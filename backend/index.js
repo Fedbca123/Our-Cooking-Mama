@@ -3,9 +3,11 @@ const { connections } = require('mongoose');
 const mongoose = require('mongoose');
 const app = express();
 const routes = require('./api/routes');
+var bodyParser = require('body-parser');
 
 app.use(express.json());
 app.use('/api', routes);
+app.use(bodyParser.json({ extended: false }))
 
 app.listen(3000, () => {
     console.log('Server started at $(3000)')
