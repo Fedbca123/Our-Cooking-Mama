@@ -42,19 +42,36 @@ router.get('/getAll', async (req, res) => {
     }
 })
 
-//Get by ID Method
-router.get('/getOne/:id', (req, res) => {
-    res.send('Get by ID API')
-})
+// Login 
+router.post('/login', async (req, res, next) => 
+{
+  const { username, password } = req.body;
 
-//Update by ID Method
-router.patch('/update/:id', (req, res) => {
-    res.send('Update by ID API')
-})
+    const loginUser = new userRegister 
+    ({
+        username: req.body.username,
+        password: req.body.password
+    })
 
-//Delete by ID Method
-router.delete('/delete/:id', (req, res) => {
-    res.send('Delete by ID API')
+  var id = -1;
+  var fn = '';
+  var ln = '';
+  var error = 'Login unsuccessful.';
+
+  if( results.length > 0 )
+  {
+    id = results[0]._id;
+    fn = results[0].first_name;
+    ln = results[0].last_name;
+    pw = results[0].password;
+    if (bcrypt.compare(password, this.password))
+    error = '';
+    var ret = { _id:id, first_name:fn, last_name:ln, error:error};
+    res.status(200).json(ret);
+    return;
+  }
+
+  res.status(400).json({ _id:id, first_name:fn, last_name:ln, error:error});
 })
 
 module.exports = router;
