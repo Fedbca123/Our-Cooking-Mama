@@ -78,8 +78,6 @@ router.post('/login', async (req, res, next) =>
         error = 'User not found.';
         res.status(400).json({ _id:id, first_name:fn, last_name:ln, error:error});
     }
-
-
 })
 
 module.exports = router;
