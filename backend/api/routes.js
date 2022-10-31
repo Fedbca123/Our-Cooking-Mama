@@ -3,6 +3,7 @@ const router = express.Router()
 const bcrypt = require('bcrypt');
 
 const userRegister = require ('../model/model.js');
+const { Model } = require('mongoose');
 
 //Post Method
 router.post('/register', async (req, res) => {
@@ -18,7 +19,7 @@ router.post('/register', async (req, res) => {
                 username: req.body.username,
                 email: req.body.email,
                 password: hash
-            })
+           })
             try {
                 const newUser = await data.save();
                 console.log(newUser);
@@ -45,33 +46,40 @@ router.get('/getAll', async (req, res) => {
 // Login 
 router.post('/login', async (req, res, next) => 
 {
-  const { username, password } = req.body;
+    const username = req.body.username;
+    var password = req.body.password;
 
-    const loginUser = new userRegister 
-    ({
-        username: req.body.username,
-        password: req.body.password
-    })
+    var id = -1;
+    var fn = '';
+    var ln = '';
+    var error = 'Login unsuccessful.';
 
-  var id = -1;
-  var fn = '';
-  var ln = '';
-  var error = 'Login unsuccessful.';
+    const result = await userRegister.findOne({username:username}).exec();
 
-  if( results.length > 0 )
-  {
-    id = results[0]._id;
-    fn = results[0].first_name;
-    ln = results[0].last_name;
-    pw = results[0].password;
-    if (bcrypt.compare(password, this.password))
-    error = '';
-    var ret = { _id:id, first_name:fn, last_name:ln, error:error};
-    res.status(200).json(ret);
-    return;
-  }
+    if (result != null)
+    {
+        if (bcrypt.compare(password, result.password))
+        {
+            id = result._id;
+            fn = result.first_name;
+            ln = result.last_name;
+            error = '';
+            var ret = { _id:id, first_name:fn, last_name:ln, error:error};
+            res.status(200).json(ret);
+        }
+        else
+        {
+            error = "Passwords do not match.";
+            res.status(400).json({ _id:id, first_name:fn, last_name:ln, error:error});
+        }
+    }
+    else
+    {
+        error = 'User not found.';
+        res.status(400).json({ _id:id, first_name:fn, last_name:ln, error:error});
+    }
 
-  res.status(400).json({ _id:id, first_name:fn, last_name:ln, error:error});
+
 })
 
 module.exports = router;
