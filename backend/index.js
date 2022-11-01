@@ -1,19 +1,22 @@
 const express = require('express');
 const { connections } = require('mongoose');
+const https = require("https");
+const fs = require("fs");
 const mongoose = require('mongoose');
+require('dotenv').config();
+
 const app = express();
 const routes = require('./api/routes');
 var bodyParser = require('body-parser');
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use('/api', routes);
 app.use(bodyParser.json({ extended: false }))
 
-app.listen(3000, () => {
-    console.log('Server started at $(3000)')
+app.listen(port, () => {
+    console.log('Server started at port: ' + port)
 })
-
-require('dotenv').config();
 
 mongoose.connect(process.env.DATABASE_URI);
 const database = mongoose.connection;
