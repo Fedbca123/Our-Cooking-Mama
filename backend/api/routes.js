@@ -6,26 +6,34 @@ const userRegister = require ('../model/model.js');
 const { Model } = require('mongoose');
 
 //Post Method
-router.post('/register', async (req, res) => {
-    bcrypt.hash(req.body.password, 10, async (err, hash) => {
-        if (err) {
-            return res.status(500).json({
+router.post('/register', async (req, res) => 
+{
+    bcrypt.hash(req.body.password, 10, async (err, hash) => 
+    {
+        if (err) 
+        {
+            return res.status(500).json 
+            ({
                 error: err
             })
-        } else {
-            const data = new userRegister({
+        } else 
+        {
+            const data = new userRegister
+            ({
                 first_name: req.body.first_name,
                 last_name: req.body.last_name,
                 username: req.body.username,
                 email: req.body.email,
                 password: hash
            })
-            try {
+            try 
+            {
                 const newUser = await data.save();
                 console.log(newUser);
                 res.status(200).json(newUser)
                 res.status(201).json({ message: "User created successfully"})
-            } catch(error) {
+            } catch(error) 
+            {
                 console.log(error);
                 res.status(400).json({message: error.message})
             }
@@ -34,11 +42,14 @@ router.post('/register', async (req, res) => {
 })
 
 //Get all Method
-router.get('/getAll', async (req, res) => {
-    try {
+router.get('/getAll', async (req, res) => 
+{
+    try 
+    {
         const data = await userRegister.find();
         res.json(data) 
-    } catch (error) {
+    } catch (error) 
+    {
         res.status(500).json({message: error.message})
     }
 })
