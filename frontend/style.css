@@ -1,0 +1,34 @@
+html 
+{
+    height: 100%;
+}
+
+body 
+{
+    background-image: linear-gradient(to bottom right, #75B9BE, #A8CCC9, #B3D6C6, #DCEAB2, #C7D66D);
+    text-align: center;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+
+button 
+{
+    background-color: #C7D66D;
+}
+
+h1
+{
+    text-align: left;
+}
+
+input[type=text], input[type=password] 
+{
+    width: 10%;
+    padding: 12px 20px;
+    margin: 10px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+
+
