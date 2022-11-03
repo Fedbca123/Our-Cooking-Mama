@@ -13,13 +13,22 @@ function Register() {
 
 	var username;
 	var psw;
+	var fs;
+	var ls;
+	var email;
 
 	const [message, setMessage] = useState("");
 
-	const doLogin = async (event) => {
+	const doRegister = async (event) => {
 		event.preventDefault();
 
-		var obj = { login: username.value, password: psw.value };
+		var obj = {
+			first_name: fs.value,
+			last_name: ls.value,
+			login: username.value,
+			email: email.value,
+			password: psw.value,
+		};
 		var js = JSON.stringify(obj);
 
 		try {
@@ -53,8 +62,29 @@ function Register() {
 
 	return (
 		<div id="loginDiv">
-			<form onSubmit={doLogin}>
+			<form onSubmit={doRegister}>
 				<span id="inner-title">Log In</span>
+				<br />
+				<input
+					type="text"
+					id="first_name"
+					placeholder="First Name"
+					ref={(c) => (fs = c)}
+				/>
+				<br />
+				<input
+					type="text"
+					id="last_Name"
+					placeholder="Last Name"
+					ref={(c) => (ls = c)}
+				/>
+				<input
+					type="text"
+					id="loginName"
+					placeholder="Email Address"
+					ref={(c) => (email = c)}
+				/>
+				<br />
 				<br />
 				<input
 					type="text"
@@ -64,7 +94,7 @@ function Register() {
 				/>
 				<br />
 				<input
-					type="password"
+					type="text"
 					id="loginPassword"
 					placeholder="Password"
 					ref={(c) => (psw = c)}
@@ -75,7 +105,7 @@ function Register() {
 					id="loginButton"
 					class="buttons"
 					value="Do It"
-					onClick={doLogin}
+					onClick={doRegister}
 				/>
 				<button component={Link} to="../pages/loginPage" />
 			</form>
