@@ -18,6 +18,13 @@ router.post('/register', async (req, res) =>
             })
         } else 
         {
+            const result = await userRegister.findOne({username:req.body.username}).exec();
+            if (result != null)
+            {
+                // User exists
+                err = 'Username taken. Try again.';
+                res.status(400).json({error:err});
+            }
             const data = new userRegister
             ({
                 first_name: req.body.first_name,
@@ -31,7 +38,7 @@ router.post('/register', async (req, res) =>
                 const newUser = await data.save();
                 console.log(newUser);
                 res.status(200).json(newUser)
-                res.status(201).json({ message: "User created successfully"})
+                res.status(201).json({ message: "User created successfully."})
             } catch(error) 
             {
                 console.log(error);
