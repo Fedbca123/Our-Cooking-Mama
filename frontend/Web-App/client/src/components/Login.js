@@ -77,7 +77,7 @@ function Login() {
 					value="Do It"
 					onClick={doLogin}
 				/>
-				<button component={Link} to="/RegisterPage" />
+				<button component={Link} to="../pages/LoginPage" />
 			</form>
 			<span id="loginResult">{message}</span>
 		</div>
