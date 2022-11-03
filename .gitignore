@@ -1,3 +1,4 @@
 #Untrack files specific to node_modules and package-lock.json
 node_modules/
 package-lock.json
+**/.env
