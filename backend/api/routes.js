@@ -8,7 +8,7 @@ const { Model } = require('mongoose');
 //Post Method
 router.post('/register', async (req, res) => 
 {
-    bcrypt.hash(req.body.password, 10, async (err, hash) => 
+    bcrypt.hash(req.body.Password, 10, async (err, hash) => 
     {
         if (err) 
         {
@@ -18,32 +18,31 @@ router.post('/register', async (req, res) =>
             })
         } else 
         {
-            const result = await userRegister.findOne({username:req.body.username}).exec();
+            const result = await userRegister.findOne({UserName:req.body.UserName}).exec();
             if (result != null)
             {
                 // User exists
                 err = 'Username taken. Try again.';
                 res.status(400).json({error:err});
-            }
-            const data = new userRegister
-            ({
-                first_name: req.body.first_name,
-                last_name: req.body.last_name,
-                username: req.body.username,
-                email: req.body.email,
-                password: hash
-           })
-            try 
-            {
-                const newUser = await data.save();
-                console.log(newUser);
-                res.status(200).json(newUser)
-                res.status(201).json({ message: "User created successfully."})
-            } catch(error) 
-            {
-                console.log(error);
-                res.status(400).json({message: error.message})
-            }
+            } else {
+                const data = new userRegister
+                ({
+                    FirstName: req.body.FirstName,
+                    LastName: req.body.LastName,
+                    UserName: req.body.UserName,
+                    Email: req.body.Email,
+                    Password: hash
+               })
+                try 
+                {
+                    const newUser = await data.save();
+                    console.log(newUser);
+                    res.status(200).json(newUser)
+                } catch(error) 
+                {
+                    console.log(error);
+                }
+            }            
         }
     })
 })
