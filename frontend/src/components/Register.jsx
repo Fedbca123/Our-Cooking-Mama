@@ -17,19 +17,19 @@ export const Register = (props) =>
         <div className="auth-form-container">
             <form className="register-form" onSubmit={handleSubmit}>
                 <label htmlFor="first_name">First Name</label>
-                <input type="text" name="first_name" id="first_name" placeHolder="First Name" />
+                <input type="text" value={first_name} name="first_name" id="first_name" placeHolder="First Name" />
 
                 <label htmlFor="last_name">Last Name</label>
-                <input type="text" name="last_name" id="lsat_name" placeHolder="Last Name" />
+                <input type="text" value={last_name} name="last_name" id="lsat_name" placeHolder="Last Name" />
             
                 <label htmlFor="email">Email</label>
-                <input type="email" placeholder="Email Adress" id="email" name="email" />
+                <input type="email" value={email} placeholder="Email Adress" id="email" name="email" />
 
                 <label htmlFor="username">Username</label>
-                <input type="text" placeholder="user1234" id="username" name="username" />
+                <input type="text" value={username} placeholder="user1234" id="username" name="username" />
 
                 <label htmlFor="password">Password</label>
-                <input type="password" placeholder="*******" id="password" name="password" />
+                <input type="password" value={pass} placeholder="*******" id="password" name="password" />
 
                 <button type="submit">Register</button>
             </form>
