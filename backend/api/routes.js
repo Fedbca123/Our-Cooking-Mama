@@ -63,37 +63,37 @@ router.get('/getAll', async (req, res) =>
 // Login 
 router.post('/login', async (req, res, next) => 
 {
-    const username = req.body.username;
-    var password = req.body.password;
+    const username = req.body.UserName;
+    var password = req.body.Password;
 
     var id = -1;
     var fn = '';
     var ln = '';
     var error = 'Login unsuccessful.';
 
-    const result = await userRegister.findOne({username:username}).exec();
+    const result = await userRegister.findOne({UserName:username}).exec();
 
     if (result != null)
     {
-        if (bcrypt.compare(password, result.password))
+        if (bcrypt.compare(password, result.Password))
         {
             id = result._id;
-            fn = result.first_name;
-            ln = result.last_name;
+            fn = result.FirstName;
+            ln = result.LastName;
             error = '';
-            var ret = { _id:id, first_name:fn, last_name:ln, error:error};
+            var ret = { _id:id, FirstName:fn, LastName:ln, error:error};
             res.status(200).json(ret);
         }
         else
         {
             error = "Passwords do not match.";
-            res.status(400).json({ _id:id, first_name:fn, last_name:ln, error:error});
+            res.status(400).json({ _id:id, FirstName:fn, LastName:ln, error:error});
         }
     }
     else
     {
         error = 'User not found.';
-        res.status(400).json({ _id:id, first_name:fn, last_name:ln, error:error});
+        res.status(400).json({ _id:id, FirstName:fn, LastName:ln, error:error});
     }
 })
 
