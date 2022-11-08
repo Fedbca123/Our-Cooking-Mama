@@ -11,12 +11,11 @@
     "express": "^4.18.2",
     "mongoose": "^6.7.2",
     "node": "^14.15.3",
-    "nodemon": "^2.0.20",
-    "serve": "^14.1.0"
+    "nodemon": "^2.0.20"
   },
   "scripts": {
     "dev": "react-scripts start",
-    "start": "nodemon ./backend/index.js",
+    "start": "serve -s build",
     "build": "react-scripts build",
     "heroku-postbuild": "npm run build"
   }
