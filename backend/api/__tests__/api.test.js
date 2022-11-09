@@ -30,8 +30,7 @@ describe("POST api/register", () => {
 
 describe("POST api/login", () => {
     test("Returns status code 200 with user's ID and first and last name", async () => {
-    const response = await request(app)
-      .post('/api/login')
+    const response = await request(port).post('/api/login')
       .send({UserName:'cheonsa143', Password:'test1234'})
       .set('Accept', 'application/json')
     expect(response.headers["Content-Type"]).toMatch(/json/);
@@ -39,8 +38,7 @@ describe("POST api/login", () => {
     })
 
     test("Returns status code 400 if user doesn't exist", async () => {
-    const response = await request(app)
-      .post('/api/login')
+    const response = await request(port).post('/api/login')
       .send({UserName:'ThisUserIsNotReal', Password:'password12345'})
       .set('Accept', 'application/json')
     expect(response.headers["Content-Type"]).toMatch(/json/);
@@ -48,8 +46,7 @@ describe("POST api/login", () => {
     })
     
     test("Returns status code 400 if user doesn't exist", async () => {
-    const response = await request(app)
-      .post('/api/login')
+    const response = await request(port).post('/api/login')
       .send({UserName:'cheonsa143', Password:'wrongPassword'})
       .set('Accept', 'application/json')
     expect(response.headers["Content-Type"]).toMatch(/json/);
