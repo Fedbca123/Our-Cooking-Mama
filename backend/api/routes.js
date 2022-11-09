@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router()
 const bcrypt = require('bcrypt');
 
-const userRegister = require ('../model/model.js');
+const userRegister = require ('../model/userAccount.js');
 const { Model } = require('mongoose');
 
 //Post Method
