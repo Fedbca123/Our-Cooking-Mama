@@ -7,76 +7,57 @@ export const Register = (props) =>
     const [username, setUser] = useState('');
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
+
     const [reType, setReType] = useState();
-
-    const app_name = 'your-cooking-mom-test'
-    function buildPath(route)
-    {
-        if (process.env.NODE_ENV === 'test') 
-        {
-            return 'https://' + app_name +  '.herokuapp.com/' + route;
-        }
-        else
-        {        
-            return 'http://localhost:3000/' + route;
-        }
-    }
-
     const [message,setMessage] = useState('');
 
-    const handleSubmit = async event => {
+    const handleSubmit = async (e) => {
+        // console.log("wee hoo");
+        // e.preventDefault();
+        // try {
+        //     const response = await fetch('http://172.25.208.1:3000/api/register', {
+        //         method: 'post',
+        //         headers: {
+        //             'Accept': 'application/json',
+        //             'Content-Type':'application/json'
+        //         },
+        //         body: JSON.stringify({
+        //             FirstName: "holy fuck",
+        //             LastName: "last name",
+        //             UserName: "webapp freaking works!",
+        //             Email: "email",
+        //             Password: "cats"
+        //         })
+        //     });
+        //     const data = await response.json();
+		// 	console.log(data._id);
+        // } catch (e) {
+        //     console.log(e);
+        // }
 
-        event.preventDefault();
+    }
 
-        var tmp = {FirstName: first_name, LastName: last_name, UserName: username, Email: email, Password: pass};
-        var obj = JSON.stringify(tmp);
+    async function login(){
+        let result = await fetch('http://172.25.208.1:3000/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type':'application/json',
+                'Accept':'application/json'
+            },
+            body:JSON.stringify({
+                FirstName: "holy fuck",
+                LastName: "last name",
+                UserName: "webapp freaking works!",
+                Email: "email",
+                Password: "cats"
+            })
+        });
+        result = await result.json();
 
-        try{
-
-            if(reType !== pass){
-                setMessage("Passwords Do Not Match.");
-                return;
-            }
-
-            const response = await fetch(buildPath('api/register'),
-                {
-                    method:'POST',
-                    mode:'no-cors',
-                    headers:{
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body:obj,
-                });
-            try{
-                var result = JSON.parse(await response.text());
-            } catch(error){
-                console.log('Error parsing JSON:', error, response);
-            }
-
-             if( result.id <= 0 ){
-
-                setMessage(result.error);
-
-             } else {
-
-                var user = {firstName: result.FirstName, lastName: result.LastName, id: result._id};
-                localStorage.setItem('user_data', JSON.stringify(user));
-                
-                setMessage('Successfully added user');
-                window.location.href = '/login'
-             }
-
-        } catch(e) {
-            alert(e.toString());
-            return;
-        }
-        console.log(username);
     }
 
     return(
         <div className="auth-form-container">
-            <form className="register-form" onSubmit={handleSubmit}>
                 <label htmlFor="first_name">First Name</label>
                 <input type="text" value={first_name} name="first_name" id="first_name" placeHolder="First Name" onChange={e => setFirst(e.target.value)}/>
 
@@ -95,8 +76,7 @@ export const Register = (props) =>
                 <label htmlFor="re-type">Re-Type Password</label>
                 <input type="password" value={reType} placeholder="*******" id="password-retype" name="password-retype" onChange={e => setReType(e.target.value)}/>
 
-                <button type="submit">Register</button>
-            </form>
+                <button type="submit" onClick={login}>Register</button>
                 <span id="registerResult">{message}</span>
             <br></br>
             <button className="link-btn" onClick={() => props.onFormSwitch('login')}>Existing Chef?</button>

@@ -5,6 +5,17 @@ const bcrypt = require("bcrypt");
 const userRegister = require("../model/userAccount.js");
 const { Model } = require("mongoose");
 
+
+router.use(function(req, res, next) {
+	res.header("Access-Control-Allow-Origin", "http://localhost:3002"); // update to match the domain you will make the request from
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	next();
+  });
+
+
+
+
+
 //Post Method
 router.post("/register", async (req, res) => {
 	bcrypt.hash(req.body.Password, 10, async (err, hash) => {
