@@ -2,8 +2,19 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 
-const userRegister = require("../model/model.js");
+const userRegister = require("../model/userAccount.js");
 const { Model } = require("mongoose");
+
+
+router.use(function(req, res, next) {
+	res.header("Access-Control-Allow-Origin", "http://localhost:3001"); // change the 3001 port the port where your webapp is running from!!
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	next();
+  });
+
+
+
+
 
 //Post Method
 router.post("/register", async (req, res) => {
@@ -63,7 +74,8 @@ router.post("/login", async (req, res, next) => {
 	const result = await userRegister.findOne({ UserName: username }).exec();
 
 	if (result != null) {
-		if (bcrypt.compare(password, result.Password)) {
+		var isEqual = await bcrypt.compare(password, result.Password);
+		if (isEqual) {
 			id = result._id;
 			fn = result.FirstName;
 			ln = result.LastName;
