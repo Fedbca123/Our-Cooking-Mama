@@ -1,6 +1,10 @@
 import React, { useState } from "react";
+import { useHistory, useNavigate } from 'react-router-dom';
 
 export const Login = (props) => {
+
+    const navigate = useNavigate();
+
     const [username, setUser] = useState('');
     const [pass, setPass] = useState('');
 
@@ -56,6 +60,7 @@ export const Login = (props) => {
     }
 
     async function login(event){
+        
         event.preventDefault();
 
         try{
@@ -78,10 +83,9 @@ export const Login = (props) => {
             result = await result.json();
 
             console.log(result.error);
-
             setMessage(result.error);
 
-            //window.location.href = "/HomePage";
+            window.location.href = "/homepage";
         } catch(error) {
             console.log(error);
         }
@@ -99,7 +103,9 @@ export const Login = (props) => {
             <span id="loginResult">{message}</span>
 
             <br></br>
-            <button className="link-btn" onClick={() => props.onFormSwitch('register')}>New Chef?</button>
+            <button className="link-btn" onClick={() => navigate('/register')}>New Chef?</button>
         </div>
     )
 }
+
+export default Login;

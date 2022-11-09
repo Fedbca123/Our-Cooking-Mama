@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { useHistory, useNavigate } from 'react-router-dom';
 
 export const Register = (props) => 
 {
+    const navigate = useNavigate();
+
     const [first_name, setFirst] = useState('');
     const [last_name, setLast] = useState('');
     const [username, setUser] = useState('');
@@ -68,7 +71,7 @@ export const Register = (props) =>
 
             setMessage("Account Registered! Returning to Login.");
 
-            window.location.href = "/Login";
+            window.location.href = "/login";
         }catch (error){
             console.log(error);
         }
@@ -97,8 +100,10 @@ export const Register = (props) =>
                 <button type="submit" onClick={register}>Register</button>
                 <span id="registerResult">{message}</span>
             <br></br>
-            <button className="link-btn" onClick={() => props.onFormSwitch('login')}>Existing Chef?</button>
+            <button className="link-btn" onClick={() => navigate('/login')}>Existing Chef?</button>
         </div>
     )
     
 }
+
+export default Register;
