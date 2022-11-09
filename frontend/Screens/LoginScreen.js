@@ -1,6 +1,7 @@
 import { Text, View, StyleSheet, Button, ImageBackground, TextInput, Image, TouchableOpacity } from 'react-native'
 import { useState } from 'react';
 import React from 'react';
+import Toast from 'react-native-toast-message';
 
 const background = '../Images/OCMgradient.jpg'
 const logo = '../Images/OCMlogo2.png';
@@ -10,30 +11,11 @@ const LoginScreen = ( {navigation} ) => {
 	const [UN, setUN] = useState("");
 	const [PW, setPW] = useState("");
 
-	// const handleLogin = async() => {
-	// 	e.preventDefault();
-	// 	try {
-	// 		await fetch('http://172.25.208.1:3000/api/login', {
-	// 			method: 'post',
-	// 			headers: {
-	// 				'Accept': 'application/json',
-	// 				'Content-Type':'application/json'
-	// 			},
-	// 			body: JSON.stringify({
-	// 				UserName: UN,
-	// 				Password: PW
-	// 			})
-	// 		});
-	// 	} catch (e) {
-	// 		console.log(e);
-	// 	}
-	// }
-
-	
 	async function handleLogin(event) {
 		event.preventDefault()
-
-		const response = await fetch('http://172.25.208.1:3000/api/login', {
+		// IP address is unique, expo/express can't resolve 'localhost' so you need to ipconfig in cmd and replace with the ipv4
+		// This should be no issue once deployed on heroku
+		const response = await fetch('http://172.23.224.1:3000/api/login', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -46,10 +28,18 @@ const LoginScreen = ( {navigation} ) => {
 
 		const data = await response.json()
 
-		if (data.user) {
-			console.log(data.error)
+		if (data.error == '') {
+			navigation.navigate('Home');
+		} else if (data.error == 'Passwords do not match.') {
+			Toast.show({
+				type: 'error',
+				text1: 'Username / Password combination is incorrect'
+			})
 		} else {
-			console.log(data.error)
+			Toast.show({
+				type: 'error',
+				text1: 'Username / Password combination is incorrect'
+			})
 		}
 	}
 

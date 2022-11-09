@@ -1,10 +1,11 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button, ImageBackground, TextInput, TouchableOpacity } from 'react-native'
+import { Text, View, StyleSheet, Button, ImageBackground, TextInput } from 'react-native'
 import { useState } from 'react';
-import { NavigationEvents } from 'react-navigation';
+import Toast from 'react-native-toast-message';
 
 const background = '../Images/OCMgradient.jpg'
-const logo = '../Images/OCMlogo2.png';
+// const logo = '../Images/OCMlogo2.png';
+
 
 const SignUpScreen = ({ navigation }) => {
 	const [UN, setUN] = useState("");
@@ -16,26 +17,53 @@ const SignUpScreen = ({ navigation }) => {
 	const comparePass = PW.localeCompare(PW2);
 
 	const handleCreate = async (e) => {
-		e.preventDefault();
-		try {
-			const response = await fetch('http://172.25.208.1:3000/api/register', {
-				method: 'post',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type':'application/json'
-				},
-				body: JSON.stringify({
-					FirstName: FN,
-					LastName: LN,
-					UserName: UN,
-					Email: EM,
-					Password: PW
+		if (UN == '' || PW == '' || PW2 == '' || FN == '' || LN == '' || EM == '') {
+			Toast.show({
+				type: 'error',
+				text1: 'All fields are required'
+			})
+		} else {
+			if (PW === PW2) {
+				e.preventDefault();
+				try {
+					// IP address is unique, expo/express can't resolve 'localhost' so you need to ipconfig in cmd and replace with the ipv4
+					// This should be no issue once deployed on heroku
+					const response = await fetch('http://172.23.224.1:3000/api/register', {
+						method: 'post',
+						headers: {
+							'Accept': 'application/json',
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({
+							FirstName: FN,
+							LastName: LN,
+							UserName: UN,
+							Email: EM,
+							Password: PW
+						})
+					});
+					const data = await response.json();
+					if (data._id != null) {
+						Toast.show({
+							type: 'success',
+							text1: 'You have successfully signed up!'
+						})
+						navigation.navigate('LoginScreen');
+					} else {
+						Toast.show({
+							type: 'error',
+							text1: 'Username is already taken'
+						})
+					}
+				} catch (e) {
+					console.log(e);
+				}
+			} else {
+				Toast.show({
+					type: 'error',
+					text1: 'Passwords do not match'
 				})
-			});
-			const data = await response.json();
-			console.log(data._id);
-		} catch (e) {
-			console.log(e);
+			}
 		}
 
 	}
@@ -55,36 +83,44 @@ const SignUpScreen = ({ navigation }) => {
 				<TextInput
 					placeholder="Username"
 					style={styles.input}
+					autoCorrect={false}
 					onChangeText={(val) => setUN(val)}
 					backgroundColor='#fff'
 				/>
 				<TextInput
 					placeholder="First name"
 					style={styles.input}
+					autoCorrect={false}
 					onChangeText={(val) => setFN(val)}
 					backgroundColor='#fff'
 				/>
 				<TextInput
 					placeholder="Last name"
 					style={styles.input}
+					autoCorrect={false}
 					onChangeText={(val) => setLN(val)}
 					backgroundColor='#fff'
 				/>
 				<TextInput
 					placeholder="Email"
 					style={styles.input}
+					autoCorrect={false}
 					onChangeText={(val) => setEM(val)}
 					backgroundColor='#fff'
 				/>
 				<TextInput
 					placeholder="Password"
 					style={styles.input}
+					autoCorrect={false}
+					secureTextEntry={true}
 					onChangeText={(val) => setPW(val)}
 					backgroundColor='#fff'
 				/>
 				<TextInput
 					placeholder=" Confirm Password"
 					style={styles.input}
+					autoCorrect={false}
+					secureTextEntry={true}
 					onChangeText={(val) => setPW2(val)}
 					backgroundColor='#fff'
 				/>
