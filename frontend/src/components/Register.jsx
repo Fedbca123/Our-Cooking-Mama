@@ -38,24 +38,40 @@ export const Register = (props) =>
     }
 
     // I removed the form submit function as a sanity check sorry! I added this to the 'register' button
-    async function register(){
-        let result = await fetch('http://localhost:3000/api/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type':'application/json',
-                'Accept':'application/json'
-            },
-            body:JSON.stringify({
-                FirstName: first_name,
-                LastName: last_name,
-                UserName: username,
-                Email: email,
-                Password: pass
-            })
-        });
-        result = await result.json();
+    async function register(event){ 
+        event.preventDefault();
 
-        window.location.href = "/Login";
+        try{
+            if(reType !== pass){
+                setMessage("Passwords Do Not Match.");
+                return;
+            }
+
+            if(first_name === ""|| last_name === "" || email === ""|| pass === "" || reType === "" || username === ""){
+                setMessage("Please fill in all fields.");
+            }
+            let result = await fetch('http://localhost:3000/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type':'application/json',
+                    'Accept':'application/json'
+                },
+                body:JSON.stringify({
+                    FirstName: first_name,
+                    LastName: last_name,
+                    UserName: username,
+                    Email: email,
+                    Password: pass
+                })
+            });
+            result = await result.json();
+
+            setMessage("Account Registered! Returning to Login.");
+
+            window.location.href = "/Login";
+        }catch (error){
+            console.log(error);
+        }
     }
 
     return(

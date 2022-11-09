@@ -56,24 +56,33 @@ export const Login = (props) => {
     }
 
     async function login(event){
-        event.preventDefault()
+        event.preventDefault();
 
-        let result = await fetch('http://localhost:3000/api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type':'application/json',
-                'Accept':'application/json'
-            },
-            body:JSON.stringify({
-                UserName: username,
-                Password: pass
-            })
-        });
-        result = await result.json();
+        try{
 
-        console.log(result.error)
+            if(username === "" || pass === "") {
+                setMessage("Please Fill in both fields.");
+                return;
+            }
+            let result = await fetch('http://localhost:3000/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type':'application/json',
+                    'Accept':'application/json'
+                },
+                body:JSON.stringify({
+                    UserName: username,
+                    Password: pass
+                })
+            });
+            result = await result.json();
 
-        window.location.href = "/HomePage";
+            console.log(result.error);
+
+            window.location.href = "/HomePage";
+        } catch(error) {
+            console.log(error);
+        }
     }
 
     return (
