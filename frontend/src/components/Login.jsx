@@ -57,7 +57,7 @@ export const Login = (props) => {
 
     async function login(event){
         event.preventDefault()
-        
+
         let result = await fetch('http://localhost:3000/api/login', {
             method: 'POST',
             headers: {
@@ -65,20 +65,17 @@ export const Login = (props) => {
                 'Accept':'application/json'
             },
             body:JSON.stringify({
-                Username: username,
+                UserName: username,
                 Password: pass
             })
         });
         result = await result.json();
 
-        const data = await result.json()
-
-        console.log(data.error)
+        console.log(result.error)
     }
 
     return (
         <div className="auth-form-container">
-            
             <label htmlFor="username">Username</label>
             <input type="text" value={username} placeholder="user1234" id="username" name="username" onChange={e => setUser(e.target.value)}/>
 
