@@ -9,12 +9,6 @@ export const Register = (props) =>
     const [pass, setPass] = useState('');
     const [reType, setReType] = useState();
 
-    // const handleSubmit = (event) => {
-    //     event.preventDefault();
-    //     console.log(email);
-        
-    // }
-
     const app_name = 'your-cooking-mom-test'
     function buildPath(route)
     {
@@ -46,7 +40,8 @@ export const Register = (props) =>
 
             const response = await fetch(buildPath('api/register'),
                 {
-                    method:'post',
+                    method:'POST',
+                    mode:'no-cors',
                     headers:{
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'

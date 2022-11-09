@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 
-const userRegister = require("../model/model.js");
+const userRegister = require("../model/userAccount.js");
 const { Model } = require("mongoose");
 
 //Post Method
@@ -63,7 +63,8 @@ router.post("/login", async (req, res, next) => {
 	const result = await userRegister.findOne({ UserName: username }).exec();
 
 	if (result != null) {
-		if (bcrypt.compare(password, result.Password)) {
+		var isEqual = await bcrypt.compare(password, result.Password);
+		if (isEqual) {
 			id = result._id;
 			fn = result.FirstName;
 			ln = result.LastName;
