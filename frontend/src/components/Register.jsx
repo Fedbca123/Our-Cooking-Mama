@@ -34,10 +34,15 @@ export const Register = (props) =>
 
         event.preventDefault();
 
-        var tmp = {UserName: username, Password: pass};
+        var tmp = {FirstName: first_name, LastName: last_name, Email: email, UserName: username, Password: pass};
         var obj = JSON.stringify(tmp);
 
         try{
+
+            if(reType !== pass){
+                setMessage("Passwords Do Not Match.");
+                return;
+            }
 
             const response = await fetch(buildPath('api/login'),
                 {method:'POST',body:obj,headers:{'Content-Type': 'application/json'}});
