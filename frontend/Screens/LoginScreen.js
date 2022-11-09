@@ -2,7 +2,7 @@ import { Text, View, StyleSheet, Button, ImageBackground, TextInput, Image, Touc
 import { useState } from 'react';
 import React from 'react';
 
-const background = '../Images/OCMgradient.png'
+const background = '../Images/OCMgradient.jpg'
 const logo = '../Images/OCMlogo2.png';
 
 
@@ -10,8 +10,47 @@ const LoginScreen = ( {navigation} ) => {
 	const [UN, setUN] = useState("");
 	const [PW, setPW] = useState("");
 
-	const handleLogin = () => {
-		console.log("login api here");
+	// const handleLogin = async() => {
+	// 	e.preventDefault();
+	// 	try {
+	// 		await fetch('http://172.25.208.1:3000/api/login', {
+	// 			method: 'post',
+	// 			headers: {
+	// 				'Accept': 'application/json',
+	// 				'Content-Type':'application/json'
+	// 			},
+	// 			body: JSON.stringify({
+	// 				UserName: UN,
+	// 				Password: PW
+	// 			})
+	// 		});
+	// 	} catch (e) {
+	// 		console.log(e);
+	// 	}
+	// }
+
+	
+	async function handleLogin(event) {
+		event.preventDefault()
+
+		const response = await fetch('http://172.25.208.1:3000/api/login', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				UserName: UN,
+				Password: PW
+			}),
+		})
+
+		const data = await response.json()
+
+		if (data.user) {
+			console.log(data.error)
+		} else {
+			console.log(data.error)
+		}
 	}
 
 	const switchS = () => { //handles screen switching
