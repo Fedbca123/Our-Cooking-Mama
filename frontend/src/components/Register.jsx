@@ -34,7 +34,7 @@ export const Register = (props) =>
 
         event.preventDefault();
 
-        var tmp = {FirstName: first_name, LastName: last_name, Email: email, UserName: username, Password: pass};
+        var tmp = {FirstName: first_name, LastName: last_name, UserName: username, Email: email, Password: pass};
         var obj = JSON.stringify(tmp);
 
         try{
@@ -65,7 +65,7 @@ export const Register = (props) =>
 
              } else {
 
-                var user = {firstName: result.FirstName, lastName: result.LastName, id: result.id};
+                var user = {firstName: result.FirstName, lastName: result.LastName, id: result._id};
                 localStorage.setItem('user_data', JSON.stringify(user));
                 
                 setMessage('Successfully added user');
@@ -98,7 +98,7 @@ export const Register = (props) =>
                 <input type="password" value={pass} placeholder="*******" id="password" name="password" onChange={e => setPass(e.target.value)}/>
 
                 <label htmlFor="re-type">Re-Type Password</label>
-                <input type="password" value={reType} placeholder="*******" id="password" name="password" onChange={e => setReType(e.target.value)}/>
+                <input type="password" value={reType} placeholder="*******" id="password-retype" name="password-retype" onChange={e => setReType(e.target.value)}/>
 
                 <button type="submit">Register</button>
             </form>
