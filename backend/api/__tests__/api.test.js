@@ -17,16 +17,15 @@ describe("POST api/register", () => {
         const response = await request(port).post('/api/register')
         .send({'FirstName': 'John', 'LastName': 'Doe', 'UserName': 'johndoe', 'Email': 'johndoe@urmom.com', 'Password':'HashThisPassword'})
         .set('Accept', 'application/json')
-        expect(response.headers["Content-Type"]).toMatch(/json/);
-        expect(response.status).toEqual(200);
+        expect(response.status).toBe(200);
     })
 
     test("Returns status code 400 if username exists already", async () => {
         const response = await request(port).post('/api/register')
         .send({'FirstName': 'John', 'LastName': 'Doe', 'UserName': 'johndoe', 'Email': 'johndoe@urmom.com', 'Password':'HashThisPassword'})
         .set('Accept', 'application/json')
-        expect(response.headers["Content-Type"]).toMatch(/json/);
-        expect(response.status).toEqual(200);
+        expect(response.status).toBe(400);
+        expect(resposne.body.error).toBe("Username taken. Try again.");
     })
 })
 
