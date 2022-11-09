@@ -53,7 +53,7 @@ export const Register = (props) =>
             if(first_name === ""|| last_name === "" || email === ""|| pass === "" || reType === "" || username === ""){
                 setMessage("Please fill in all fields.");
             }
-            let result = await fetch('http://localhost:3000/api/register', {
+            let result = await fetch('http://your-cooking-mom-test.herokuapp.com/api/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type':'application/json',

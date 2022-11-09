@@ -69,7 +69,7 @@ export const Login = (props) => {
                 setMessage("Please Fill in both fields.");
                 return;
             }
-            let result = await fetch('http://localhost:3000/api/login', {
+            let result = await fetch('http://your-cooking-mom-test.herokuapp.com/api/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type':'application/json',
