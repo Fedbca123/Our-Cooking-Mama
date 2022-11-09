@@ -75,7 +75,8 @@ router.post('/login', async (req, res, next) =>
 
     if (result != null)
     {
-        if (bcrypt.compare(password, result.Password))
+        var isEqual = await bcrypt.compare(password, result.Password);
+        if (isEqual)
         {
             id = result._id;
             fn = result.FirstName;
