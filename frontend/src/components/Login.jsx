@@ -72,6 +72,8 @@ export const Login = (props) => {
         result = await result.json();
 
         console.log(result.error)
+
+        window.location.href = "/HomePage";
     }
 
     return (

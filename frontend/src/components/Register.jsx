@@ -54,6 +54,8 @@ export const Register = (props) =>
             })
         });
         result = await result.json();
+
+        window.location.href = "/Login";
     }
 
     return(
