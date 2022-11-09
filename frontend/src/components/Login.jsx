@@ -81,7 +81,7 @@ export const Login = (props) => {
 
             setMessage(result.error);
 
-            window.location.href = "/HomePage";
+            //window.location.href = "/HomePage";
         } catch(error) {
             console.log(error);
         }
