@@ -38,7 +38,7 @@ export const Register = (props) =>
     }
 
     // I removed the form submit function as a sanity check sorry! I added this to the 'register' button
-    async function login(){
+    async function register(){
         let result = await fetch('http://localhost:3000/api/register', {
             method: 'POST',
             headers: {
@@ -76,7 +76,7 @@ export const Register = (props) =>
                 <label htmlFor="re-type">Re-Type Password</label>
                 <input type="password" value={reType} placeholder="*******" id="password-retype" name="password-retype" onChange={e => setReType(e.target.value)}/>
 
-                <button type="submit" onClick={login}>Register</button>
+                <button type="submit" onClick={register}>Register</button>
                 <span id="registerResult">{message}</span>
             <br></br>
             <button className="link-btn" onClick={() => props.onFormSwitch('login')}>Existing Chef?</button>
