@@ -79,6 +79,8 @@ export const Login = (props) => {
 
             console.log(result.error);
 
+            setMessage(result.error);
+
             window.location.href = "/HomePage";
         } catch(error) {
             console.log(error);
