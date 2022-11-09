@@ -35,16 +35,16 @@ export const Register = (props) =>
 
             if(reType !== pass){
                 setMessage("Passwords Do Not Match.");
-                return;
+                return;        
             }
 
             const response = await fetch(buildPath('api/register'),
                 {
                     method:'POST',
-                    mode:'no-cors',
+                    // mode:'no-cors',
                     headers:{
                         'Accept': 'application/json',
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
                     },
                     body:obj,
                 });
@@ -78,10 +78,10 @@ export const Register = (props) =>
         <div className="auth-form-container">
             <form className="register-form" onSubmit={handleSubmit}>
                 <label htmlFor="first_name">First Name</label>
-                <input type="text" value={first_name} name="first_name" id="first_name" placeHolder="First Name" onChange={e => setFirst(e.target.value)}/>
+                <input type="text" value={first_name} name="first_name" id="first_name" placeholder="First Name" onChange={e => setFirst(e.target.value)}/>
 
                 <label htmlFor="last_name">Last Name</label>
-                <input type="text" value={last_name} name="last_name" id="lsat_name" placeHolder="Last Name" onChange={e => setLast(e.target.value)}/>
+                <input type="text" value={last_name} name="last_name" id="lsat_name" placeholder="Last Name" onChange={e => setLast(e.target.value)}/>
             
                 <label htmlFor="email">Email</label>
                 <input type="email" value={email} placeholder="Email Adress" id="email" name="email" onChange={e => setEmail(e.target.value)}/>
