@@ -37,23 +37,23 @@ export const Register = (props) =>
 
     }
 
+    // I removed the form submit function as a sanity check sorry! I added this to the 'register' button
     async function login(){
-        let result = await fetch('http://172.25.208.1:3000/api/register', {
+        let result = await fetch('http://localhost:3000/api/register', {
             method: 'POST',
             headers: {
                 'Content-Type':'application/json',
                 'Accept':'application/json'
             },
             body:JSON.stringify({
-                FirstName: "holy fuck",
-                LastName: "last name",
-                UserName: "webapp freaking works!",
-                Email: "email",
-                Password: "cats"
+                FirstName: first_name,
+                LastName: last_name,
+                UserName: username,
+                Email: email,
+                Password: pass
             })
         });
         result = await result.json();
-
     }
 
     return(

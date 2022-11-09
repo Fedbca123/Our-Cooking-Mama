@@ -7,7 +7,7 @@ const { Model } = require("mongoose");
 
 
 router.use(function(req, res, next) {
-	res.header("Access-Control-Allow-Origin", "http://localhost:3002"); // update to match the domain you will make the request from
+	res.header("Access-Control-Allow-Origin", "http://localhost:3001"); // change the 3001 port the port where your webapp is running from!!
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 	next();
   });
