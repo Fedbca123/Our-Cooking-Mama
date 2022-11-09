@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const userId = UserAccountSchema.Schema.Types.ObjectId;
 
 const userProfileSchema = new mongoose.Schema 
 ({
@@ -9,9 +10,11 @@ const userProfileSchema = new mongoose.Schema
     FavFood: Array,
     FavoriteFlavor: Array,
     FoodAllerg: Array,
+    UserID: userId,
     AccountType: Boolean,
     PersonalFeedID: String,
-    MostRecentPosts: Array
+    MostRecentPosts: Array,
+    Pronouns: String
  },
  {
     collection: 'UserInfo'
