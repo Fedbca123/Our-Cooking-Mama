@@ -4,7 +4,7 @@ export const Login = (props) => {
     const [username, setUser] = useState('');
     const [pass, setPass] = useState('');
 
-    const app_name = ''
+    const app_name = 'your-cooking-mom-test'
     function buildPath(route)
     {
         if (process.env.NODE_ENV === 'test') 
@@ -29,7 +29,11 @@ export const Login = (props) => {
         try{
 
             const response = await fetch(buildPath('api/login'),
-                {method:'FETCH',body:obj,headers:{'Content-Type': 'application/json'}});
+                {
+                    method:'FETCH',
+                    body:obj,
+                    headers:{'Content-Type': 'application/json'},
+                });
              var result = JSON.parse(await response.text());
 
              if( result.id <= 0 ){

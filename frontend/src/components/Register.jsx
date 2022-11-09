@@ -15,7 +15,7 @@ export const Register = (props) =>
         
     // }
 
-    const app_name = ''
+    const app_name = 'your-cooking-mom-test'
     function buildPath(route)
     {
         if (process.env.NODE_ENV === 'test') 
@@ -44,21 +44,32 @@ export const Register = (props) =>
                 return;
             }
 
-            const response = await fetch(buildPath('api/login'),
-                {method:'POST',body:obj,headers:{'Content-Type': 'application/json'}});
-             var result = JSON.parse(await response.text());
+            const response = await fetch(buildPath('api/register'),
+                {
+                    method:'post',
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body:obj,
+                });
+            try{
+                var result = JSON.parse(await response.text());
+            } catch(error){
+                console.log('Error parsing JSON:', error, response);
+            }
 
              if( result.id <= 0 ){
 
-                setMessage('User/Password incorrect');
+                setMessage(result.error);
 
              } else {
 
                 var user = {firstName: result.FirstName, lastName: result.LastName, id: result.id};
                 localStorage.setItem('user_data', JSON.stringify(user));
                 
-                setMessage('');
-                window.location.href = '/Login'
+                setMessage('Successfully added user');
+                window.location.href = '/login'
              }
 
         } catch(e) {
