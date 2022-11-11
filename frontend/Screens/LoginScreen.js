@@ -3,7 +3,7 @@ import { useState } from 'react';
 import React from 'react';
 import Toast from 'react-native-toast-message';
 
-const background = '../Images/OCMgradient.jpg'
+const background = '../Images/OCMgradient.png'
 const logo = '../Images/OCMlogo2.png';
 
 
