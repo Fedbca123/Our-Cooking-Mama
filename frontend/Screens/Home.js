@@ -4,10 +4,11 @@ import { Text, View, StyleSheet, Image, FlatList, SafeAreaView, ImageBackground,
 import FoodReal from '../components/home/FoodReal';
 import Header from '../components/home/Header';
 import Post from '../components/home/Post';
+import BottomTabs, {bottomTabIcons} from '../components/BottomTabs';
 
 import { POSTS } from '../dummydata/posts'
 
-export default function Home() {
+export default function Home({navigation}) {
   const background = '../Images/OCMgradient.png'
 
 
@@ -40,7 +41,7 @@ export default function Home() {
           <Text style={styles.post}>{item.name}</Text>
         )}
       /> */}
-
+        <BottomTabs  navigation={navigation}/>
       </SafeAreaView>
     // </ImageBackground>
   );
