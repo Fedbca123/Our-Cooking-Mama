@@ -12,35 +12,39 @@ const LoginScreen = ( {navigation} ) => {
 	const [PW, setPW] = useState("");
 
 	async function handleLogin(event) {
-		event.preventDefault()
-		// IP address is unique, expo/express can't resolve 'localhost' so you need to ipconfig in cmd and replace with the ipv4
-		// This should be no issue once deployed on heroku
-		const response = await fetch('http://172.23.224.1:3000/api/login', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				UserName: UN,
-				Password: PW
-			}),
-		})
+		navigation.navigate('Home');
+		// event.preventDefault()
+		// // IP address is unique, expo/express can't resolve 'localhost' so you need to ipconfig in cmd and replace with the ipv4
+		// // This should be no issue once deployed on heroku
+		// const response = await fetch('http://172.23.224.1:3000/api/login', {
+		// 	method: 'POST',
+		// 	headers: {
+		// 		'Content-Type': 'application/json',
+		// 		'Accept': 'application/json',
+		// 	},
+		// 	body: JSON.stringify({
+		// 		UserName: UN,
+		// 		Password: PW
+		// 	}),
+		// }).catch(err => {
+		// 	console.log(err);
+		// })
 
-		const data = await response.json()
+		// const data = await response.json()
 
-		if (data.error == '') {
-			navigation.navigate('Home');
-		} else if (data.error == 'Passwords do not match.') {
-			Toast.show({
-				type: 'error',
-				text1: 'Username / Password combination is incorrect'
-			})
-		} else {
-			Toast.show({
-				type: 'error',
-				text1: 'Username / Password combination is incorrect'
-			})
-		}
+		// if (data.error == '') {
+		// 	navigation.navigate('Home');
+		// } else if (data.error == 'Passwords do not match.') {
+		// 	Toast.show({
+		// 		type: 'error',
+		// 		text1: 'Username / Password combination is incorrect'
+		// 	})
+		// } else {
+		// 	Toast.show({
+		// 		type: 'error',
+		// 		text1: 'Username / Password combination is incorrect'
+		// 	})
+		// }
 	}
 
 	const switchS = () => { //handles screen switching
@@ -59,8 +63,9 @@ const LoginScreen = ( {navigation} ) => {
 					backgroundColor = '#fff'
 				/>
 				<TextInput
-					placeholder= "Passowrd"
+					placeholder= "Password"
 					style = {styles.input}
+					secureTextEntry={true}
 					onChangeText = {(val) => setPW(val)}
 					backgroundColor = '#fff'
 				/>
