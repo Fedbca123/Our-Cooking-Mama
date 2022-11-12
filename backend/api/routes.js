@@ -75,7 +75,8 @@ router.post('/login', async (req, res, next) =>
 
     if (result != null)
     {
-        if (bcrypt.compare(password, result.Password))
+        var isEqual = await bcrypt.compare(password, result.Password);
+        if (isEqual)
         {
             id = result._id;
             fn = result.FirstName;
@@ -96,5 +97,8 @@ router.post('/login', async (req, res, next) =>
         res.status(400).json({ _id:id, FirstName:fn, LastName:ln, error:error});
     }
 })
+
+// create/edit Profile
+router.post()
 
 module.exports = router;
