@@ -3,23 +3,10 @@ const router = express.Router()
 const bcrypt = require('bcrypt');
 
 const userRegister = require ('../model/userAccount.js');
+const userProfile = require ('../model/userProfile.js');
 const { Model } = require('mongoose');
 
-function getCookie(cname) {
-    let name = cname + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    for(let i = 0; i <ca.length; i++) {
-      let c = ca[i];
-      while (c.charAt(0) == ' ') {
-        c = c.substring(1);
-      }
-      if (c.indexOf(name) == 0) {
-        return c.substring(name.length, c.length);
-      }
-    }
-    return "";
-  }
+const DEBUG = true;
 
 //Post Method
 router.post('/register', async (req, res) => 
@@ -116,9 +103,13 @@ router.post('/login', async (req, res, next) =>
 
 // create/edit Profile
 router.post('/editProfile', async (req, res) => {
-    const result = await userProfile.findOne({ UserName: username }).exec();
     const feed = "feedID";
-    let user = getCookie("id");
+    if (DEBUG == true) {
+        // cheonsa143 testing
+        const userId = "636ac93cedd560025e6c8893";
+    } else {
+        const userId = req.body._id;
+    }
     try {
         // check if id is valid
         if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -142,36 +133,42 @@ router.post('/editProfile', async (req, res) => {
                     PersonalFeedID: feed,
                     Pronouns: req.body.pronouns 
                 })
-
-            } else if (!result) {
-                // create profile
-                console.log('User profile not found. Please create one.')
-                
+                try {
+                    const filter = {_id: "636ac93cedd560025e6c8893"};
+                    const updatedProfile = await userProfile.findOneAndUpdate(filter, profile, {
+                        new: true,
+                        upsert: true,
+                        projection: { _id: 0, __v: 0 }
+                    });
+                    console.log(updatedProfile);
+                    res.status(200).json(updatedProfile)
+                } catch(error) {
+                    // Profile creation/update error
+                    console.log(error);
+                    error = "Cannot find user account.";
+                    res.status(400).json({ _id:id, FirstName:fn, LastName:ln, error:error});
+                }
             }
-        } 
+        }
     } catch {
-        // Profile creation/update error
-        error = "Cannot find user account.";
-        res.status(400).json({ _id:id, FirstName:fn, LastName:ln, error:error});
+        console.log(error);
     }
 })
 
 router.post('/searchProfiles', async (req, res, next) =>
 {
-    const query = '/' + req.body.Query + '/i';
-    console.log(query);
+    const query = req.body.Query;
 
-    const result = await userRegister.find({UserName:query}, (err, result) =>
+    const result = await userRegister.find({UserName: {$regex: query, $options: 'i'}}).exec();
+    
+    if (result != null)
     {
-        if (err)
-        {
-            res.status(400).json({Error:err});
-        }
-        else
-        {
-            res.status(200).json(JSON.stringify(result));
-        }
-    });
+        res.status(200).json(result);
+    }
+    else
+    {
+        res.status(400).json({error:"No results found."});
+    }
 })
 
 module.exports = router;
