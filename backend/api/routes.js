@@ -156,4 +156,22 @@ router.post('/editProfile', async (req, res) => {
     }
 })
 
+router.post('/searchProfiles', async (req, res, next) =>
+{
+    const query = '/' + req.body.Query + '/i';
+    console.log(query);
+
+    const result = await userRegister.find({UserName:query}, (err, result) =>
+    {
+        if (err)
+        {
+            res.status(400).json({Error:err});
+        }
+        else
+        {
+            res.status(200).json(JSON.stringify(result));
+        }
+    });
+})
+
 module.exports = router;
