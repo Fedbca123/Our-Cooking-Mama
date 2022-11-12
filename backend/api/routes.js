@@ -98,7 +98,20 @@ router.post('/login', async (req, res, next) =>
     }
 })
 
-// create/edit Profile
-router.post()
+router.post('/searchProfiles', async (req, res, next) =>
+{
+    const query = req.body.Query;
+
+    const result = await userRegister.find({UserName: {$regex: query, $options: 'i'}}).exec();
+    
+    if (result != null)
+    {
+        res.status(200).json(result);
+    }
+    else
+    {
+        res.status(400).json({error:"No results found."});
+    }
+})
 
 module.exports = router;
