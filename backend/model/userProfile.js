@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-const userId = UserAccountSchema.Schema.Types.ObjectId;
-
 const userProfileSchema = new mongoose.Schema 
 ({
     NickName: String,
@@ -10,7 +8,7 @@ const userProfileSchema = new mongoose.Schema
     FavFood: Array,
     FavoriteFlavor: Array,
     FoodAllerg: Array,
-    UserID: userId,
+    UserID: {type: mongoose.Schema.Types.ObjectId, ref: 'userReg'},
     AccountType: Boolean,
     PersonalFeedID: String,
     Pronouns: String
