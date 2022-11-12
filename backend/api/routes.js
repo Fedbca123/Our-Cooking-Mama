@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 
 const userRegister = require ('../model/userAccount.js');
 const userProfile = require ('../model/userProfile.js');
-const { Model } = require('mongoose');
+const mongoose = require('mongoose');
 
 const DEBUG = true;
 
@@ -78,7 +78,7 @@ router.post('/login', async (req, res, next) =>
 
     if (result != null)
     {
-        var isEqual = await bcrypt.compare(password, result.Password);
+        var isEqual = await bcrypt.compare(password, result.Password).exec();
         if (isEqual)
         {
             id = result._id;
@@ -103,54 +103,47 @@ router.post('/login', async (req, res, next) =>
 
 // create/edit Profile
 router.post('/editProfile', async (req, res) => {
+    // TO DO: Replace feed variable with _id from Personal Feed once created
     const feed = "feedID";
-    if (DEBUG == true) {
-        // cheonsa143 testing
-        const userId = "636ac93cedd560025e6c8893";
-    } else {
-        const userId = req.body._id;
-    }
+    // Getting this userId from cookie on frontend
+    const userId = "666ac93cedd560025e6c1111";
+    const result = await userRegister.findOne({ _id: userId }).exec();
     try {
         // check if id is valid
-        if (!mongoose.Types.ObjectId.isValid(userId)) {
+        if (result == null) {
             var ret = {userId: -1, error: "User Account Not Found."}
             return res.json(ret);
         } else {
-            // check if profile exists already
-            if (result) {
-                // edit profile
-                console.log('User profile found. Please edit.')
-                const profile = new userProfile ({
-                    NickName: req.body.NickName,
-                    DietRest: req.body.DietRest,
-                    FavCuisine: req.body.FavCuisine,
-                    FavDrink: req.body.FavDrink,
-                    FavFood: req.body.FavFood,
-                    FavoriteFlavor: req.body.FavoriteFlavor,
-                    FoodAllerg: req.body.FoodAllerg,
-                    UserID: result._id,
-                    AccountType: req.body.AccountType,
-                    PersonalFeedID: feed,
-                    Pronouns: req.body.pronouns 
-                })
-                try {
-                    const filter = {_id: "636ac93cedd560025e6c8893"};
-                    const updatedProfile = await userProfile.findOneAndUpdate(filter, profile, {
-                        new: true,
-                        upsert: true,
-                        projection: { _id: 0, __v: 0 }
-                    });
-                    console.log(updatedProfile);
-                    res.status(200).json(updatedProfile)
-                } catch(error) {
-                    // Profile creation/update error
-                    console.log(error);
-                    error = "Cannot find user account.";
-                    res.status(400).json({ _id:id, FirstName:fn, LastName:ln, error:error});
-                }
+            // edit profile
+            console.log('User profile found. Please edit.')
+            const profile = {
+                NickName: req.body.NickName,
+                DietRest: req.body.DietRest,
+                FavCuisine: req.body.FavCuisine,
+                FavDrink: req.body.FavDrink,
+                FavFood: req.body.FavFood,
+                FavoriteFlavor: req.body.FavoriteFlavor,
+                FoodAllerg: req.body.FoodAllerg,
+                UserID: mongoose.Types.ObjectId(userId),
+                AccountType: req.body.AccountType,
+                PersonalFeedID: feed,
+                Pronouns: req.body.pronouns 
+            }
+            try {
+                const updatedProfile = await userProfile.findByIdAndUpdate(userId, profile, {
+                    new: true,
+                    upsert: true,
+                });
+                console.log(updatedProfile);
+                res.status(200).json(updatedProfile)
+            } catch(error) {
+                // Profile creation/update error
+                console.log(error);
+                error = "Cannot find user account.";
+                res.status(400).json(error);
             }
         }
-    } catch {
+    } catch(error) {
         console.log(error);
     }
 })
