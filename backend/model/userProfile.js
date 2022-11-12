@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const userProfileSchema = new mongoose.Schema 
 ({
     NickName: String,
@@ -9,9 +8,10 @@ const userProfileSchema = new mongoose.Schema
     FavFood: Array,
     FavoriteFlavor: Array,
     FoodAllerg: Array,
-    AccountType: Boolean,
+    UserID: {type: String, ref: 'userReg'},
+    AccountType: String,
     PersonalFeedID: String,
-    MostRecentPosts: Array
+    Pronouns: String
  },
  {
     collection: 'UserInfo'
