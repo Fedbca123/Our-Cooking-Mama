@@ -8,8 +8,8 @@ const userProfileSchema = new mongoose.Schema
     FavFood: Array,
     FavoriteFlavor: Array,
     FoodAllerg: Array,
-    UserID: {type: mongoose.Schema.Types.ObjectId, ref: 'userReg'},
-    AccountType: Boolean,
+    UserID: {type: String, ref: 'userReg'},
+    AccountType: String,
     PersonalFeedID: String,
     Pronouns: String
  },
