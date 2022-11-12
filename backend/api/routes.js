@@ -5,6 +5,22 @@ const bcrypt = require('bcrypt');
 const userRegister = require ('../model/userAccount.js');
 const { Model } = require('mongoose');
 
+function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+
 //Post Method
 router.post('/register', async (req, res) => 
 {
@@ -94,6 +110,48 @@ router.post('/login', async (req, res, next) =>
     else
     {
         error = 'User not found.';
+        res.status(400).json({ _id:id, FirstName:fn, LastName:ln, error:error});
+    }
+})
+
+// create/edit Profile
+router.post('/editProfile', async (req, res) => {
+    const result = await userProfile.findOne({ UserName: username }).exec();
+    const feed = "feedID";
+    let user = getCookie("id");
+    try {
+        // check if id is valid
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            var ret = {userId: -1, error: "User Account Not Found."}
+            return res.json(ret);
+        } else {
+            // check if profile exists already
+            if (result) {
+                // edit profile
+                console.log('User profile found. Please edit.')
+                const profile = new userProfile ({
+                    NickName: req.body.NickName,
+                    DietRest: req.body.DietRest,
+                    FavCuisine: req.body.FavCuisine,
+                    FavDrink: req.body.FavDrink,
+                    FavFood: req.body.FavFood,
+                    FavoriteFlavor: req.body.FavoriteFlavor,
+                    FoodAllerg: req.body.FoodAllerg,
+                    UserID: result._id,
+                    AccountType: req.body.AccountType,
+                    PersonalFeedID: feed,
+                    Pronouns: req.body.pronouns 
+                })
+
+            } else if (!result) {
+                // create profile
+                console.log('User profile not found. Please create one.')
+                
+            }
+        } 
+    } catch {
+        // Profile creation/update error
+        error = "Cannot find user account.";
         res.status(400).json({ _id:id, FirstName:fn, LastName:ln, error:error});
     }
 })
