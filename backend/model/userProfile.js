@@ -13,7 +13,6 @@ const userProfileSchema = new mongoose.Schema
     UserID: userId,
     AccountType: Boolean,
     PersonalFeedID: String,
-    MostRecentPosts: Array,
     Pronouns: String
  },
  {
