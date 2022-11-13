@@ -3,15 +3,15 @@ const mongoose = require('mongoose');
 const userProfileSchema = new mongoose.Schema 
 ({
     NickName: String,
-    DietRest: Array,
-    FavCuisine: Array,
-    FavDrink: Array,
-    FavFood: Array,
-    FavoriteFlavor: Array,
-    FoodAllerg: Array,
+    DietRest: [String],
+    FavCuisine: [String],
+    FavDrink: [String],
+    FavFood: [String],
+    FavoriteFlavor: [String],
+    FoodAllerg: [String],
     AccountType: Boolean,
     PersonalFeedID: String,
-    MostRecentPosts: Array
+    MostRecentPosts: [String]
  },
  {
     collection: 'UserInfo'
