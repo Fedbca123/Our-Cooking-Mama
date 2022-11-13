@@ -3,9 +3,9 @@ const mongoose = require('mongoose');
 const userPostSchema = new mongoose.Schema 
 ({
     Category: String,
-    Photo: String,              // waiting on database update
+    Photo: String,            
     Caption: String,
-    Tags: Array,
+    Tags: [String],
     ProfileID: String,
     RecipeID: String
  },
