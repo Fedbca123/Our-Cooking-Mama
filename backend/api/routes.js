@@ -4,9 +4,8 @@ const bcrypt = require('bcrypt');
 
 const userRegister = require ('../model/userAccount.js');
 const userProfile = require ('../model/userProfile.js');
+const userPost = require('../model/userPost.js');
 const mongoose = require('mongoose');
-
-const DEBUG = true;
 
 //Post Method
 router.post('/register', async (req, res) => 
@@ -64,7 +63,7 @@ router.get('/getAll', async (req, res) =>
 })
 
 // Login 
-router.post('/login', async (req, res, next) => 
+router.post('/login', async (req, res) => 
 {
     const username = req.body.UserName;
     var password = req.body.Password;
@@ -105,8 +104,8 @@ router.post('/login', async (req, res, next) =>
 router.post('/editProfile', async (req, res) => {
     // TO DO: Replace feed variable with _id from Personal Feed once created
     const feed = "feedID";
-    // Getting this userId from cookie on frontend
-    const userId = "666ac93cedd560025e6c1111";
+    // Getting this userId from cookie on frontend, verbatim 'userId'
+    const userId = req.body.userId;
     const result = await userRegister.findOne({ _id: userId }).exec();
     try {
         // check if id is valid
@@ -148,7 +147,7 @@ router.post('/editProfile', async (req, res) => {
     }
 })
 
-router.post('/searchProfiles', async (req, res, next) =>
+router.post('/searchProfiles', async (req, res) =>
 {
     const query = req.body.Query;
 
@@ -161,6 +160,55 @@ router.post('/searchProfiles', async (req, res, next) =>
     else
     {
         res.status(400).json({error:"No results found."});
+    }
+})
+
+// search Post
+router.post('/searchPosts', async (req, res) =>
+{
+    try
+    {
+        const query = req.body.Query;
+
+        const result = await userPost.find({Tags: {$regex: query, $options: 'i'}}).exec();
+        
+        if (result != null)
+        {
+            res.status(200).json(result);
+        }
+        else
+        {
+            res.status(400).json({error:"No results found."});
+        }
+    }
+    catch (err)
+    {
+        res.status(500).json({error:err});
+    }
+})
+
+// add Post
+router.post('/addPost', async (req, res) => {
+    try {
+        const userId = req.body.userId;
+        const recipeId = req.body.recipeId;
+        const post = new userPost ({
+            Category: req.body.Category,
+            Photo: req.body.Photo,
+            Caption: req.body.Caption,
+            Tags: req.body.Tags,
+            ProfileID: mongoose.Types.ObjectId(userId),
+            RecipeID: mongoose.Types.ObjectId(recipeId)
+        })
+        try {
+            const newPost = await post.save();
+            console.log(newPost);
+            res.status(200).json(newPost)
+        } catch(error) {
+            console.log(error);
+        }
+    } catch(error) {
+        console.log(error);
     }
 })
 
