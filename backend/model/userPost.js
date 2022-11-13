@@ -10,7 +10,7 @@ const userPostSchema = new mongoose.Schema
     RecipeID: String
  },
  {
-    collection: 'UserPost'      // waiting on database update
+    collection: 'UserPost'      
  }
 );
 
