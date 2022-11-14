@@ -23,7 +23,7 @@
   },
   "scripts": {
     "dev": "react-scripts start",
-    "start": "react-scripts build",
+    "start": "nodemon ./backend/index.js",
     "build": "react-scripts build",
     "heroku-postbuild": "npm run build"
   },
