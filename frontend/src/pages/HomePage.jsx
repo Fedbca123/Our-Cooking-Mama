@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 
+import NavBar from '../components/NavBar-Components/NavBar';
+
 export const HomePage = (props) => {
 
     return (
+        
         <div>
-            <h1>Home Page</h1>
+            <NavBar />
+            home page
         </div>
     )
 }

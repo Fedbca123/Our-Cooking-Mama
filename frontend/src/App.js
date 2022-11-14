@@ -8,7 +8,10 @@ import "./App.css";
 
 import LoginPage from './components/Login';
 import RegisterPage from './components/Register';
-import HomePage from './components/HomePage';
+import HomePage from './pages/HomePage';
+import ProfilePage from "./pages/ProfilePage";
+
+import NavBar from "./components/NavBar-Components/NavBar";
 
 function App() {
 	//const [currentForm, setCurrentForm] = useState("login");
@@ -25,6 +28,8 @@ function App() {
 				<Route path="/login" element={<LoginPage />} />
 				<Route path="/register" element={<RegisterPage />} />
 				<Route path="/homepage" element={<HomePage />} />
+				<Route path="/profile" element={<ProfilePage />} />
+				<Route path="/nav" element={<NavBar />} />
 			</Routes>
 		</BrowserRouter>
 		</div>
