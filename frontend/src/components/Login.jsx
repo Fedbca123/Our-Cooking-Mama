@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useHistory, useNavigate } from 'react-router-dom';
 
+import NavBarLanding from '../components/NavBar-Components/NavBarLanding';
+
 export const Login = (props) => {
 
     const navigate = useNavigate();
@@ -22,42 +24,7 @@ export const Login = (props) => {
 
     const [message,setMessage] = useState('');
 
-    const handleSubmit = async event => {
-
-       //event.preventDefault();
-
-        //var tmp = {UserName: username, Password: pass};
-        //var obj = JSON.stringify(tmp);
-
-        //try{
-
-            //const response = await fetch(buildPath('api/login'),
-                //{
-                   // method:'FETCH',
-                   // body:obj,
-                   // headers:{'Content-Type': 'application/json'},
-                //});
-             //var result = JSON.parse(await response.text());
-
-             //if( result.id <= 0 ){
-
-                //setMessage('User/Password incorrect');
-
-             //} else {
-
-                //var user = {firstName: result.FirstName, lastName: result.LastName, id: result.id};
-                //localStorage.setItem('user_data', JSON.stringify(user));
-                
-               // setMessage('');
-               // window.location.href = '/HomePage'
-            // }
-
-        //} catch(e) {
-        //    alert(e.toString());
-         //   return;
-        //}
-       // console.log(username);
-    }
+    
 
     async function login(event){
         
@@ -84,26 +51,32 @@ export const Login = (props) => {
 
             console.log(result.error);
             setMessage(result.error);
+            
+            // Need to change it here so if the login infor is wrong then they cant get in.. right now it just lets them in.
+            //window.location.href = "/homepage";
 
-            window.location.href = "/homepage";
         } catch(error) {
             console.log(error);
         }
     }
 
     return (
-        <div className="auth-form-container">
-            <label htmlFor="username">Username</label>
-            <input type="text" value={username} placeholder="user1234" id="username" name="username" onChange={e => setUser(e.target.value)}/>
+        <div>
+            <NavBarLanding className="landingNav"/>
 
-            <label htmlFor="password">Password</label>
-            <input type="password" value={pass} placeholder="*******" id="password" name="password" onChange={e => setPass(e.target.value)}/>
+            <div className="auth-form-container">
+                <label htmlFor="username">Username</label>
+                <input type="text" value={username} placeholder="user1234" id="username" name="username" onChange={e => setUser(e.target.value)}/>
 
-            <button type="submit" onClick={login}>Log In</button>
-            <span id="loginResult">{message}</span>
+                <label htmlFor="password">Password</label>
+                <input type="password" value={pass} placeholder="*******" id="password" name="password" onChange={e => setPass(e.target.value)}/>
 
-            <br></br>
-            <button className="link-btn" onClick={() => navigate('/register')}>New Chef?</button>
+                <button type="submit" onClick={login}>Log In</button>
+                <span id="loginResult">{message}</span>
+
+                <br></br>
+                <button className="link-btn" onClick={() => navigate('/register')}>New Chef?</button>
+            </div>
         </div>
     )
 }

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useHistory, useNavigate } from 'react-router-dom';
 
+import NavBarLanding from '../components/NavBar-Components/NavBarLanding';
+
 export const Register = (props) => 
 {
     const navigate = useNavigate();
@@ -78,7 +80,10 @@ export const Register = (props) =>
     }
 
     return(
-        <div className="auth-form-container">
+        <div>
+                <NavBarLanding className="landingNav"/>
+                
+            <div className="auth-form-container">
                 <label htmlFor="first_name">First Name</label>
                 <input type="text" value={first_name} name="first_name" id="first_name" placeHolder="First Name" onChange={e => setFirst(e.target.value)}/>
 
@@ -99,8 +104,9 @@ export const Register = (props) =>
 
                 <button type="submit" onClick={register}>Register</button>
                 <span id="registerResult">{message}</span>
-            <br></br>
-            <button className="link-btn" onClick={() => navigate('/login')}>Existing Chef?</button>
+                <br></br>
+                <button className="link-btn" onClick={() => navigate('/login')}>Existing Chef?</button>
+            </div>
         </div>
     )
     
