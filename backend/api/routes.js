@@ -147,6 +147,7 @@ router.post('/editProfile', async (req, res) => {
     }
 })
 
+// Search profiles
 router.post('/searchProfiles', async (req, res) =>
 {
     const query = req.body.Query;
@@ -187,6 +188,34 @@ router.post('/searchPosts', async (req, res) =>
     }
 })
 
+// edit a Post
+router.post('/editPost', async (req, res) =>
+{
+    try {
+        const postId = req.body.PostID;
+        const recipeId = req.body.RecipeID;
+        const profileId = req.body.ProfileID;
+        const post = {
+            Category: req.body.Category,
+            Photo: req.body.Photo,            
+            Caption: req.body.Caption,
+            Tags: req.body.Tags,
+            ProfileID: profileId,
+            RecipeID: recipeId
+        }
+
+        const updatedPost = await userPost.findByIdAndUpdate(postId, post, {
+            new: true,
+            upsert: true,
+        });
+        console.log(updatedPost);
+        res.status(200).json(updatedPost)
+    }
+    catch(error) {
+        console.log(error);
+    }
+})
+
 // add Post
 router.post('/addPost', async (req, res) => {
     try {
@@ -208,6 +237,25 @@ router.post('/addPost', async (req, res) => {
             console.log(error);
         }
     } catch(error) {
+        console.log(error);
+    }
+})
+
+// delete a Post
+router.post('/deletePost/:id', (req, res) => {
+    try {
+        userPost.findByIdAndDelete(req.params.id)
+            .then((post) => {
+                if (!post) {
+                    return res.status(404).send();
+                } else {
+                    res.send(post);
+                }
+            })
+            .catch((error) => {
+                res.status(500).send(error);
+            })
+    } catch (error) {
         console.log(error);
     }
 })
