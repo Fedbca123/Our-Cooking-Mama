@@ -1,3 +1,5 @@
+import cors from 'cors'
+
 const express = require('express');
 const { connections } = require('mongoose');
 const https = require("https");
