@@ -14,6 +14,7 @@ import LandingPage from "./pages/LandingPages/LandingPage";
 
 import NavBar from "./components/NavBar-Components/NavBar";
 import NavBarLanding from "./components/NavBar-Components/NavBarLanding";
+import AboutUs from "./pages/LandingPages/AboutUs";
 
 function App() {
 	//const [currentForm, setCurrentForm] = useState("login");
@@ -29,8 +30,11 @@ function App() {
 				<Route path="/" element={<LandingPage />} />
 				<Route path="/login" element={<LoginPage />} />
 				<Route path="/register" element={<RegisterPage />} />
+				<Route path="/about-us" element={<AboutUs />} />
+
 				<Route path="/homepage" element={<HomePage />} />
 				<Route path="/profile" element={<ProfilePage />} />
+
 				<Route path="/nav" element={<NavBar />} />
 			</Routes>
 		</BrowserRouter>

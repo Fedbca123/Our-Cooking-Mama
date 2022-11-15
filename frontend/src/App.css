@@ -17,6 +17,16 @@
     flex-direction: column;
 }
 
+.AboutUse {
+    text-align: center;
+    display: flex;
+}
+
+.MeetTheTeam, .Motivation{
+    text-align: left;
+    padding: 2.25rem;
+}
+
 label {
     text-align: left;
     padding: 0.25rem 0;

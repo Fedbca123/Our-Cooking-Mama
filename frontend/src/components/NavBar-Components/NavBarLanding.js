@@ -12,7 +12,7 @@ export default function NavBarLanding() {
             <ul>
                 <CustomLink to="/login">Login</CustomLink>
                 <CustomLink to="/register">Register</CustomLink>
-                <CustomLink to="/about">About Us</CustomLink>
+                <CustomLink to="/about-us">About Us</CustomLink>
             </ul>
         </nav>
     )
