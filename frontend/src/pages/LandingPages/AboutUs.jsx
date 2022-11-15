@@ -23,6 +23,8 @@ export const AboutUs = (props) => {
                         <ul>
                             <li>Rachel Biesiedzinski</li>
                             <li>Omar Shalaby</li>
+                            <li>Chris Merino</li>
+                            <li>Chrystian Orren</li>
                         </ul>
                         
                         <li><b>2 TPS of Back End:</b></li>
