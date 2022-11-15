@@ -16,35 +16,47 @@ export const Register = (props) =>
     const [reType, setReType] = useState();
     const [message,setMessage] = useState('');
 
-    const handleSubmit = async (e) => {
-        // console.log("wee hoo");
-        // e.preventDefault();
-        // try {
-        //     const response = await fetch('http://172.25.208.1:3000/api/register', {
-        //         method: 'post',
-        //         headers: {
-        //             'Accept': 'application/json',
-        //             'Content-Type':'application/json'
-        //         },
-        //         body: JSON.stringify({
-        //             FirstName: "holy fuck",
-        //             LastName: "last name",
-        //             UserName: "webapp freaking works!",
-        //             Email: "email",
-        //             Password: "cats"
-        //         })
-        //     });
-        //     const data = await response.json();
-		// 	console.log(data._id);
-        // } catch (e) {
-        //     console.log(e);
-        // }
+    // const handleSubmit = async (e) => {
+    //     // console.log("wee hoo");
+    //     // e.preventDefault();
+    //     // try {
+    //     //     const response = await fetch('http://172.25.208.1:3000/api/register', {
+    //     //         method: 'post',
+    //     //         headers: {
+    //     //             'Accept': 'application/json',
+    //     //             'Content-Type':'application/json'
+    //     //         },
+    //     //         body: JSON.stringify({
+    //     //             FirstName: "holy fuck",
+    //     //             LastName: "last name",
+    //     //             UserName: "webapp freaking works!",
+    //     //             Email: "email",
+    //     //             Password: "cats"
+    //     //         })
+    //     //     });
+    //     //     const data = await response.json();
+	// 	// 	console.log(data._id);
+    //     // } catch (e) {
+    //     //     console.log(e);
+    //     // }
 
-    }
+    // }
 
     // I removed the form submit function as a sanity check sorry! I added this to the 'register' button
     async function register(event){ 
         event.preventDefault();
+
+        const app_name = 'your-cooking-mom-test'
+        function buildPath(route)
+        {
+            if (process.env.NODE_ENV === 'test') {
+                return 'https://' + app_name +  '.herokuapp.com/' + route;
+            }
+            else
+            {        
+                return 'http://localhost:3000/' + route;
+            }
+        }
 
         try{
             if(reType !== pass){
@@ -55,7 +67,7 @@ export const Register = (props) =>
             if(first_name === ""|| last_name === "" || email === ""|| pass === "" || reType === "" || username === ""){
                 setMessage("Please fill in all fields.");
             }
-            let result = await fetch('http://localhost:3000/api/register', {
+            let result = await fetch(buildPath("api/register"), {
                 method: 'POST',
                 headers: {
                     'Content-Type':'application/json',

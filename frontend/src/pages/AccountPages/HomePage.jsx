@@ -8,7 +8,7 @@ export const HomePage = (props) => {
         
         <div>
             <NavBar />
-            home page
+            Home Page
         </div>
     )
 }

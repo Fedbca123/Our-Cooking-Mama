@@ -35,26 +35,26 @@ export const Login = (props) => {
             if(username === "" || pass === "") {
                 setMessage("Please Fill in both fields.");
                 return;
+            } else { //added else statement so user can't login if they don't fill in both fields.
+                let result = await fetch(buildPath("api/login"), {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type':'application/json',
+                        'Accept':'application/json'
+                    },
+                    body:JSON.stringify({
+                        UserName: username,
+                        Password: pass
+                    })
+                });
+                result = await result.json();
+
+                console.log(result.error);
+                setMessage(result.error);
+                
+                // Need to change it here so if the login infor is wrong then they cant get in.. right now it just lets them in.
+                window.location.href = "/homepage";
             }
-            let result = await fetch('http://localhost:3000/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type':'application/json',
-                    'Accept':'application/json'
-                },
-                body:JSON.stringify({
-                    UserName: username,
-                    Password: pass
-                })
-            });
-            result = await result.json();
-
-            console.log(result.error);
-            setMessage(result.error);
-            
-            // Need to change it here so if the login infor is wrong then they cant get in.. right now it just lets them in.
-            //window.location.href = "/homepage";
-
         } catch(error) {
             console.log(error);
         }
