@@ -1,13 +1,42 @@
-import React from 'react'
-import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput } from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Modal } from 'react-native'
 import { Divider } from 'react-native-elements'
 
 const Post = ({ post }) => {
+    const [modalVisible, setModalVisible] = useState(false);
     return (
         <View style={{ marginBottom: 30 }}>
-            <Divider width={10} orientation='vertical' color='black' />
+            <Divider width={1} orientation='vertical' color='black' />
             <PostHeader post={post} />
-            <PostImage post={post}></PostImage>
+            <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <PostImage post={post}></PostImage>
+            </TouchableOpacity>
+
+
+
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <Modal
+                    animationType='fade'
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        setModalVisible(!modalVisible);
+                    }}
+                >
+                    <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                        <View style={styles.popcap}>
+                            <Popup post={post}></Popup>
+                        </View>
+                    </TouchableOpacity>
+                </Modal>
+            </View>
+
+
+
+
+
+
+
             <View style={{ marginHorizontal: 15, marginVertical: 10 }}>
                 <PostFooter></PostFooter>
                 <Likes post={post}></Likes>
@@ -40,7 +69,7 @@ const PostFooter = () => (
     <View style={{ flexDirection: 'row' }}>
         <View style={styles.leftFooterIconsContianer}>
             <Icon imgStyle={styles.footerIcon} imgUrl={'https://cdn-icons-png.flaticon.com/512/126/126473.png'}></Icon>
-            <Icon imgStyle={styles.footerIcon} imgUrl={'https://www.pngfind.com/pngs/m/247-2474217_png-file-svg-comment-icon-transparent-png.png'}></Icon>
+
             <Icon imgStyle={styles.footerIcon} imgUrl={'https://toppng.com/uploads/preview/share-png-file-share-icon-free-download-1156313309811bbndeiii.png'}></Icon>
         </View>
     </View>
@@ -59,13 +88,30 @@ const Likes = ({ post }) => (
 )
 
 const Caption = ({ post }) => (
-    <View style={{marginTop: 5}}>
+    <View style={{ marginTop: 5 }}>
         <Text>
-            <Text style={{ fontWeight: '600',}}>{post.user} </Text>
-            <Text>{post.caption}</Text>
+            <Text style={{ fontWeight: '600' }}>{post.user} </Text>
+            <Text>{post.title}</Text>
+            {/* BELOW HAS INVISIBLE CHARACTERS THIS IS AWFUL BUT I DONT KNOW HOW TO STRETCH THE CAPTION TO WIDTH OF SCREEN! OR ELSE IT WILL SHNRINK EVERYTHING */}
+            <Text>ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ</Text>
         </Text>
     </View>
+)
 
+const Popup = ({ post }) => (
+    <View>
+        <View style={{ alignItems: 'center' }}>
+            <Text style={{marginTop: 15}}>
+            <Text style={{fontWeight: '900', color: 'blue', }}>Tags or food type(bfast lunch dinner) here: </Text>
+            <Text style={{fontWeight: '900', color: 'blue', }}>n/a</Text>
+            </Text>
+            <Image source={{ uri: post.imageUrl }} style={{ height: '50%', resizeMode: 'cover', width: 300, height: 250 }}></Image>
+        </View>
+
+        <View style={{ marginTop: 20, marginHorizontal: 10, alignItems: 'center' }}>
+            <Text style={{ fontSize: 20, fontWeight: '600' }}>{post.caption}</Text>
+        </View>
+    </View>
 )
 
 const styles = StyleSheet.create({
@@ -83,9 +129,20 @@ const styles = StyleSheet.create({
     },
     leftFooterIconsContianer: {
         flexDirection: 'row',
-        width: '32%',
+        width: '20%',
         justifyContent: 'space-between',
-    }
+    },
+    popcap: {
+        marginTop: '25%',
+        borderRadius: 30,
+        borderWidth: 5,
+        backgroundColor: 'pink',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        alignSelf: 'center',
+        width: '85%',
+        height: '85%',
+    },
 
 })
 

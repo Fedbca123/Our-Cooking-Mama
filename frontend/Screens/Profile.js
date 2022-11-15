@@ -1,18 +1,30 @@
 import * as React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, Image, FlatList, SafeAreaView, ImageBackground, ScrollView } from 'react-native';
 import BottomTabs from '../components/BottomTabs';
+import Header from '../components/profile/Header';
+import ProfileSummary from '../components/profile/ProfileSummary';
+import UserPosts from '../components/profile/UserPosts';
 
-export default function Profile({navigation}) {
+import { PROFILE } from '../dummydata/profile'
+
+export default function Profile({ navigation }) {
+  const background = '../Images/OCMgradient.png'
   return (
-    <View style={styles.container}>
-      <Text>Our profile page!</Text>
-      <BottomTabs navigation={navigation}/>
-    </View>
+    <ImageBackground style={styles.background} source={require(background)}>
+      <SafeAreaView style={styles.container}>
+        <Header navigation={navigation}></Header>
+        <ProfileSummary profile={PROFILE}></ProfileSummary>
+        <UserPosts profile={PROFILE[0].posts}></UserPosts>
+        <BottomTabs navigation={navigation}/>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+  },
+  background: {
     flex: 1,
   },
 });

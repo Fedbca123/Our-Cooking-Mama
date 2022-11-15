@@ -6,7 +6,7 @@ import { StyleSheet } from 'react-native';
 
 const homeIcon = '../Images/homeIcon.png';
 const profileIcon = '../Images/profileIcon.png';
-const cameraIcon = '../Images/cameraIcon.png';
+const cameraIcon = '../Images/cameraIcon.jpg';
 
 export const bottomTabIcons = [
     {
