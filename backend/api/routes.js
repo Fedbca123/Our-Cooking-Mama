@@ -104,8 +104,8 @@ router.post('/login', async (req, res, next) =>
 router.post('/editProfile', async (req, res) => {
     // TO DO: Replace feed variable with _id from Personal Feed once created
     const feed = "feedID";
-    // Getting this userId from cookie on frontend
-    const userId = "666ac93cedd560025e6c1111";
+    // Getting this userId from cookie on frontend, verbatim 'userId'
+    const userId = req.body.userId;
     const result = await userRegister.findOne({ _id: userId }).exec();
     try {
         // check if id is valid
