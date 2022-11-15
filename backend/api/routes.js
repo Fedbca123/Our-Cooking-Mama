@@ -3,18 +3,10 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 
 const userRegister = require("../model/userAccount.js");
-const { Model } = require("mongoose");
+const userProfile = require("../model/userProfile.js");
+const mongoose = require("mongoose");
 
-
-router.use(function(req, res, next) {
-	res.header("Access-Control-Allow-Origin", "http://localhost:3001"); // change the 3001 port the port where your webapp is running from!!
-	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-	next();
-  });
-
-
-
-
+const DEBUG = true;
 
 //Post Method
 router.post("/register", async (req, res) => {
@@ -64,7 +56,7 @@ router.get("/getAll", async (req, res) => {
 // Login
 router.post("/login", async (req, res, next) => {
 	const username = req.body.UserName;
-	var password = req.body.Password;
+	var Password = req.body.Password;
 
 	var id = -1;
 	var fn = "";
@@ -74,8 +66,7 @@ router.post("/login", async (req, res, next) => {
 	const result = await userRegister.findOne({ UserName: username }).exec();
 
 	if (result != null) {
-		var isEqual = await bcrypt.compare(password, result.Password);
-		if (isEqual) {
+		if (bcrypt.compare(Password, result.Password)) {
 			id = result._id;
 			fn = result.FirstName;
 			ln = result.LastName;
@@ -99,6 +90,71 @@ router.post("/login", async (req, res, next) => {
 			LastName: ln,
 			error: error,
 		});
+	}
+});
+
+// create/edit Profile
+router.post("/editProfile", async (req, res) => {
+	// TO DO: Replace feed variable with _id from Personal Feed once created
+	const feed = "feedID";
+	// Getting this userId from cookie on frontend, verbatim 'userId'
+	const userId = req.body.userId;
+	const result = await userRegister.findOne({ _id: userId }).exec();
+	try {
+		// check if id is valid
+		if (result == null) {
+			var ret = { userId: -1, error: "User Account Not Found." };
+			return res.json(ret);
+		} else {
+			// edit profile
+			console.log("User profile found. Please edit.");
+			const profile = {
+				NickName: req.body.NickName,
+				DietRest: req.body.DietRest,
+				FavCuisine: req.body.FavCuisine,
+				FavDrink: req.body.FavDrink,
+				FavFood: req.body.FavFood,
+				FavoriteFlavor: req.body.FavoriteFlavor,
+				FoodAllerg: req.body.FoodAllerg,
+				UserID: mongoose.Types.ObjectId(userId),
+				AccountType: req.body.AccountType,
+				PersonalFeedID: feed,
+				Pronouns: req.body.pronouns,
+			};
+			try {
+				const updatedProfile = await userProfile.findByIdAndUpdate(
+					userId,
+					profile,
+					{
+						new: true,
+						upsert: true,
+					},
+				);
+				console.log(updatedProfile);
+				res.status(200).json(updatedProfile);
+			} catch (error) {
+				// Profile creation/update error
+				console.log(error);
+				error = "Cannot find user account.";
+				res.status(400).json(error);
+			}
+		}
+	} catch (error) {
+		console.log(error);
+	}
+});
+
+router.post("/searchProfiles", async (req, res, next) => {
+	const query = req.body.Query;
+
+	const result = await userRegister
+		.find({ UserName: { $regex: query, $options: "i" } })
+		.exec();
+
+	if (result != null) {
+		res.status(200).json(result);
+	} else {
+		res.status(400).json({ error: "No results found." });
 	}
 });
 
