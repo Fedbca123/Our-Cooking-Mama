@@ -9,7 +9,7 @@ export const AboutUs = (props) => {
         <div>
             <NavBarLanding />
             <div className="AboutUs">
-                <h1>About Us</h1>
+                <h1 className="aboutTitles">About Us</h1>
 
                 <div className="MeetTheTeam">
                     <h2>Meet Our Team</h2>
@@ -46,7 +46,9 @@ export const AboutUs = (props) => {
                     <p>
                         For the trained chefs and the self-taught chefs to create and share what they are proud of!
                         The creation of Our Cooking Mama is a UCF based project, created as a large project for 
-                        COP 4331. 
+                        COP 4331. Our goal was to create a platform for the foodies of the world to share photos of 
+                        meals they made as well as giving the option to share the recipie for others to try, aiming 
+                        to grow a foodie community with you and your mom.... or rather our mom.
                     </p>
                 </div>
             </div>

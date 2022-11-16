@@ -5,9 +5,10 @@ import { Link, useMatch, useResolvedPath } from "react-router-dom";
 export default function NavBar() {
 	const path = window.location.pathname;
 
-	function logOut() {
-		window.location.href = "/login";
-	}
+	// function logOut() {
+	// 	window.location.href = "/login";
+	// }
+
 	return (
 		<nav className="nav">
 			<Link to="/homepage" className="site-title">
@@ -17,7 +18,9 @@ export default function NavBar() {
 			<ul>
 				<CustomLink to="/homepage">Home Page</CustomLink>
 				<CustomLink to="/profile">Profile</CustomLink>
-				<Link onClick={logOut()}> Log Out</Link>
+				<CustomLink to="/search">Search</CustomLink>
+				<CustomLink to="/">Log Out</CustomLink>
+				{/* <Link onClick={logOut()}> Log Out</Link> */}
 			</ul>
 		</nav>
 	);
