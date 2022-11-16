@@ -27,6 +27,10 @@
     padding: 2.25rem;
 }
 
+.landingLogo {
+    max-width: 50%;
+}
+
 label {
     text-align: left;
     padding: 0.25rem 0;
