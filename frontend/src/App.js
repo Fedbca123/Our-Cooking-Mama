@@ -26,7 +26,7 @@ function App() {
 
 	return (
 		<div className="App">
-			<BrowserRouter >
+			
 			<Routes>
 				<Route path="/" element={<LandingPage />} />
 				<Route path="/login" element={<LoginPage />} />
@@ -37,9 +37,9 @@ function App() {
 				<Route path="/profile" element={<ProfilePage />} />
 				<Route path="/search" element={<SearchPage />} />
 
-				<Route path="/nav" element={<NavBar />} />
+			
 			</Routes>
-		</BrowserRouter>
+		
 		</div>
 	);
 }
