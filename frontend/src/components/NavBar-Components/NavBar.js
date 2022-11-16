@@ -8,6 +8,7 @@ export default function NavBar() {
 	function logOut() {
 		window.location.href = "/login";
 	}
+	//<Link onClick={logOut()}> Log Out</Link>
 	return (
 		<nav className="nav">
 			<Link to="/homepage" className="site-title">
@@ -18,7 +19,7 @@ export default function NavBar() {
 				<CustomLink to="/homepage">Home Page</CustomLink>
 				<CustomLink to="/profile">Profile</CustomLink>
 				<CustomLink to="/search">Search</CustomLink>
-				
+				<CustomLink to="/">Log out</CustomLink>
 			</ul>
 		</nav>
 	);
