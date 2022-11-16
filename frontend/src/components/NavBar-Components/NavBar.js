@@ -8,6 +8,7 @@ export default function NavBar() {
 	// function logOut() {
 	// 	window.location.href = "/login";
 	// }
+
 	return (
 		<nav className="nav">
 			<Link to="/homepage" className="site-title">
