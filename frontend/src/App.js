@@ -10,6 +10,7 @@ import LoginPage from './components/Login';
 import RegisterPage from './components/Register';
 import HomePage from './pages/AccountPages/HomePage';
 import ProfilePage from "./pages/AccountPages/ProfilePage";
+import SearchPage from "./pages/AccountPages/SearchPage";
 import LandingPage from "./pages/LandingPages/LandingPage";
 
 import NavBar from "./components/NavBar-Components/NavBar";
@@ -34,6 +35,7 @@ function App() {
 
 				<Route path="/homepage" element={<HomePage />} />
 				<Route path="/profile" element={<ProfilePage />} />
+				<Route path="/search" element={<SearchPage />} />
 
 				<Route path="/nav" element={<NavBar />} />
 			</Routes>
