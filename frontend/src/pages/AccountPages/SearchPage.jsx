@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useHistory, useNavigate } from 'react-router-dom';
 
 import NavBar from '../../components/NavBar-Components/NavBar';
+import Card from '../../components/Recipes-Display/Card';
 
 export const SearchPage = (props) => {
     const navigate = useNavigate();
@@ -44,21 +45,8 @@ export const SearchPage = (props) => {
 
                 {/*Results Display for Recipe Cards Component */}
                 <div className="results-wrapper">
-                    
+                    <Card />
                 </div>
-
-                {/*Recipe Card Component*/}
-                <div className="card">
-                    <div className="card-body">
-                        <img src="" />
-                        <h2 className="card-title">Our Mom's Favorite Meal</h2>
-                        <p className="card-description">This is a test of the card component, 
-                        which will actually pull from the DB a related post's caption if 
-                        properly linked.</p>
-                    </div>
-                    <button className="card-viewrecipe-button">View Recipe</button>
-                </div>
-                
             </div>
         </div>
     )
