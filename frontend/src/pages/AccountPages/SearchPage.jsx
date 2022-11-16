@@ -42,13 +42,21 @@ export const SearchPage = (props) => {
                     </label>
                 </div>
 
-                {/*Results Display Component*/}
+                {/*Results Display for Recipe Cards Component */}
                 <div className="results-wrapper">
-                    <ul className="card-grid">
-                        <li>
+                    
+                </div>
 
-                        </li>
-                    </ul>
+                {/*Recipe Card Component*/}
+                <div className="card">
+                    <div className="card-body">
+                        <img src="" />
+                        <h2 className="card-title">Our Mom's Favorite Meal</h2>
+                        <p className="card-description">This is a test of the card component, 
+                        which will actually pull from the DB a related post's caption if 
+                        properly linked.</p>
+                    </div>
+                    <button className="card-viewrecipe-button">View Recipe</button>
                 </div>
                 
             </div>
