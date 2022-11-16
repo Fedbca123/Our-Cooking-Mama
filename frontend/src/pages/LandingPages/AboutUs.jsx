@@ -9,7 +9,7 @@ export const AboutUs = (props) => {
         <div>
             <NavBarLanding />
             <div className="AboutUs">
-                <h1>About Us</h1>
+                <h1 className="aboutTitles">About Us</h1>
 
                 <div className="MeetTheTeam">
                     <h2>Meet Our Team</h2>
