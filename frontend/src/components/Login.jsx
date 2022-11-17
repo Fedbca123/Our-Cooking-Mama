@@ -10,7 +10,7 @@ export const Login = (props) => {
     const [username, setUser] = useState('');
     const [pass, setPass] = useState('');
 
-    const app_name = 'your-cooking-mom'
+    const app_name = 'your-cooking-mom-test'
     function buildPath(route)
     {
         if (process.env.NODE_ENV === 'production') {
