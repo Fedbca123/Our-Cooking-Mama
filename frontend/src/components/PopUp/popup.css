@@ -19,7 +19,7 @@
 
 }
 
-.pop-inner .close-btn {
+.pop-inner, .close-btn {
     position: absolute;
     top: 16px;
     right: 16 px;

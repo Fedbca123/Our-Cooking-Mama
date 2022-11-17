@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Popup from "../../components/popUp";
+import Popup from "../../components/PopUp/popUp";
 
 import NavBar from '../../components/NavBar-Components/NavBar';
 
