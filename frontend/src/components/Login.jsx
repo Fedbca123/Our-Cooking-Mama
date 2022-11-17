@@ -13,7 +13,7 @@ export const Login = (props) => {
     const app_name = 'your-cooking-mom-test'
     function buildPath(route)
     {
-        if (process.env.NODE_ENV === 'test') {
+        if (process.env.NODE_ENV === 'production') {
             return 'https://' + app_name +  '.herokuapp.com/' + route;
         }
         else
@@ -36,7 +36,7 @@ export const Login = (props) => {
                 setMessage("Please Fill in both fields.");
                 return;
             } else { //added else statement so user can't login if they don't fill in both fields.
-                let result = await fetch('http://localhost:3000/api/login', {
+                let result = await fetch(buildPath('api/login'), {
                     method: 'POST',
                     headers: {
                         'Content-Type':'application/json',

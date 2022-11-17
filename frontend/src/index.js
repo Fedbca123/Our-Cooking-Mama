@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import "./components/NavBar-Components/styles.css"
+import "./components/NavBar-Components/styles.css";
+import "./components/PopUp/popup.css";
 import { BrowserRouter } from "react-router-dom";
 
 //ReactDOM.render(<App />, document.getElementById("root"));
