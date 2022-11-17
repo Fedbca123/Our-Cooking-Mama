@@ -3,9 +3,11 @@ import { Text, View, StyleSheet, Image } from 'react-native';
 import { Camera, CameraType } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import { useState, useRef, useEffect } from 'react';
+import * as ImagePicker from 'expo-image-picker';
 
 
 import Button from '../components/Button.js';
+import { style } from 'deprecated-react-native-prop-types/DeprecatedImagePropType.js';
 
 
 
@@ -28,7 +30,7 @@ export default function Settings({navigation}) {
         if(cameraRef){
             try{
                 const data = await cameraRef.current.takePictureAsync();
-                // console.log(data);
+                //console.log(data.uri);
                 setImage(data.uri);
             }catch(e){
                 console.log(e);
@@ -53,6 +55,24 @@ export default function Settings({navigation}) {
 
     if(hasCameraPermission == false){
         return <Text>No acess to camera</Text> 
+    }
+
+    const openGallery = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+      
+        if (!result.canceled) { // For some reason the image wont update here but if I jsut send the uri itll work
+            //console.log("Before set: " + result.assets[0].uri);
+            setImage(result.assets[0].uri);
+            //console.log("After set: " + image);
+        }
+        
+
+        navigation.navigate('CreatePost', {img: result.assets[0].uri});
     }
 
 
@@ -93,7 +113,12 @@ export default function Settings({navigation}) {
                     <Button title={"Save and use"} icon="check" onPress={saveImage}/>
                 </View>
                 :
-                <Button icon="camera" onPress={takePicture} style={styles.takePic}/>
+                <View style={{flexDirection: 'row', justifyContent:'space-evenly'}}>
+                    <Button icon="camera" onPress={takePicture} />
+                    <View style={{position: 'absolute', right: 0, paddingRight: 20}}>
+                        <Button icon ="archive" onPress={openGallery} />
+                    </View>
+                </View>
                 }
             </View>
         </View>
