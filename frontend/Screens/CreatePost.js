@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { ScreenHeight, ScreenWidth } from 'react-native-elements/dist/helpers';
 import { Entypo } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-navigation';
 
 export default function CreatePost({navigation}) {
   const route = useRoute();
@@ -15,24 +16,19 @@ export default function CreatePost({navigation}) {
 
   const handleUpload = () => {
     console.log("POSTING..")
-    getTags();
-  }
-
-  const getTags = () => {
     const tagsArr = tags.split(' ');
-    console.log(tagsArr);
+    console.log("\nTitle: " + title + "\nCaption: " + caption + "\nTags: " + tagsArr);
   }
 
   return (
-    <View style={styles.container}>
-      
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Entypo name={'arrow-long-left'} size={28} color= '#000' onPress={() => navigation.navigate('Camera')} style={{paddingLeft:5, paddingTop: 20}}/>
+        <Entypo name={'arrow-long-left'} size={28} color= '#000' onPress={() => navigation.navigate('Camera')} style={styles.backButton}/>
         <Text style={styles.newPost}>New Post</Text>
       </View>
-      
+
       <TextInput style={styles.input} placeholder='Enter a title' onChangeText = {(val) => setTitle(val)}/>
-      
+
       <Image source={{uri: image}} style={styles.img}/>
 
       <TextInput style={styles.input} placeholder='Write a caption' onChangeText = {(val) => setCaption(val)}></TextInput>
@@ -43,7 +39,7 @@ export default function CreatePost({navigation}) {
         <Text style={{alignContent:'center'}}>Upload</Text>
       </TouchableOpacity>
 
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -51,7 +47,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingTop: 50
   },
   img: {
     width: (ScreenWidth)-20,
@@ -66,7 +63,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#c7d66d',
     alignContent: 'center',
     alignItems: 'center',
-    paddingTop: 12
+    paddingTop: 11,
   },
   input: {
     height: 40,
@@ -84,12 +81,12 @@ const styles = StyleSheet.create({
     top: 0,
     height: (ScreenHeight)/10,
     paddingTop: 20,
-    alignContent: 'center'
+    alignContent: 'center',
+    justifyContent: 'center',
   },
   newPost: {
     fontSize: 30,
     alignSelf: 'center',
-    paddingLeft: 90
   },
   inputCapTag: {
     height: 70,
@@ -99,4 +96,10 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderBottomWidth: 1,
   },
+  backButton: {
+    position: 'absolute',
+    left: 0,
+    paddingTop: 35,
+    paddingLeft: 10
+  }
 });
