@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginHorizontal: 20,
         marginVertical: 10,
+        paddingTop: 10
     },
     logo: {
         // padding: 30,
