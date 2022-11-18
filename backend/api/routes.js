@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router()
 const bcrypt = require('bcrypt');
+const cloudinary = require('cloudinary');
+const multer = require('multer');
 
 const userRegister = require ('../model/userAccount.js');
 const userProfile = require ('../model/userProfile.js');
@@ -14,6 +16,30 @@ router.use(function(req, res, next) {
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 	next();
 });
+
+// Cloudinary Config for Image Upload
+cloudinary.config ({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_ACCESS_KEY,
+    api_secret: process.env.CLOUDINARY_SECRET_ACCESS_KEY,
+});
+
+// Define where the photo will be stored
+var storage = multer.diskStorage ({
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + file.originalname);
+    }
+})
+
+const imageFilter = function (req, file, cb) {
+    // accept image files only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+      return cb(new Error('Only image files are accepted!'), false);
+    }
+    cb(null, true);
+  };
+
+var upload = multer({ storage: storage, fileFilter: imageFilter });
 
 //Post Method
 router.post('/register', async (req, res) => 
@@ -225,25 +251,30 @@ router.post('/editPost', async (req, res) =>
 })
 
 // add Post
-router.post('/addPost', async (req, res) => {
+router.post('/addPost', upload.single('file'), function (req, res) {
     try {
-        const userId = req.body.userId;
-        const recipeId = req.body.recipeId;
-        const post = new userPost ({
-            Category: req.body.Category,
-            Photo: req.body.Photo,
-            Caption: req.body.Caption,
-            Tags: req.body.Tags,
-            ProfileID: mongoose.Types.ObjectId(userId),
-            RecipeID: mongoose.Types.ObjectId(recipeId)
+        cloudinary.v2.uploader.upload(req.file.path, async (err, result) => {
+            if (err) {
+                req.json(err.message);
+            }
+            const userId = req.body.userId;
+            const recipeId = req.body.recipeId;
+            var post = new userPost ({
+                Category: req.body.Category,
+                Photo: result.secure_url,
+                Caption: req.body.Caption,
+                Tags: req.body.Tags,
+                ProfileID: mongoose.Types.ObjectId(userId),
+                RecipeID: mongoose.Types.ObjectId(recipeId)
+            })
+            try {
+                const newPost = await post.save();
+                console.log(newPost);
+                res.status(200).json(newPost)
+            } catch(error) {
+                console.log(error);
+            }
         })
-        try {
-            const newPost = await post.save();
-            console.log(newPost);
-            res.status(200).json(newPost)
-        } catch(error) {
-            console.log(error);
-        }
     } catch(error) {
         console.log(error);
     }
