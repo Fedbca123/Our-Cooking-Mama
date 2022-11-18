@@ -4,7 +4,10 @@ const bcrypt = require('bcrypt');
 
 const userRegister = require ('../model/userAccount.js');
 const userProfile = require ('../model/userProfile.js');
+const userPost = require ('../model/userPost.js');
+const recipes = require ('../model/recipe.js');
 const mongoose = require('mongoose');
+const { json } = require('body-parser');
 
 // For frontend CORS
 router.use(function(req, res, next) {
@@ -167,6 +170,24 @@ router.post('/searchProfiles', async (req, res, next) =>
     else
     {
         res.status(400).json({error:"No results found."});
+    }
+})
+
+router.post('/universalSearch', async (req, res, next) =>
+{
+    const query = req.body.Query;
+
+    const userSearch = await userRegister.find({UserName: {$regex: query, $options: 'i'}}).exec();
+    const postSearch = await userPost.find({Tags: {$regex: query, $options: 'i'}}).exec();
+    const recipeSearch = await recipes.find({Recipe: {$regex: query, $options: 'i'}}).exec();
+
+    if (userSearch == null && postSearch == null && recipeSearch == null)
+    {
+        res.status(400).json({error:"No results found."});
+    }
+    else
+    {
+        res.status(200).json({Users: userSearch, Posts: postSearch, Recipes: recipeSearch});
     }
 })
 
