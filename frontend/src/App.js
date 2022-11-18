@@ -6,6 +6,8 @@ import "./App.css";
 //import { Register } from "./components/Register";
 //import { HomePage } from "./components/HomePage";
 
+import BuildPath from "./components/bPath"
+
 import LoginPage from './components/Login';
 import RegisterPage from './components/Register';
 import HomePage from './pages/AccountPages/HomePage';
