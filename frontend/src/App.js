@@ -8,7 +8,8 @@ import "./App.css";
 
 import BuildPath from "./components/bPath"
 
-import LoginPage from './components/Login';
+//import LoginPage from './components/Login';
+import LoginPage from './pages/LandingPages/LoginPage';
 import RegisterPage from './components/Register';
 import HomePage from './pages/AccountPages/HomePage';
 import ProfilePage from "./pages/AccountPages/ProfilePage";
