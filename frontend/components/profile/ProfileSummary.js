@@ -6,7 +6,7 @@ const ProfileSummary = ({ profile }) => {
     return (
         <View style={styles.container}>
             <View style={{ paddingBottom: 10 }}>
-                <Text style={{ fontSize: 30, fontWeight: '700' }}>{profile[0].user}</Text>
+                <Text style={{ fontSize: 30, fontWeight: '700' }}>{global.signedUser}</Text>
             </View>
             <View>
                 <Image style={styles.logo} source={{ uri: profile[0].profile_picture }} />

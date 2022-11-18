@@ -19,6 +19,8 @@ const theme = {
 }
 
 const App = () => {
+	global._id = 0;
+	global.signedUser = '';
 	return(
 		<NavigationContainer theme={theme}>
 			<Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Login">

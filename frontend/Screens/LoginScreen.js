@@ -45,6 +45,9 @@ const LoginScreen = ( {navigation} ) => {
 				text1: 'Username / Password combination is incorrect'
 			})
 		}
+
+		global._id = data._id;
+		global.signedUser = data.FirstName;
 	}
 
 	const switchS = () => { //handles screen switching

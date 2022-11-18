@@ -15,7 +15,7 @@ export default function Home({navigation}) {
   return (
     <ImageBackground style={styles.background} source={require(background)}>
       <SafeAreaView style={styles.container}>
-        <Header></Header>
+        <Header navigation={navigation}></Header>
         <FoodReal></FoodReal>
         <ScrollView>
           {POSTS.map((post,index) => (
