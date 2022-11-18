@@ -3,6 +3,8 @@ import { View, Text, Image } from 'react-native';
 import { Divider } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { StyleSheet } from 'react-native';
+import { Entypo } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 const homeIcon = '../Images/homeIcon.png';
 const profileIcon = '../Images/profileIcon.png';
@@ -24,7 +26,7 @@ export const bottomTabIcons = [
 ]
 
 
-const BottomTabs = ({navigation}) => {
+const BottomTabs = ({ navigation }) => {
     const [activeTab, setActivetab] = useState('Home')
 
     // const Icon = ({icon, navigation}) => {
@@ -35,15 +37,15 @@ const BottomTabs = ({navigation}) => {
 
     return (
         <View style={styles.container}>
-            {/* <Divider width={20} orientation='horizontal'/> */} 
+            {/* <Divider width={20} orientation='horizontal'/> */}
             <TouchableOpacity onPress={() => navigation.navigate('Camera')}>
-                <Image source={require(cameraIcon)} style={styles.icon}></Image>
+                <Entypo name="camera" size={33} color="black" />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-                <Image source={require(homeIcon)} style={styles.icon}></Image>
+                <Entypo name="home" size={33} color="black" />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-                <Image source={require(profileIcon)} style={styles.icon}></Image>
+                <Ionicons name="person" size={33} color="black" />
             </TouchableOpacity>
         </View>
     )

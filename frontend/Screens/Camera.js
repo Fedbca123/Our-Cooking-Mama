@@ -5,10 +5,7 @@ import * as MediaLibrary from 'expo-media-library';
 import { useState, useRef, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 
-
 import Button from '../components/Button.js';
-import { style } from 'deprecated-react-native-prop-types/DeprecatedImagePropType.js';
-
 
 
 export default function Settings({navigation}) {

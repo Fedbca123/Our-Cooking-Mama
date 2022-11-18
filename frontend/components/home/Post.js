@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Modal } from 'react-native'
 import { Divider } from 'react-native-elements'
+import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 const Post = ({ post }) => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -68,9 +70,8 @@ const PostImage = ({ post }) => (
 const PostFooter = () => (
     <View style={{ flexDirection: 'row' }}>
         <View style={styles.leftFooterIconsContianer}>
-            <Icon imgStyle={styles.footerIcon} imgUrl={'https://cdn-icons-png.flaticon.com/512/126/126473.png'}></Icon>
-
-            <Icon imgStyle={styles.footerIcon} imgUrl={'https://toppng.com/uploads/preview/share-png-file-share-icon-free-download-1156313309811bbndeiii.png'}></Icon>
+            <FontAwesome name="thumbs-o-up" size={33} color="black" />
+            <FontAwesome5 name="share" size={33} color="black" />
         </View>
     </View>
 )
@@ -101,9 +102,9 @@ const Caption = ({ post }) => (
 const Popup = ({ post }) => (
     <View>
         <View style={{ alignItems: 'center' }}>
-            <Text style={{marginTop: 15}}>
-            <Text style={{fontWeight: '900', color: 'blue', }}>Tags or food type(bfast lunch dinner) here: </Text>
-            <Text style={{fontWeight: '900', color: 'blue', }}>n/a</Text>
+            <Text style={{ marginTop: 15 }}>
+                <Text style={{ fontWeight: '900', color: 'blue', }}>Tags or food type(bfast lunch dinner) here: </Text>
+                <Text style={{ fontWeight: '900', color: 'blue', }}>n/a</Text>
             </Text>
             <Image source={{ uri: post.imageUrl }} style={{ height: '50%', resizeMode: 'cover', width: 300, height: 250 }}></Image>
         </View>
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
     },
     leftFooterIconsContianer: {
         flexDirection: 'row',
-        width: '20%',
+        width: '23%',
         justifyContent: 'space-between',
     },
     popcap: {

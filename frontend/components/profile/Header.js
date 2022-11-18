@@ -1,14 +1,13 @@
 import React from 'react'
 import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput } from 'react-native'
+import { Ionicons } from '@expo/vector-icons';
 
 const Header = ({ navigation }) => {
-
-    const [searchQuery, setQuery] = React.useState("");
 
     return (
         <View style={styles.contianer}>
             <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-                <Text style={{ fontSize: 25 }}>⬅️</Text>
+                <Ionicons name="arrow-back" size={40} color="black" />
             </TouchableOpacity>
 
             <View style={styles.logoContainer}>
