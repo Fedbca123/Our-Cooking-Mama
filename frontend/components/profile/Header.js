@@ -1,19 +1,22 @@
 import React from 'react'
 import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput } from 'react-native'
+import { Entypo } from '@expo/vector-icons';
 
 const Header = ({ navigation }) => {
 
     const [searchQuery, setQuery] = React.useState("");
 
+    const handleEdit = () => {
+
+    }
+
     return (
         <View style={styles.contianer}>
-            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-                <Text style={{ fontSize: 25 }}>⬅️</Text>
-            </TouchableOpacity>
-
-            <View style={styles.logoContainer}>
-                <Image style={styles.logo} source={require('../../Images/OCMlogo2.png')} />
-            </View>
+            
+            <Entypo name={'arrow-long-left'} size={28} color= '#000' onPress={() => navigation.goBack()}></Entypo>
+            
+            <Entypo name={'edit'} size={28} color='#000' onPress={() => handleEdit}></Entypo>
+            
         </View>
 
     )
@@ -26,6 +29,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginHorizontal: 20,
         marginVertical: 10,
+        paddingTop: 10
     },
     logo: {
         // padding: 30,
