@@ -181,7 +181,7 @@ router.post('/universalSearch', async (req, res, next) =>
     const postSearch = await userPost.find({Tags: {$regex: query, $options: 'i'}}).exec();
     const recipeSearch = await recipes.find({Recipe: {$regex: query, $options: 'i'}}).exec();
 
-    if (userSearch == null && postSearch == null && recipeSearch == null)
+    if (userSearch == "" && postSearch == "" && recipeSearch == "")
     {
         res.status(400).json({error:"No results found."});
     }
