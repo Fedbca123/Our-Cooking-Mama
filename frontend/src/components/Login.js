@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { buildPath } from "./bPath";
 
 import NavBarLanding from "./NavBar-Components/NavBarLanding";
 
@@ -17,34 +18,41 @@ function Login() {
 		var obj = { UserName: loginName.value, Password: loginPassword.value };
 		var js = JSON.stringify(obj);
 
-		try {
-			const response = await fetch("http://localhost:3000/api/login", {
-				method: "POST",
-				body: js,
-				headers: {
-					"Content-Type": "application/json",
-					"Accept": "application/json",
-				},
-			});
-
-			var res = JSON.parse(await response.text());
-
-			if (res.id <= 0) {
-				setMessage("User/Password combination incorrect");
-			} else {
-				var user = {
-					FirstName: res.firstName,
-					LastName: res.lastName,
-					_id: res.id,
-				};
-				localStorage.setItem("user_data", JSON.stringify(user));
-
-				setMessage(" ");
-				window.location.href = "/homepage";
-			}
-		} catch (e) {
-			alert(e.toString());
+		if (loginName.value === "" || loginPassword.value === "") {
+			setMessage("Please fill in both fields.");
 			return;
+		} else {
+			try {
+				const response = await fetch(buildPath("api/login"), {
+					method: "POST",
+					body: js,
+					headers: {
+						"Content-Type": "application/json",
+						"Accept": "application/json",
+					},
+				});
+
+				var res = JSON.parse(await response.text());
+
+				if (res.id <= 0) {
+					setMessage("User/Password combination incorrect");
+				} else {
+					var user = {
+						FirstName: res.FirstName,
+						LastName: res.LastName,
+						_id: res._id,
+					};
+					localStorage.setItem("user_data", JSON.stringify(user));
+
+					console.log(user);
+
+					setMessage(" ");
+					window.location.href = "/homepage";
+				}
+			} catch (e) {
+				alert(e.toString());
+				return;
+			}
 		}
 	};
 
@@ -53,7 +61,7 @@ function Login() {
 			<NavBarLanding />
 			<div id="loginDiv">
 				<form onSubmit={doLogin}>
-					<h5>Username</h5>
+					<h3>Username</h3>
 					<input
 						type="text"
 						id="loginName"
@@ -61,7 +69,7 @@ function Login() {
 						ref={(c) => (loginName = c)}
 					/>{" "}
 					<br />
-					<h5>Password</h5>
+					<h3>Password</h3>
 					<input
 						type="password"
 						id="loginPassword"
@@ -79,6 +87,9 @@ function Login() {
 				>
 					New Chef?
 				</button>
+
+				<br />
+
 				<span id="loginResult">{message}</span>
 			</div>
 		</div>
