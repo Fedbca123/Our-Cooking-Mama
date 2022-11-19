@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 
 const Header = ({ navigation }) => {
 
@@ -8,6 +9,10 @@ const Header = ({ navigation }) => {
         <View style={styles.contianer}>
             <TouchableOpacity onPress={() => navigation.navigate('Home')}>
                 <Ionicons name="arrow-back" size={40} color="black" />
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
+                <Entypo name="edit" size={28} color="black"/>
             </TouchableOpacity>
 
             <View style={styles.logoContainer}>
