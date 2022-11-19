@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const userRegister = require ('../model/userAccount.js');
 const userProfile = require ('../model/userProfile.js');
 const userPost = require ('../model/userPost.js');
-const recipes = require ('../model/recipe.js');
+const recipe = require ('../model/recipes.js');
 const mongoose = require('mongoose');
 const { json } = require('body-parser');
 
@@ -157,6 +157,7 @@ router.post('/editProfile', async (req, res) => {
     }
 })
 
+// Search for profiles only
 router.post('/searchProfiles', async (req, res, next) =>
 {
     const query = req.body.Query;
@@ -173,13 +174,14 @@ router.post('/searchProfiles', async (req, res, next) =>
     }
 })
 
+// Search for profiles, recipes, and posts.
 router.post('/universalSearch', async (req, res, next) =>
 {
     const query = req.body.Query;
 
     const userSearch = await userRegister.find({UserName: {$regex: query, $options: 'i'}}).exec();
     const postSearch = await userPost.find({Tags: {$regex: query, $options: 'i'}}).exec();
-    const recipeSearch = await recipes.find({Recipe: {$regex: query, $options: 'i'}}).exec();
+    const recipeSearch = await recipe.find({Recipe: {$regex: query, $options: 'i'}}).exec();
 
     if (userSearch == "" && postSearch == "" && recipeSearch == "")
     {
@@ -188,6 +190,68 @@ router.post('/universalSearch', async (req, res, next) =>
     else
     {
         res.status(200).json({Users: userSearch, Posts: postSearch, Recipes: recipeSearch});
+    }
+})
+
+// Add recipe
+router.post('/addRecipe', async (req, res) => 
+{
+    const result = await recipe.findOne({Recipe:req.body.Name}).exec();
+
+    if (result != null)
+    {
+        err = 'Recipe already exists.';
+        res.status(400).json({error:err});
+    } 
+    else 
+    {
+        const data = new recipe
+        ({
+            Ingredients: req.body.Ingredients,
+            Recipe: req.body.Name,
+            DatePosted: new Date(),
+            ChefID: req.body.ChefID
+        })
+        try 
+        {
+            const newRecipe = await data.save();
+            console.log(newRecipe);
+            res.status(200).json(newRecipe)
+        } catch(error) 
+        {
+            console.log(error);
+        }
+    } 
+})
+
+// Edit recipes
+router.post('/editRecipe', async (req, res) => {
+    const recipeId = req.body.RecipeID;
+    const result = await recipe.findOne({ _id: recipeId }).exec();
+    try {
+        // check if id is valid
+        if (result == null) {
+            var ret = {RecipeID: -1, error: "Recipe Not Found."}
+            return res.json(ret);
+        } else {
+            // edit recipe
+            console.log('Recipe found. Please edit.')
+            const editedRecipe = {
+                Ingredients: req.body.Ingredients,
+                Recipe: req.body.Name,
+                DatePosted: result.DatePosted,
+                ChefID: req.body.ChefID
+            }
+
+            const updatedRecipe = await recipe.findByIdAndUpdate(recipeId, editedRecipe, {
+                new: true,
+                upsert: true,
+            });
+            console.log(updatedRecipe);
+            res.status(200).json(updatedRecipe)
+        }
+    } catch(error) {
+        console.log(error);
     }
 })
 
