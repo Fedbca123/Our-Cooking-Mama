@@ -36,6 +36,11 @@ function Register() {
 		) {
 			setMessage("Please fill in all fields.");
 			return;
+		} else if (un.value.length !== 8 || pass.value.length !== 8) {
+			setMessage(
+				"Please make sure username and password are at least 8 characters long.",
+			);
+			return;
 		} else {
 			try {
 				const response = await fetch(buildPath("api/register"), {
