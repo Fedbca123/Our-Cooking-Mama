@@ -81,6 +81,9 @@ function Login() {
 						Login
 					</button>
 				</form>
+
+				<br />
+
 				<button
 					className="link-btn"
 					onClick={() => navigate("/register")}

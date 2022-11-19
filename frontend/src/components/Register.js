@@ -1,3 +1,4 @@
+// import { set } from "mongoose";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { buildPath } from "./bPath";
@@ -10,6 +11,7 @@ function Register() {
 	var un;
 	var email;
 	var pass;
+	var reType;
 
 	const navigate = useNavigate();
 
@@ -36,10 +38,13 @@ function Register() {
 		) {
 			setMessage("Please fill in all fields.");
 			return;
-		} else if (un.value.length !== 8 || pass.value.length !== 8) {
+		} else if (un.value.length < 8 || pass.value.length < 8) {
 			setMessage(
 				"Please make sure username and password are at least 8 characters long.",
 			);
+			return;
+		} else if (reType.value !== pass.value) {
+			setMessage("Passwords don't match.");
 			return;
 		} else {
 			try {
@@ -54,17 +59,19 @@ function Register() {
 
 				var res = JSON.parse(await response.text());
 
-				if (res.id <= 0) {
-					setMessage("User/Password combination incorrect");
+				if (res.error === "Username taken. Try again.") {
+					//api returns this error message so if user/pass is taken
+					setMessage("Username taken. Try again.");
+					return;
 				} else {
-					var user = {
-						FirstName: res.FirstName,
-						LastName: res.LastName,
-						_id: res._id,
-					};
-					localStorage.setItem("user_data", JSON.stringify(user));
+					// var user = {
+					// 	FirstName: res.FirstName,
+					// 	LastName: res.LastName,
+					// 	_id: res._id,
+					// };
+					// localStorage.setItem("user_data", JSON.stringify(user));
 
-					console.log(user);
+					// console.log(user);
 
 					setMessage(" ");
 					window.location.href = "/login";
@@ -119,6 +126,14 @@ function Register() {
 						id="loginPassword"
 						placeholder="********"
 						ref={(c) => (pass = c)}
+					/>
+					<br />
+					<h3>Confirm Password</h3>
+					<input
+						type="password"
+						id="loginPassword"
+						placeholder="********"
+						ref={(c) => (reType = c)}
 					/>
 					<br />
 					<button
