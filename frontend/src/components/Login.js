@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory, useNavigate } from 'react-router-dom';
 
 import NavBarLanding from "./NavBar-Components/NavBarLanding";
 
@@ -7,8 +8,13 @@ function Login ()
     var loginName;
     var loginPassword;
 
+    const navigate = useNavigate();
+
     const [message, setMessage] = useState('');
 
+    let element = (
+        <button href="/register">New Chef?</button>
+    );
 
     const doLogin = async event =>
     {
@@ -19,7 +25,7 @@ function Login ()
 
         try
         {
-            const response = await fetch ('http://localhost:3000/api/login',
+            const response = await fetch ('/api/login',
                 {
                     method: 'POST',
                     body: js,
@@ -56,13 +62,17 @@ function Login ()
                 <form onSubmit={doLogin}>
                     <span id="inner-title">Please Login In</span><br />
                 
+                    <h5>Username</h5>
                     <input type="text" id="loginName" placeholder="Username" ref={ (c) => loginName = c } /> <br />
 
+                    <h5>Password</h5>
                     <input type="password" id="loginPassword" placeholder="********" ref={ (c) => loginPassword = c } /> <br />
 
-                    <input type="submit" id="loginButton" class="buttons" value="Do It" onClick={doLogin} />
+                
+                    <button type="submit" className="login" onClick={doLogin}>Login</button> 
 
                 </form>
+                <button className="link-btn" onClick={() => navigate('/register')}>New Chef?</button>
                 <span id="loginResult">{message}</span>
             </div>
         </div>

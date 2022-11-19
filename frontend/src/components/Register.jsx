@@ -115,9 +115,11 @@ export const Register = (props) =>
                 <input type="password" value={reType} placeholder="*******" id="password-retype" name="password-retype" onChange={e => setReType(e.target.value)}/>
 
                 <button type="submit" onClick={register}>Register</button>
-                <span id="registerResult">{message}</span>
+                
                 <br></br>
                 <button className="link-btn" onClick={() => navigate('/login')}>Existing Chef?</button>
+
+                <span id="registerResult">{message}</span>
             </div>
         </div>
     )
