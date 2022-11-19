@@ -28,7 +28,7 @@ const SignUpScreen = ({ navigation }) => {
 				try {
 					// IP address is unique, expo/express can't resolve 'localhost' so you need to ipconfig in cmd and replace with the ipv4
 					// This should be no issue once deployed on heroku
-					const response = await fetch('http://172.27.224.1:3000/api/register', {
+					const response = await fetch('http://192.168.1.252:3000/api/register', {
 						method: 'post',
 						headers: {
 							'Accept': 'application/json',
@@ -77,6 +77,12 @@ const SignUpScreen = ({ navigation }) => {
 			<View style={{ alignItems: 'center' }}>
 				<Text style={styles.title}>Sign Up</Text>
 				<Text>Become a chef today!</Text>
+			</View>
+
+			<View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10}}>
+				<Text style={styles.switchButton} onPress={switchL}>Login</Text>
+				<Text> </Text>
+				<Text style={styles.switchButtonColored}>Sign Up</Text>
 			</View>
 
 			<View>
@@ -130,12 +136,6 @@ const SignUpScreen = ({ navigation }) => {
 				<Text style={styles.button} onPress={handleCreate}>Create Account</Text>
 			</View>
 
-			<View style={{ flexDirection: 'row', marginTop: 135 }}>
-				<Text style={styles.switchButton} onPress={switchL}>Login</Text>
-				<Text> </Text>
-				<Text style={styles.switchButtonColored}>Sign Up</Text>
-			</View>
-
 		</ImageBackground>
 	);
 }
@@ -187,7 +187,6 @@ const styles = StyleSheet.create({
 		backgroundColor: 'grey',
 		borderRadius: 15,
 		overflow: 'hidden',
-		marginBottom: 70,
 	},
 	switchButtonColored: {
 		padding: 7,
@@ -196,7 +195,6 @@ const styles = StyleSheet.create({
 		backgroundColor: '#E39E6D',
 		borderRadius: 15,
 		overflow: 'hidden',
-		marginBottom: 70,
 	},
 
 });
