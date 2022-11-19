@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import NavBarLanding from '../components/NavBar-Components/NavBarLanding';
 

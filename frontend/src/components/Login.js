@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import NavBarLanding from "./NavBar-Components/NavBarLanding";
 
@@ -12,9 +12,6 @@ function Login ()
 
     const [message, setMessage] = useState('');
 
-    let element = (
-        <button href="/register">New Chef?</button>
-    );
 
     const doLogin = async event =>
     {
@@ -25,11 +22,14 @@ function Login ()
 
         try
         {
-            const response = await fetch ('/api/login',
+            const response = await fetch ('http://localhost:3000/api/login',
                 {
                     method: 'POST',
                     body: js,
-                    headers: { 'Content-Type': 'application/json/' }
+                    headers: { 
+                        'Content-Type': 'application/json/',
+                        'Accept':'application/json'
+                    }
                 }
             );
 
@@ -60,13 +60,11 @@ function Login ()
             <NavBarLanding />
             <div id="loginDiv">
                 <form onSubmit={doLogin}>
-                    <span id="inner-title">Please Login In</span><br />
-                
                     <h5>Username</h5>
-                    <input type="text" id="loginName" placeholder="Username" ref={ (c) => loginName = c } /> <br />
+                    <input type="text" id="loginName" placeholder="Username" ref={ (c) => (loginName = c) } /> <br />
 
                     <h5>Password</h5>
-                    <input type="password" id="loginPassword" placeholder="********" ref={ (c) => loginPassword = c } /> <br />
+                    <input type="password" id="loginPassword" placeholder="********" ref={ (c) => (loginPassword = c) } /> <br />
 
                 
                     <button type="submit" className="login" onClick={doLogin}>Login</button> 
