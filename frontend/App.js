@@ -7,6 +7,8 @@ import SignUpScreen from './Screens/SignUp.js';
 import Home from './Screens/Home.js';
 import Camera from './Screens/Camera';
 import Profile from './Screens/Profile';
+import EditProfile from './Screens/EditProfile';
+import CreatePost from './Screens/CreatePost';
 
 const Stack = createStackNavigator();
 
@@ -29,6 +31,8 @@ const App = () => {
 				<Stack.Screen name="Home" component={Home} />
 				<Stack.Screen name="Camera" component={Camera} />
 				<Stack.Screen name="Profile" component={Profile} />
+				<Stack.Screen name="EditProfile" component={EditProfile} />
+				<Stack.Screen name="CreatePost" component={CreatePost} />
 			</Stack.Navigator>
 			<Toast />
 		</NavigationContainer>
