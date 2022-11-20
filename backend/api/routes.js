@@ -1,18 +1,45 @@
 const express = require('express');
 const router = express.Router()
 const bcrypt = require('bcrypt');
+const cloudinary = require('cloudinary');
+const multer = require('multer');
 
 const userRegister = require ('../model/userAccount.js');
 const userProfile = require ('../model/userProfile.js');
+const userPost = require('../model/userPost.js');
 const mongoose = require('mongoose');
 
 // For frontend CORS
 router.use(function(req, res, next) {
 	res.header("Access-Control-Allow-Origin", "http://localhost:3002"); // update to match the domain you will make the request from
-	res.header("Access-Control-Allow-Origin", "http://localhost:3001"); // change the 3001 port the port where your webapp is running from!!
+	res.header("Access-Control-Allow-Origin", "http://localhost:19000"); // change the 3001 port the port where your webapp is running from!!
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 	next();
 });
+
+// Cloudinary Config for Image Upload
+cloudinary.config ({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_ACCESS_KEY,
+    api_secret: process.env.CLOUDINARY_SECRET_ACCESS_KEY,
+});
+
+// Define where the photo will be stored
+var storage = multer.diskStorage ({
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + file.originalname);
+    }
+})
+
+const imageFilter = function (req, file, cb) {
+    // accept image files only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+      return cb(new Error('Only image files are accepted!'), false);
+    }
+    cb(null, true);
+  };
+
+var upload = multer({ storage: storage, fileFilter: imageFilter });
 
 //Post Method
 router.post('/register', async (req, res) => 
@@ -70,10 +97,10 @@ router.get('/getAll', async (req, res) =>
 })
 
 // Login 
-router.post('/login', async (req, res, next) => 
+router.post('/login', async (req, res) => 
 {
     const username = req.body.UserName;
-    var Password = req.body.Password;
+    var password = req.body.Password;
 
     var id = -1;
     var fn = '';
@@ -84,7 +111,7 @@ router.post('/login', async (req, res, next) =>
 
     if (result != null)
     {
-        var isEqual = await bcrypt.compare(Password, result.Password);
+        var isEqual = await bcrypt.compare(password, result.Password);
         if (isEqual)
         {
             id = result._id;
@@ -154,7 +181,8 @@ router.post('/editProfile', async (req, res) => {
     }
 })
 
-router.post('/searchProfiles', async (req, res, next) =>
+// Search profiles
+router.post('/searchProfiles', async (req, res) =>
 {
     const query = req.body.Query;
 
@@ -167,6 +195,107 @@ router.post('/searchProfiles', async (req, res, next) =>
     else
     {
         res.status(400).json({error:"No results found."});
+    }
+})
+
+// search Post
+router.post('/searchPosts', async (req, res) =>
+{
+    try
+    {
+        const query = req.body.Query;
+
+        const result = await userPost.find({Tags: {$regex: query, $options: 'i'}}).exec();
+        
+        if (result != null)
+        {
+            res.status(200).json(result);
+        }
+        else
+        {
+            res.status(400).json({error:"No results found."});
+        }
+    }
+    catch (err)
+    {
+        res.status(500).json({error:err});
+    }
+})
+
+// edit a Post
+router.post('/editPost', async (req, res) =>
+{
+    try {
+        const postId = req.body.PostID;
+        const recipeId = req.body.RecipeID;
+        const profileId = req.body.ProfileID;
+        const post = {
+            Category: req.body.Category,
+            Photo: req.body.Photo,            
+            Caption: req.body.Caption,
+            Tags: req.body.Tags,
+            ProfileID: profileId,
+            RecipeID: recipeId
+        }
+
+        const updatedPost = await userPost.findByIdAndUpdate(postId, post, {
+            new: true,
+            upsert: true,
+        });
+        console.log(updatedPost);
+        res.status(200).json(updatedPost)
+    }
+    catch(error) {
+        console.log(error);
+    }
+})
+
+// add Post
+router.post('/addPost', upload.single('file'), function (req, res) {
+    try {
+        cloudinary.v2.uploader.upload(req.file.path, async (err, result) => {
+            if (err) {
+                req.json(err.message);
+            }
+            const userId = req.body.userId;
+            const recipeId = req.body.recipeId;
+            var post = new userPost ({
+                Category: req.body.Category,
+                Photo: result.secure_url,
+                Caption: req.body.Caption,
+                Tags: req.body.Tags,
+                ProfileID: mongoose.Types.ObjectId(userId),
+                RecipeID: mongoose.Types.ObjectId(recipeId)
+            })
+            try {
+                const newPost = await post.save();
+                console.log(newPost);
+                res.status(200).json(newPost)
+            } catch(error) {
+                console.log(error);
+            }
+        })
+    } catch(error) {
+        console.log(error);
+    }
+})
+
+// delete a Post
+router.post('/deletePost/:id', (req, res) => {
+    try {
+        userPost.findByIdAndDelete(req.params.id)
+            .then((post) => {
+                if (!post) {
+                    return res.status(404).send();
+                } else {
+                    res.send(post);
+                }
+            })
+            .catch((error) => {
+                res.status(500).send(error);
+            })
+    } catch (error) {
+        console.log(error);
     }
 })
 
