@@ -38,7 +38,7 @@ function Register() {
 		) {
 			setMessage("Please fill in all fields.");
 			return;
-		} else if (un.value.length < 8 || pass.value.length < 8) {
+		} else if (un.value.length < 4 || pass.value.length < 8) {
 			setMessage(
 				"Please make sure username and password are at least 8 characters long.",
 			);
