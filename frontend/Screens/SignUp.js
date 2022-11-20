@@ -28,7 +28,7 @@ const SignUpScreen = ({ navigation }) => {
 				try {
 					// IP address is unique, expo/express can't resolve 'localhost' so you need to ipconfig in cmd and replace with the ipv4
 					// This should be no issue once deployed on heroku
-					const response = await fetch('http://192.168.1.252:3000/api/register', {
+					const response = await fetch('http://172.29.16.1:3000/api/register', {
 						method: 'post',
 						headers: {
 							'Accept': 'application/json',
