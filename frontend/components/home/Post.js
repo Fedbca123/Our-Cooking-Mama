@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Modal } from 'react-native'
+import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Modal, Touchable, Share } from 'react-native'
 import { Divider } from 'react-native-elements'
 import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -49,6 +49,28 @@ const Post = ({ post }) => {
     )
 }
 
+
+const share = async () => {
+    try {
+        const result = await Share.share({
+            message: 'Share this post with the foodie world!',
+            url: './breakfast.jpg',
+            title: 'Share this post with the foodie world!'
+        });
+        if (result.action === Share.sharedAction) {
+            if (result.activityType) {
+                // shared with activity type of result.activityType
+            } else {
+                // shared
+            }
+        } else if (result.action === Share.dismissedAction) {
+            // dismissed
+        }
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
 const PostHeader = ({ post }) => (
     <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 5, alignItems: 'center' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -71,7 +93,10 @@ const PostFooter = () => (
     <View style={{ flexDirection: 'row' }}>
         <View style={styles.leftFooterIconsContianer}>
             <FontAwesome name="thumbs-o-up" size={33} color="black" />
-            <FontAwesome5 name="share" size={33} color="black" />
+            <TouchableOpacity onPress={share}>
+                <FontAwesome5 name="share" size={33} color="black" />
+            </TouchableOpacity>
+
         </View>
     </View>
 )

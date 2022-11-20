@@ -299,4 +299,18 @@ router.post('/deletePost/:id', (req, res) => {
     }
 })
 
+router.post('/getOneProfile', async (req, res) => {
+    try {
+        const query = req.body.Query;
+        const result = await userProfile.findOne({UserID: {$regex: query}}).exec();
+        if (result != null) {
+            res.status(200).json(result);
+        } else {
+            res.status(400).json({error:"User profile not found."});
+        }
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 module.exports = router;

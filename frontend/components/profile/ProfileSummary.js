@@ -2,13 +2,49 @@ import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Image, Modal } from 'react-native'
 import { ScreenWidth } from 'react-native-elements/dist/helpers'
 import { SafeAreaView } from 'react-navigation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Entypo } from '@expo/vector-icons';
 
 const ProfileSummary = ({ profile }) => {
     const [modalVisible, setModalVisible] = useState(false);
+    const [nickName, setNickName] = useState('');
+    const [pronouns, setPronouns] = useState('');
+    const [accountType, setAccountType] = useState('');
+    const [favCuisine, setCuisine] = useState('');
+    const [favDrink, setDrink] = useState('');
+    const [favFood, setFood] = useState('');
+    const [favFlavor, setFlavor] = useState('');
+
+    const getData = async () => {
+        const response = await fetch('http://172.29.16.1:3000/api/getOneProfile', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+                Query: global._id,
+            }),
+        }).catch(err => {
+            console.log(err);
+        })
+        const data = await response.json();
+        if (data.error == "User profile not found.") {
+            console.log("not slay!")
+        } else {
+            setNickName(data.NickName)
+            setPronouns(data._id)
+            setAccountType(data.AccountType)
+            setCuisine(data.FavCuisine)
+            setDrink(data.FavDrink)
+            setFood(data.FavFood)
+            setFlavor(data.FavoriteFlavor)
+        }
+    }
 
     const handleModal = () => {
+
+        getData();
         setModalVisible(true);
     }
 
@@ -16,27 +52,27 @@ const ProfileSummary = ({ profile }) => {
         <SafeAreaView>
             <View style={styles.info}>
                 <Image style={styles.logo} source={{ uri: profile[0].profile_picture }} />
-                
-                <View style={{flexDirection: 'column'}}>
-                    <Text style={{ fontSize: 30, fontWeight: '700', paddingLeft: 50}}>{global.signedUser}</Text>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between', marginLeft: 47}}>
-                        <Text style={{color: '#75b9be'}}>Foodies</Text>
-                        <Text style={{color: '#75b9be'}}>Fooders</Text>
+
+                <View style={{ flexDirection: 'column' }}>
+                    <Text style={{ fontSize: 30, fontWeight: '700', paddingLeft: 50 }}>{global.signedUser}</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 47 }}>
+                        <Text style={{ color: '#75b9be' }}>Foodies</Text>
+                        <Text style={{ color: '#75b9be' }}>Fooders</Text>
                     </View>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between', marginLeft: 47}}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 47 }}>
                         <Text style={{ fontSize: 20, fontWeight: '500' }}>{profile[0].following}</Text>
                         <Text style={{ fontSize: 20, fontWeight: '500' }}>{profile[0].followers}</Text>
                     </View>
-                    
+
                     <TouchableOpacity onPress={handleModal}>
                         <Text style={styles.aboutMe}>About Me</Text>
                     </TouchableOpacity>
 
                 </View>
 
-                <Modal 
-                    animationType="slide" 
-                    visible={modalVisible} 
+                <Modal
+                    animationType="slide"
+                    visible={modalVisible}
                     transparent={true}
                     onRequestClose={() => {
                         setModalVisible(!modalVisible);
@@ -44,17 +80,17 @@ const ProfileSummary = ({ profile }) => {
                 >
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
-                            <TouchableOpacity onPress={() => setModalVisible(!modalVisible)} style={{position: 'absolute', right: 0, paddingRight: 5, paddingTop: 5}}>
-                                <Entypo name="cross" size={30} color="black"/>
+                            <TouchableOpacity onPress={() => setModalVisible(!modalVisible)} style={{ position: 'absolute', right: 0, paddingRight: 5, paddingTop: 5 }}>
+                                <Entypo name="cross" size={30} color="black" />
                             </TouchableOpacity>
                             <View>
-                                <Text>NickName: {}</Text>
-                                <Text>Pronouns: </Text>
-                                <Text>AccountType: </Text>
-                                <Text>Favorite cuisine: </Text>
-                                <Text>Favorite drink: </Text>
-                                <Text>Favorite food: </Text>
-                                <Text>Favorite flavor: </Text>
+                                <Text>NickName: { nickName}</Text>
+                                <Text>Pronouns: {pronouns}</Text>
+                                <Text>AccountType: {accountType} </Text>
+                                <Text>Favorite cuisine: {favCuisine}</Text>
+                                <Text>Favorite drink: {favDrink}</Text>
+                                <Text>Favorite food: {favFood}</Text>
+                                <Text>Favorite flavor: {favFlavor}</Text>
                             </View>
                         </View>
                     </View>
@@ -94,10 +130,10 @@ const styles = StyleSheet.create({
         width: ScreenWidth
     },
     bio: {
-        paddingVertical: 5, 
-        paddingHorizontal: 5, 
-        borderWidth: 2, 
-        marginHorizontal: 10, 
+        paddingVertical: 5,
+        paddingHorizontal: 5,
+        borderWidth: 2,
+        marginHorizontal: 10,
         marginBottom: 5,
         borderColor: "#75b9be"
     },
@@ -114,8 +150,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         marginTop: 22
-      },
-      modalView: {
+    },
+    modalView: {
         margin: 20,
         backgroundColor: "white",
         borderRadius: 20,
@@ -123,13 +159,13 @@ const styles = StyleSheet.create({
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {
-          width: 0,
-          height: 2
+            width: 0,
+            height: 2
         },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5
-      },
+    },
 })
 
 export default ProfileSummary;
