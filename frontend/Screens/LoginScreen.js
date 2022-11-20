@@ -12,7 +12,7 @@ const LoginScreen = ( {navigation} ) => {
 	const [PW, setPW] = useState("");
 
 	async function handleLogin(event) {
-		// navigation.navigate('Home');
+		navigation.navigate('Home');
 		event.preventDefault()
 		// IP address is unique, expo/express can't resolve 'localhost' so you need to ipconfig in cmd and replace with the ipv4
 		// This should be no issue once deployed on heroku
