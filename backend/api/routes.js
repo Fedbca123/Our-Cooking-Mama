@@ -160,7 +160,8 @@ router.post('/editProfile', async (req, res) => {
                 UserID: mongoose.Types.ObjectId(userId),
                 AccountType: req.body.AccountType,
                 PersonalFeedID: feed,
-                Pronouns: req.body.pronouns 
+                Pronouns: req.body.pronouns,
+                ProfilePhoto: req.body.ProfilePhoto
             }
             try {
                 const updatedProfile = await userProfile.findByIdAndUpdate(userId, profile, {
