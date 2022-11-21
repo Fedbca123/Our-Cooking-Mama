@@ -2,10 +2,10 @@ import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Image, Modal } from 'react-native'
 import { ScreenWidth } from 'react-native-elements/dist/helpers'
 import { SafeAreaView } from 'react-navigation'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Entypo } from '@expo/vector-icons';
 
-const ProfileSummary = ({ profile }) => {
+const ProfileSummary = ({ profile, navigation }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [nickName, setNickName] = useState('');
     const [pronouns, setPronouns] = useState('');
@@ -14,6 +14,15 @@ const ProfileSummary = ({ profile }) => {
     const [favDrink, setDrink] = useState('');
     const [favFood, setFood] = useState('');
     const [favFlavor, setFlavor] = useState('');
+    const [profilePic, setProfilePic] = useState('');
+
+    React.useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+          getData();
+        });
+    
+        return unsubscribe;
+      }, [navigation]);
 
     const getData = async () => {
         const response = await fetch('http://' + global.ipv4 + ':3000/api/getOneProfile', {
@@ -30,6 +39,7 @@ const ProfileSummary = ({ profile }) => {
         })
         const data = await response.json();
         if (data.error == "User profile not found.") {
+            console.log("not slay!")
         } else {
             setNickName(data.NickName)
             setPronouns(data.Pronouns)
@@ -38,11 +48,11 @@ const ProfileSummary = ({ profile }) => {
             setDrink(data.FavDrink)
             setFood(data.FavFood)
             setFlavor(data.FavoriteFlavor)
+            setProfilePic(data.ProfilePhoto)
         }
     }
 
     const handleModal = () => {
-
         getData();
         setModalVisible(true);
     }
@@ -50,8 +60,11 @@ const ProfileSummary = ({ profile }) => {
     return (
         <SafeAreaView>
             <View style={styles.info}>
-                <Image style={styles.logo} source={{ uri: profile[0].profile_picture }} />
-
+                {(profilePic == '')? 
+                <Text></Text>
+                :
+                <Image style={styles.logo} source={{ uri: profilePic }} />
+                }
                 <View style={{ flexDirection: 'column' }}>
                     <Text style={{ fontSize: 30, fontWeight: '700', paddingLeft: 50 }}>{global.signedUser}</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 47 }}>
