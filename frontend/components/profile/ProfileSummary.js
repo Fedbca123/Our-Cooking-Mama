@@ -30,7 +30,6 @@ const ProfileSummary = ({ profile }) => {
         })
         const data = await response.json();
         if (data.error == "User profile not found.") {
-            console.log("not slay!")
         } else {
             setNickName(data.NickName)
             setPronouns(data.Pronouns)
