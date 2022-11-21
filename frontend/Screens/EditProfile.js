@@ -7,10 +7,8 @@ import { ScreenWidth } from 'react-native-elements/dist/helpers';
 import { Ionicons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 
-import { PROFILE } from '../dummydata/profile'
-
 export default function EditProfile( {navigation} ) {
-    const background = '../Images/OCMgradient.png';
+    const background = '../Images/OCMgradientGH.png';
     const Divider = () => <View style={styles.divider}/>
     const [image, setImage] = useState(null);
     const [nickName, setnickName] = useState("");
@@ -31,16 +29,16 @@ export default function EditProfile( {navigation} ) {
 
 
     const changeProfilePic = async () => {
-        // let result = await ImagePicker.launchImageLibraryAsync({
-        //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        //     allowsEditing: false,
-        // });
-        // if (!result.canceled) { 
-        //     console.log("Before: " + result.assets[0].uri)
-        //     setImage(result.assets[0].uri);
-        //     console.log("After: " + image)
-        // }
-        // PROFILE[0].profile_picture = result.assets[0].uri;
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: false,
+        });
+        const newProfilePic = result.assets[0].uri;
+        if (!result.canceled) { 
+            //console.log("Before: " + result.assets[0].uri)
+            setImage(newProfilePic);
+            //console.log("After: " + image)
+        }
     }
 
     const parseData = () => {
@@ -72,7 +70,8 @@ export default function EditProfile( {navigation} ) {
                 userId: global._id,
                 AccountType: accountType,
                 PersonalFeedID: global._id,
-                pronouns: pronouns 
+                pronouns: pronouns,
+                ProfilePhoto: image
 			}),
 		}).catch(err => {
 			console.log(err);
@@ -103,7 +102,7 @@ export default function EditProfile( {navigation} ) {
             </View>
 
             <View style={{}}>
-                <Image style={styles.logo} source={{ uri: PROFILE[0].profile_picture }} />
+                <Image style={styles.logo} source={{ uri: image }} />
                 <TouchableOpacity onPress={changeProfilePic}>
                     <Text style={{alignSelf: 'center', color: 'steelblue'}}>Change Profile Picture</Text>
                 </TouchableOpacity>
@@ -196,9 +195,10 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         paddingLeft: 10,
         marginVertical: 3,
+        padding: 3
     },
     element: {
-        fontSize: 17
+        fontSize: 20
     },
     disclaimer: {
         alignSelf: 'center',
@@ -218,4 +218,3 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     }
 });
-
