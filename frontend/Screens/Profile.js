@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, Image, FlatList, SafeAreaView, ImageBackground, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, Image, FlatList, SafeAreaView, ImageBackground, Modal } from 'react-native';
 import BottomTabs from '../components/BottomTabs';
 import Header from '../components/profile/Header';
 import ProfileSummary from '../components/profile/ProfileSummary';
@@ -13,9 +13,9 @@ export default function Profile({ navigation }) {
     <ImageBackground style={styles.background} source={require(background)}>
       <SafeAreaView style={styles.container}>
         <Header navigation={navigation}></Header>
-        <ProfileSummary profile={PROFILE}></ProfileSummary>
+        <ProfileSummary profile={PROFILE} navigation={navigation}></ProfileSummary>
         <UserPosts profile={PROFILE[0].posts}></UserPosts>
-        <BottomTabs navigation={navigation}/>
+        <BottomTabs navigation={navigation} />
       </SafeAreaView>
     </ImageBackground>
   );
