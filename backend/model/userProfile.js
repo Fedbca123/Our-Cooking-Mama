@@ -11,7 +11,8 @@ const userProfileSchema = new mongoose.Schema
     UserID: {type: String, ref: 'userReg'},
     AccountType: String,
     PersonalFeedID: String,
-    Pronouns: String
+    Pronouns: String,
+    ProfilePhoto: String
  },
  {
     collection: 'UserInfo'
