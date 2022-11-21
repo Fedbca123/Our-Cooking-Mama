@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button, ImageBackground, TextInput } from 'react-native'
+import { Text, View, StyleSheet, Image, ImageBackground, TextInput } from 'react-native'
 import { useState } from 'react';
 import Toast from 'react-native-toast-message';
 
@@ -15,8 +15,21 @@ const SignUpScreen = ({ navigation }) => {
 	const [LN, setLN] = useState("");
 	const [EM, setEM] = useState("");
 	const comparePass = PW.localeCompare(PW2);
+	const greencheck = '../Images/greencheck.png';
+	const redx = '../Images/redx.png';
 
 	const handleCreate = async (e) => {
+		if(passAllCheck(PW)){
+			console.log("Nice ._.")
+		} else {
+			//console.log("Password must meet all criteria")
+			Toast.show({
+				type: 'error',
+				text1: 'Password must meet all criteria'
+			})
+			return;
+		}
+
 		if (UN == '' || PW == '' || PW2 == '' || FN == '' || LN == '' || EM == '') {
 			Toast.show({
 				type: 'error',
@@ -69,8 +82,29 @@ const SignUpScreen = ({ navigation }) => {
 	}
 
 	const switchL = () => {
-		navigation.navigate('LoginScreen');
+		navigation.navigate('Login');
 	}
+
+	function hasNumber(myString) {
+		return !/\d/.test(myString);
+	}
+
+	function hasSpecialChar(str){
+		return !/[~`!#$@%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(str);
+	}
+
+	function hasUpper(str) {
+		return !/[A-Z]/.test(str);
+	}
+
+	function passAllCheck(){
+		if ( !hasUpper(PW) && PW.length >= 8 && !hasNumber(PW) && !hasSpecialChar(PW) && !comparePass){
+			//console.log("Nice " + hasUpper(PW) + " " + (PW.length >= 8) + " " + hasNumber(PW) + " " + hasSpecialChar(PW) + " " + comparePass);
+			return true;
+		}
+		return false;
+	}
+
 
 	return (
 		<ImageBackground style={styles.background} source={require(background)}>
@@ -136,6 +170,53 @@ const SignUpScreen = ({ navigation }) => {
 				<Text style={styles.button} onPress={handleCreate}>Create Account</Text>
 			</View>
 
+			{(PW == '') ?
+			<Text></Text> //Place Holder
+			:
+			<View style={styles.passCheck}>
+				<View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingLeft:15}}>
+					{(PW.length < 8) ?
+						<Image source={require(redx)} style={styles.passIcon}></Image>
+					:
+						<Image source={require(greencheck)} style={styles.passIcon}></Image>
+					}
+					<Text style={{padding: 2, fontSize: 11.5, paddingLeft:15}}>Password has atleast 8 characters</Text>
+				</View>
+				<View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingLeft:15}}>
+					{(hasNumber(PW)) ?
+						<Image source={require(redx)} style={styles.passIcon}></Image>
+					:
+						<Image source={require(greencheck)} style={styles.passIcon}></Image>
+					}
+					<Text style={{padding: 2, fontSize: 11.5, paddingLeft:15}}>Atleast one numeric character (0-9)</Text>
+				</View>
+				<View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingLeft:15}}>
+					{(hasSpecialChar(PW)) ?
+						<Image source={require(redx)} style={styles.passIcon}></Image>
+					:
+						<Image source={require(greencheck)} style={styles.passIcon}></Image>
+					}
+					<Text style={{padding: 2, fontSize: 11.5, paddingLeft:15}}>Atleast one special character</Text>
+				</View>
+				<View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingLeft:15}}>
+					{(hasUpper(PW)) ?
+						<Image source={require(redx)} style={styles.passIcon}></Image>
+					:
+						<Image source={require(greencheck)} style={styles.passIcon}></Image>
+					}
+					<Text style={{padding: 2, fontSize: 11.5, paddingLeft:15}}>Atleast one upper case letter</Text>
+				</View>
+				<View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingLeft:15}}>
+					{(comparePass) ?
+						<Image source={require(redx)} style={styles.passIcon}></Image>
+					:
+						<Image source={require(greencheck)} style={styles.passIcon}></Image>
+					}
+					<Text style={{padding: 2, fontSize: 11.5, paddingLeft:15}}>Passwords match</Text>
+				</View>
+			</View>
+			}
+
 		</ImageBackground>
 	);
 }
@@ -196,5 +277,17 @@ const styles = StyleSheet.create({
 		borderRadius: 15,
 		overflow: 'hidden',
 	},
-
+	passCheck: {
+		width: '70%',
+		height: '15%',
+		borderWidth: 1,
+		marginTop: 10,
+		borderRadius: 10,
+		flexDirection: 'column',
+		justifyContent: 'space-evenly',
+	},
+	passIcon: {
+		width: 15,
+		height: 15,
+	},
 });
