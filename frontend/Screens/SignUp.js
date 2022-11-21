@@ -1,7 +1,8 @@
 import React from 'react';
-import { Text, View, StyleSheet, Image, ImageBackground, TextInput } from 'react-native'
+import { Text, View, StyleSheet, Image, ImageBackground, TextInput, TouchableOpacity } from 'react-native'
 import { useState } from 'react';
 import Toast from 'react-native-toast-message';
+import { Entypo } from '@expo/vector-icons';
 
 const background = '../Images/OCMgradient.png'
 // const logo = '../Images/OCMlogo2.png';
@@ -14,6 +15,7 @@ const SignUpScreen = ({ navigation }) => {
 	const [FN, setFN] = useState("");
 	const [LN, setLN] = useState("");
 	const [EM, setEM] = useState("");
+	const [seePass, setSeePass] = useState(true);
 	const comparePass = PW.localeCompare(PW2);
 	const greencheck = '../Images/greencheck.png';
 	const redx = '../Images/redx.png';
@@ -105,6 +107,10 @@ const SignUpScreen = ({ navigation }) => {
 		return false;
 	}
 
+	const changeSeePass = () => {
+		setSeePass(!seePass);
+	}
+
 
 	return (
 		<ImageBackground style={styles.background} source={require(background)}>
@@ -148,22 +154,44 @@ const SignUpScreen = ({ navigation }) => {
 					onChangeText={(val) => setEM(val)}
 					backgroundColor='#fff'
 				/>
-				<TextInput
-					placeholder="Password"
-					style={styles.input}
-					autoCorrect={false}
-					secureTextEntry={true}
-					onChangeText={(val) => setPW(val)}
-					backgroundColor='#fff'
-				/>
-				<TextInput
-					placeholder=" Confirm Password"
-					style={styles.input}
-					autoCorrect={false}
-					secureTextEntry={true}
-					onChangeText={(val) => setPW2(val)}
-					backgroundColor='#fff'
-				/>
+				<View style={styles.passWrapper}>
+					<TextInput
+						placeholder="Password"
+						style={{width: 150}}
+						autoCorrect={false}
+						secureTextEntry={seePass}
+						onChangeText={(val) => setPW(val)}
+						backgroundColor='#fff'
+					/>
+					{!seePass ?
+					<TouchableOpacity onPress={() => setSeePass(!seePass)}>
+						<Entypo name="eye" color="black" size={20}/>
+					</TouchableOpacity>
+					:
+					<TouchableOpacity onPress={() => setSeePass(!seePass)}>
+						<Entypo name="eye-with-line" color="black" size={20}/>
+					</TouchableOpacity>
+					}
+				</View>
+				<View style={styles.passWrapper}>
+					<TextInput
+						placeholder=" Confirm Password"
+						style={{width: 150}}
+						autoCorrect={false}
+						secureTextEntry={seePass}
+						onChangeText={(val) => setPW2(val)}
+						backgroundColor='#fff'
+					/>
+					{!seePass ?
+					<TouchableOpacity onPress={() => setSeePass(!seePass)}>
+						<Entypo name="eye" color="black" size={20}/>
+					</TouchableOpacity>
+					:
+					<TouchableOpacity onPress={() => setSeePass(!seePass)}>
+						<Entypo name="eye-with-line" color="black" size={20}/>
+					</TouchableOpacity>
+					}
+				</View>
 			</View>
 
 			<View>
@@ -289,5 +317,17 @@ const styles = StyleSheet.create({
 	passIcon: {
 		width: 15,
 		height: 15,
+	},
+	passWrapper: {
+		flexDirection: 'row', 
+		alignItems: 'center',
+		height: 40,
+		margin: 12,
+		borderWidth: 1,
+		padding: 10,
+		width: 200,
+		borderRadius: 20,
+		backgroundColor: '#fff',
+		justifyContent: 'space-between'
 	},
 });
