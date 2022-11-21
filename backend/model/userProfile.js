@@ -1,17 +1,18 @@
 const mongoose = require('mongoose');
-
 const userProfileSchema = new mongoose.Schema 
 ({
     NickName: String,
-    DietRest: [String],
-    FavCuisine: [String],
-    FavDrink: [String],
-    FavFood: [String],
-    FavoriteFlavor: [String],
-    FoodAllerg: [String],
-    AccountType: Boolean,
+    DietRest: Array,
+    FavCuisine: Array,
+    FavDrink: Array,
+    FavFood: Array,
+    FavoriteFlavor: Array,
+    FoodAllerg: Array,
+    UserID: {type: String, ref: 'userReg'},
+    AccountType: String,
     PersonalFeedID: String,
-    MostRecentPosts: [String]
+    Pronouns: String,
+    ProfilePhoto: String
  },
  {
     collection: 'UserInfo'
