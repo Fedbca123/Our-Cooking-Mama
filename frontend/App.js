@@ -10,7 +10,12 @@ import Profile from './Screens/Profile';
 import EditProfile from './Screens/EditProfile';
 import CreatePost from './Screens/CreatePost';
 
+import { LogBox } from 'react-native';
+
 const Stack = createStackNavigator();
+
+// Change me
+global.ipv4 = '10.0.0.243';
 
 const theme = {
 	...DefaultTheme,
@@ -21,6 +26,7 @@ const theme = {
 }
 
 const App = () => {
+	// LogBox.ignoreAllLogs();
 	global._id = 0;
 	global.signedUser = '';
 	return(

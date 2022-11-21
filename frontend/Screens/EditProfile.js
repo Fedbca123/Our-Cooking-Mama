@@ -55,7 +55,7 @@ export default function EditProfile( {navigation} ) {
     const saveEdit = async (event) => {
         parseData();
         event.preventDefault();
-        const response = await fetch('http://172.29.16.1:3000/api/editProfile', {
+        const response = await fetch('http://' + global.ipv4 + ':3000/api/editProfile', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',

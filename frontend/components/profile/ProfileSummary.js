@@ -16,7 +16,7 @@ const ProfileSummary = ({ profile }) => {
     const [favFlavor, setFlavor] = useState('');
 
     const getData = async () => {
-        const response = await fetch('http://172.29.16.1:3000/api/getOneProfile', {
+        const response = await fetch('http://' + global.ipv4 + ':3000/api/getOneProfile', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -33,7 +33,7 @@ const ProfileSummary = ({ profile }) => {
             console.log("not slay!")
         } else {
             setNickName(data.NickName)
-            setPronouns(data._id)
+            setPronouns(data.Pronouns)
             setAccountType(data.AccountType)
             setCuisine(data.FavCuisine)
             setDrink(data.FavDrink)

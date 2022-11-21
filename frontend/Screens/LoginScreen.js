@@ -7,17 +7,17 @@ const background = '../Images/OCMgradient.png'
 const logo = '../Images/OCMlogo2.png';
 
 
-const LoginScreen = ( {navigation} ) => {
+const LoginScreen = ({ navigation }) => {
 	const [UN, setUN] = useState("");
 	const [PW, setPW] = useState("");
 
 	async function handleLogin(event) {
-		navigation.navigate('Home');
+		// navigation.navigate('Home');
 		event.preventDefault()
 		// IP address is unique, expo/express can't resolve 'localhost' so you need to ipconfig in cmd and replace with the ipv4
 		// This should be no issue once deployed on heroku
 
-		const response = await fetch('http://172.29.16.1:3000/api/login', {
+		const response = await fetch('http://' + global.ipv4 + ':3000/api/login', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -55,30 +55,30 @@ const LoginScreen = ( {navigation} ) => {
 		navigation.navigate('SignUpScreen');
 	}
 
-	return(
-		<ImageBackground style={styles.background}source={require(background)}>
+	return (
+		<ImageBackground style={styles.background} source={require(background)}>
 			<View>
-				<Text style = {styles.title}>Our Cooking Mama</Text>
-				<Image source={require(logo)} style = {styles.logo}></Image>
+				<Text style={styles.title}>Our Cooking Mama</Text>
+				<Image source={require(logo)} style={styles.logo}></Image>
 
-				<View style ={{flexDirection: 'row', justifyContent: 'center', marginVertical: 10}}>
-					<Text style={styles.switchButtonColored}>Login</Text> 
+				<View style={{ flexDirection: 'row', justifyContent: 'center', marginVertical: 10 }}>
+					<Text style={styles.switchButtonColored}>Login</Text>
 					<Text> </Text>
-					<Text style = {styles.switchButton} onPress={switchS}>Sign Up</Text>
+					<Text style={styles.switchButton} onPress={switchS}>Sign Up</Text>
 				</View>
 
 				<TextInput
-					placeholder= "Username"
-					style = {styles.input}
-					onChangeText = {(val) => setUN(val)}
-					backgroundColor = '#fff'
+					placeholder="Username"
+					style={styles.input}
+					onChangeText={(val) => setUN(val)}
+					backgroundColor='#fff'
 				/>
 				<TextInput
-					placeholder= "Password"
-					style = {styles.input}
+					placeholder="Password"
+					style={styles.input}
 					secureTextEntry={true}
-					onChangeText = {(val) => setPW(val)}
-					backgroundColor = '#fff'
+					onChangeText={(val) => setPW(val)}
+					backgroundColor='#fff'
 				/>
 			</View>
 
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'center',
 	},
-	container:{
+	container: {
 		flex: 1,
 	},
 	input: {
@@ -112,36 +112,36 @@ const styles = StyleSheet.create({
 		padding: 10,
 		borderRadius: 20,
 	},
-	logo:{
+	logo: {
 		width: 150,
 		height: 150,
 		resizeMode: 'center',
 		alignSelf: 'center'
 	},
-	button:{
+	button: {
 		borderWidth: 2,
 		padding: 5,
 		width: 100,
 		textAlign: 'center',
 		backgroundColor: '#E39E6D',
-        borderRadius: 15,
-        overflow: 'hidden',
+		borderRadius: 15,
+		overflow: 'hidden',
 	},
-	switchButton:{
+	switchButton: {
 		padding: 7,
 		width: 100,
 		textAlign: 'center',
 		backgroundColor: 'grey',
-        borderRadius: 15,
-        overflow: 'hidden',
+		borderRadius: 15,
+		overflow: 'hidden',
 	},
-	switchButtonColored:{
+	switchButtonColored: {
 		padding: 7,
 		width: 100,
 		textAlign: 'center',
 		backgroundColor: '#E39E6D',
-        borderRadius: 15,
-        overflow: 'hidden',
+		borderRadius: 15,
+		overflow: 'hidden',
 	},
-	
-  });
+
+});

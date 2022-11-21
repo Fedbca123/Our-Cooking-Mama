@@ -16,7 +16,7 @@ const Header = ({ navigation }) => {
         event.preventDefault()
         // IP address is unique, expo/express can't resolve 'localhost' so you need to ipconfig in cmd and replace with the ipv4
         // This should be no issue once deployed on heroku
-        const response = await fetch('http://172.29.16.1:3000/api/searchProfiles', {
+        const response = await fetch('http://' + global.ipv4 + ':3000/api/searchProfiles', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
