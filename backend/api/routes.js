@@ -135,48 +135,57 @@ router.post('/login', async (req, res) =>
 })
 
 // create/edit Profile
-router.post('/editProfile', async (req, res) => {
-    // TO DO: Replace feed variable with _id from Personal Feed once created
-    const feed = "feedID";
-    // Getting this userId from cookie on frontend, verbatim 'userId'
-    const userId = req.body.userId;
-    const result = await userRegister.findOne({ _id: userId }).exec();
+router.post('/editProfile', upload.single('file'), function (req, res) {
     try {
-        // check if id is valid
-        if (result == null) {
-            var ret = {userId: -1, error: "User Account Not Found."}
-            return res.json(ret);
-        } else {
-            // edit profile
-            console.log('User profile found. Please edit.')
-            const profile = {
-                NickName: req.body.NickName,
-                DietRest: req.body.DietRest,
-                FavCuisine: req.body.FavCuisine,
-                FavDrink: req.body.FavDrink,
-                FavFood: req.body.FavFood,
-                FavoriteFlavor: req.body.FavoriteFlavor,
-                FoodAllerg: req.body.FoodAllerg,
-                UserID: mongoose.Types.ObjectId(userId),
-                AccountType: req.body.AccountType,
-                PersonalFeedID: feed,
-                Pronouns: req.body.pronouns,
-                ProfilePhoto: req.body.ProfilePhoto
+        // TO DO: Replace feed variable with _id from Personal Feed once created
+        const feed = "feedID";
+        // Getting this userId from cookie on frontend, verbatim 'userId'
+        cloudinary.v2.uploader.upload(req.file.path, async (err, result) => {
+            if (err) {
+                req.json(err.message);
             }
+            const userId = req.body.userId;
+            const validAccount = await userRegister.findOne({ _id: userId }).exec();
             try {
-                const updatedProfile = await userProfile.findByIdAndUpdate(userId, profile, {
-                    new: true,
-                    upsert: true,
-                });
-                console.log(updatedProfile);
-                res.status(200).json(updatedProfile)
+                // check if id is valid
+                if (validAccount == null) {
+                    var ret = {userId: -1, error: "User Account Not Found."}
+                    return res.json(ret);
+                } else {
+                    // edit profile
+                    console.log('User profile found. Please edit.')
+                    const profile = {
+                        NickName: req.body.NickName,
+                        DietRest: req.body.DietRest,
+                        FavCuisine: req.body.FavCuisine,
+                        FavDrink: req.body.FavDrink,
+                        FavFood: req.body.FavFood,
+                        FavoriteFlavor: req.body.FavoriteFlavor,
+                        FoodAllerg: req.body.FoodAllerg,
+                        UserID: mongoose.Types.ObjectId(userId),
+                        AccountType: req.body.AccountType,
+                        PersonalFeedID: feed,
+                        Pronouns: req.body.pronouns,
+                        ProfilePhoto: result.secure_url
+                    }
+                    try {
+                        const updatedProfile = await userProfile.findByIdAndUpdate(userId, profile, {
+                            new: true,
+                            upsert: true,
+                        });
+                        console.log(updatedProfile);
+                        res.status(200).json(updatedProfile)
+                    } catch(error) {
+                        // Profile creation/update error
+                        console.log(error);
+                        error = "Cannot find user account.";
+                        res.status(400).json(error);
+                    }
+                }
             } catch(error) {
-                // Profile creation/update error
                 console.log(error);
-                error = "Cannot find user account.";
-                res.status(400).json(error);
             }
-        }
+        })
     } catch(error) {
         console.log(error);
     }
