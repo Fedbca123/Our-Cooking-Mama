@@ -15,11 +15,33 @@ export default function CreatePost({ navigation }) {
   const [caption, setCaption] = useState("");
   const [tags, setTags] = useState("");
 
-  const handleUpload = () => {
-    console.log("POSTING..")
-    const tagsArr = tags.split(' ');
-    console.log("\nTitle: " + title + "\nCaption: " + caption + "\nTags: " + tagsArr);
-  }
+  async function handleUpload(event) {
+    let formdata = new FormData();
+    formdata.append("userId", global._id)
+    formdata.append("recipeId", '63772881990a71a5cf2ff956')
+    formdata.append("Category", title)
+    formdata.append("Caption", caption)
+    formdata.append("Tags", tags)
+    formdata.append("file", {uri: image, name: 'image.jpg', type: 'image/jpg'})
+
+		event.preventDefault()
+		const response = await fetch('http://' + global.ipv4 + ':3000/api/addPost', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+			body: formdata
+    }).then(response => {
+      console.log("IMAGE UPLOADED!!!")
+		}).catch(err => {
+			console.log(err);
+		})
+
+    // probabyl navigate back 
+    // probably need a toast notification or something
+    // this takes like 10 seconds to upload so user will need a loading bar or circle or someryhing
+    navigation.navigate('Home');
+	}
 
   return (
     <ImageBackground source={require(background)} style={styles.background}>
