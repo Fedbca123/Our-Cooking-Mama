@@ -314,4 +314,66 @@ router.post('/getOneProfile', async (req, res) => {
     }
 })
 
+// Add recipe
+router.post('/addRecipe', async (req, res) => 
+{
+    const result = await recipe.findOne({Recipe:req.body.Name}).exec();
+
+    if (result != null)
+    {
+        err = 'Recipe already exists.';
+        res.status(400).json({error:err});
+    } 
+    else 
+    {
+        const data = new recipe
+        ({
+            Ingredients: req.body.Ingredients,
+            Recipe: req.body.Name,
+            DatePosted: new Date(),
+            ChefID: req.body.ChefID
+        })
+        try 
+        {
+            const newRecipe = await data.save();
+            console.log(newRecipe);
+            res.status(200).json(newRecipe)
+        } catch(error) 
+        {
+            console.log(error);
+        }
+    } 
+})
+
+// Edit recipes
+router.post('/editRecipe', async (req, res) => {
+    const recipeId = req.body.RecipeID;
+    const result = await recipe.findOne({ _id: recipeId }).exec();
+    try {
+        // check if id is valid
+        if (result == null) {
+            var ret = {RecipeID: -1, error: "Recipe Not Found."}
+            return res.json(ret);
+        } else {
+            // edit recipe
+            console.log('Recipe found. Please edit.')
+            const editedRecipe = {
+                Ingredients: req.body.Ingredients,
+                Recipe: req.body.Name,
+                DatePosted: result.DatePosted,
+                ChefID: req.body.ChefID
+            }
+
+            const updatedRecipe = await recipe.findByIdAndUpdate(recipeId, editedRecipe, {
+                new: true,
+                upsert: true,
+            });
+            console.log(updatedRecipe);
+            res.status(200).json(updatedRecipe)
+        }
+    } catch(error) {
+        console.log(error);
+    }
+})
+
 module.exports = router;
