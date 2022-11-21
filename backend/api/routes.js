@@ -56,7 +56,7 @@ router.post('/register', async (req, res) =>
     })
 })
 
-//Get all Method
+// Get all Method (Register / User Accounts)
 router.get('/getAll', async (req, res) => 
 {
     try 
@@ -66,6 +66,21 @@ router.get('/getAll', async (req, res) =>
     } catch (error) 
     {
         res.status(500).json({message: error.message})
+    }
+})
+
+// Get Specific User Profile
+router.post('/getOneProfile', async (req, res) => {
+    try {
+        const query = req.body.Query;
+        const result = await userProfile.findOne({UserID: {$regex: query}}).exec();
+        if (result != null) {
+            res.status(200).json(result);
+        } else {
+            res.status(400).json({error:"User profile not found."});
+        }
+    } catch (error) {
+        console.log(error);
     }
 })
 
