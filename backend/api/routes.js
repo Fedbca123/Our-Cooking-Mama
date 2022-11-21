@@ -256,4 +256,17 @@ router.post('/editRecipe', async (req, res) => {
     }
 })
 
+// Delete recipe
+router.post('/deleteRecipe', async (req, res) => {
+    try 
+    {
+        const recipeID = await recipe.findByIdAndDelete(req.body.RecipeID).exec();
+        res.status(200).json(recipeID);
+    } 
+    catch (error)
+    {
+        res.status(400).json({error:"Recipe does not exist."});
+    }
+})
+
 module.exports = router;
