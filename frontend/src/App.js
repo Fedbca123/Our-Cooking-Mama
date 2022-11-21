@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Helmet } from "react-helmet";
 import { BrowserRouter as BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 
@@ -10,7 +11,7 @@ import BuildPath from "./components/bPath"
 
 //import LoginPage from './components/Login';
 import LoginPage from './pages/LandingPages/LoginPage';
-import RegisterPage from './components/Register';
+import RegisterPage from './pages/LandingPages/RegisterPage';
 import HomePage from './pages/AccountPages/HomePage';
 import ProfilePage from "./pages/AccountPages/ProfilePage";
 import SearchPage from "./pages/AccountPages/SearchPage";
@@ -29,7 +30,7 @@ function App() {
 
 	return (
 		<div className="App">
-			
+
 			<Routes>
 				<Route path="/" element={<LandingPage />} />
 				<Route path="/login" element={<LoginPage />} />

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { buildPath } from "./bPath";
 
 import NavBarLanding from "./NavBar-Components/NavBarLanding";
+import ChefHat from './Images/chefHat.png';
 
 function Login() {
 	var loginName;
@@ -59,9 +60,12 @@ function Login() {
 	return (
 		<div>
 			<NavBarLanding />
-			<div id="loginDiv">
+
+			<img src={ChefHat} className="chefHat" alt="White Chef Hat." />
+
+			<div id="loginDiv" className="loginForm">
 				<form onSubmit={doLogin}>
-					<h3>Username</h3>
+					<p>Username</p>
 					<input
 						type="text"
 						id="loginName"
@@ -69,7 +73,7 @@ function Login() {
 						ref={(c) => (loginName = c)}
 					/>{" "}
 					<br />
-					<h3>Password</h3>
+					<p>Password</p>
 					<input
 						type="password"
 						id="loginPassword"

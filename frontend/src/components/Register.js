@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { buildPath } from "./bPath";
 
 import NavBarLanding from "./NavBar-Components/NavBarLanding";
+import ChefHat from './Images/chefHat.png';
 
 function Register() {
 	var fs;
@@ -74,6 +75,7 @@ function Register() {
 					// console.log(user);
 
 					setMessage(" ");
+
 					window.location.href = "/login";
 				}
 			} catch (e) {
@@ -86,70 +88,67 @@ function Register() {
 	return (
 		<div>
 			<NavBarLanding />
-			<div id="loginDiv">
+
+			<img src={ChefHat} className="chefHat" alt="White Chef Hat." />
+			
+			<div id="loginDiv" className="registerForm">
 				<form onSubmit={doRegister}>
-					<h3>First Name</h3>
+
+					<p>First Name</p>
 					<input
 						type="text"
 						id="FirstName"
 						placeholder="Gordon"
 						ref={(c) => (fs = c)}
 					/>
-					<br />
-					<h3>Last Name</h3>
+
+					<p>Last Name</p>
 					<input
 						type="text"
 						id="LastName"
 						placeholder="Ramsey"
 						ref={(c) => (ls = c)}
 					/>
-					<h3>Email</h3>
+
+					<p>Email</p>
 					<input
 						type="email"
 						id="Email"
 						placeholder="GRam@gmail.com"
 						ref={(c) => (email = c)}
 					/>
-					<br />
-					<br />
-					<h3>Username</h3>
+
+					<p>Username</p>
 					<input
 						type="text"
 						id="loginName"
 						placeholder="Username"
 						ref={(c) => (un = c)}
 					/>
-					<br />
-					<h3>Password</h3>
+
+					<p>Password</p>
 					<input
 						type="password"
 						id="loginPassword"
 						placeholder="********"
 						ref={(c) => (pass = c)}
 					/>
-					<br />
-					<h3>Confirm Password</h3>
+
+					<p>Confirm Password</p>
 					<input
 						type="password"
 						id="loginPassword"
 						placeholder="********"
 						ref={(c) => (reType = c)}
-					/>
-					<br />
-					<button
-						type="submit"
-						className="login"
-						onClick={doRegister}
-					>
-						Register
-					</button>
+					/> <br />
+					
+					<button type="submit" className="login" onClick={doRegister}>Register</button>
+					
 				</form>
-				<br />
+
 				<button className="link-btn" onClick={() => navigate("/login")}>
 					Returning Chef?
 				</button>
-
-				<br />
 
 				<span id="registerResult">{message}</span>
 			</div>
