@@ -20,12 +20,51 @@ export default function EditProfile( {navigation} ) {
     const [dietRest, setdietRest] = useState("");
 	const [foodAllergy, setfoodAllergy] = useState("");
     const [accountType, setaccountType] = useState("");
+    const [profilePic, setProfilePic] = useState('');
     let favCuisineArr = [];
     let favFoodArr = [];
     let favDrinkArr = [];
     let favFlavorArr = [];
     let dietRestArr = [];
     let foodAllergyArr = [];
+
+    React.useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+          getData();
+        });
+    
+        return unsubscribe;
+      }, [navigation]);
+
+    const getData = async () => {
+        const response = await fetch('http://' + global.ipv4 + ':3000/api/getOneProfile', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+                Query: global._id,
+            }),
+        }).catch(err => {
+            console.log(err);
+        })
+        const data = await response.json();
+        if (data.error == "User profile not found.") {
+            console.log("not slay!")
+        } else {
+            setnickName(data.NickName)
+            setPronouns(data.Pronouns)
+            setaccountType(data.AccountType)
+            setfavCuisine(data.FavCuisine)
+            setfavDrink(data.FavDrink)
+            setfavFood(data.FavFood)
+            setfavFlavor(data.FavoriteFlavor)
+            setProfilePic(data.ProfilePhoto)
+            setfoodAllergy(data.FoodAllerg)
+            setdietRest(data.DietRest)
+        }
+    }
 
 
     const changeProfilePic = async () => {
@@ -42,12 +81,12 @@ export default function EditProfile( {navigation} ) {
     }
 
     const parseData = () => {
-        favCuisineArr = favCuisine.split(", ");
-        favFoodArr = favFood.split(", ");
-        favDrinkArr = favDrink.split(", ");
-        favFlavorArr = favFlavor.split(", ");
-        dietRestArr = dietRest.split(", ");
-        foodAllergyArr = foodAllergy.split(", ");
+        favCuisineArr = favCuisine.toString().split(", ");
+        favFoodArr = favFood.toString().split(", ");
+        favDrinkArr = favDrink.toString().split(", ");
+        favFlavorArr = favFlavor.toString().split(", ");
+        dietRestArr = dietRest.toString().split(", ");
+        foodAllergyArr = foodAllergy.toString().split(", ");
     }
 
     const saveEdit = async (event) => {
@@ -102,7 +141,11 @@ export default function EditProfile( {navigation} ) {
             </View>
 
             <View style={{}}>
-                <Image style={styles.logo} source={{ uri: image }} />
+                {(profilePic == '')? 
+                <Text></Text>
+                :
+                <Image style={styles.logo} source={{ uri: profilePic }} />
+                }
                 <TouchableOpacity onPress={changeProfilePic}>
                     <Text style={{alignSelf: 'center', color: 'steelblue'}}>Change Profile Picture</Text>
                 </TouchableOpacity>
@@ -117,9 +160,9 @@ export default function EditProfile( {navigation} ) {
                     <Text style={styles.element}>Account type</Text>
                 </View>
                 <View style={{flexDirection: 'column', justifyContent: 'space-evenly'}}>
-                    <TextInput style={styles.input} maxLength={10} onChangeText = {(val) => setnickName(val)}></TextInput>
-                    <TextInput style={styles.input} maxLength={10} onChangeText = {(val) => setPronouns(val)}></TextInput>
-                    <TextInput style={styles.input} maxLength={10} onChangeText = {(val) => setaccountType(val)}></TextInput>
+                    <TextInput style={styles.input} maxLength={10} onChangeText = {(val) => setnickName(val)}>{nickName}</TextInput>
+                    <TextInput style={styles.input} maxLength={10} onChangeText = {(val) => setPronouns(val)}>{pronouns}</TextInput>
+                    <TextInput style={styles.input} maxLength={10} onChangeText = {(val) => setaccountType(val)}>{accountType}</TextInput>
                 </View>
             </View>
 
@@ -133,10 +176,10 @@ export default function EditProfile( {navigation} ) {
                     <Text style={styles.element}>Favorite flavor</Text>
                 </View>
                 <View style={{flexDirection: 'column', justifyContent: 'space-evenly'}}>
-                    <TextInput style={styles.input} onChangeText = {(val) => setfavCuisine(val)}></TextInput>
-                    <TextInput style={styles.input} onChangeText = {(val) => setfavFood(val)}></TextInput>
-                    <TextInput style={styles.input} onChangeText = {(val) => setfavDrink(val)}></TextInput>
-                    <TextInput style={styles.input} onChangeText = {(val) => setfavFlavor(val)}></TextInput>
+                    <TextInput style={styles.input} onChangeText = {(val) => setfavCuisine(val)}>{favCuisine}</TextInput>
+                    <TextInput style={styles.input} onChangeText = {(val) => setfavFood(val)}>{favFood}</TextInput>
+                    <TextInput style={styles.input} onChangeText = {(val) => setfavDrink(val)}>{favDrink}</TextInput>
+                    <TextInput style={styles.input} onChangeText = {(val) => setfavFlavor(val)}>{favFlavor}</TextInput>
                 </View>
             </View>
 
@@ -150,8 +193,8 @@ export default function EditProfile( {navigation} ) {
                     <Text style={styles.element}>Food allergies</Text>
                 </View>
                 <View style={{flexDirection: 'column', justifyContent: 'space-evenly'}}>
-                    <TextInput style={styles.input} onChangeText = {(val) => setdietRest(val)}></TextInput>
-                    <TextInput style={styles.input} onChangeText = {(val) => setfoodAllergy(val)}></TextInput>
+                    <TextInput style={styles.input} onChangeText = {(val) => setdietRest(val)}>{dietRest}</TextInput>
+                    <TextInput style={styles.input} onChangeText = {(val) => setfoodAllergy(val)}>{foodAllergy}</TextInput>
                 </View>
             </View>
 
