@@ -33,6 +33,7 @@ const ProfileSummary = ({ profile, navigation }) => {
             },
             body: JSON.stringify({
                 Query: global._id,
+                // Query: '636b1021df00540ba3ab22d9'
             }),
         }).catch(err => {
             console.log(err);
@@ -60,11 +61,7 @@ const ProfileSummary = ({ profile, navigation }) => {
     return (
         <SafeAreaView>
             <View style={styles.info}>
-                {(profilePic == '')? 
-                <Text></Text>
-                :
                 <Image style={styles.logo} source={{ uri: profilePic }} />
-                }
                 <View style={{ flexDirection: 'column' }}>
                     <Text style={{ fontSize: 30, fontWeight: '700', paddingLeft: 50 }}>{global.signedUser}</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 47 }}>

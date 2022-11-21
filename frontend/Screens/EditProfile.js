@@ -8,7 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 
 export default function EditProfile( {navigation} ) {
-    const background = '../Images/OCMgradientGH.png';
+    const background = '../Images/OCMgradient.png';
     const Divider = () => <View style={styles.divider}/>
     const [image, setImage] = useState(null);
     const [nickName, setnickName] = useState("");
