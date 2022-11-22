@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { buildPath } from "./bPath";
 
 import NavBarLanding from "./NavBar-Components/NavBarLanding";
-import ChefHat from './Images/chefHat.png';
+import ChefHat from "./Images/chefHat.png";
+import { Cookie } from "universal-cookie";
 
 function Login() {
 	var loginName;
