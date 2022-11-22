@@ -7,6 +7,7 @@ import { ScreenWidth } from 'react-native-elements/dist/helpers';
 import { Ionicons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { MultipleSelectList } from 'react-native-dropdown-select-list'
+import { testID } from 'deprecated-react-native-prop-types/DeprecatedTextPropTypes';
 
 export default function EditProfile( {navigation} ) {
     const background = '../Images/OCMgradientGH.png';
@@ -15,6 +16,12 @@ export default function EditProfile( {navigation} ) {
 	const [pronouns, setPronouns] = useState("");
     const [accountType, setaccountType] = useState("");
     const [profilePic, setProfilePic] = useState('');
+    const [favCuisine, setfavCuisine] = useState("");
+	const [favFlavor, setfavFlavor] = useState("");
+    const [favFood, setfavFood] = useState("");
+    const [favDrink, setfavDrink] = useState('');
+    const [dietRest, setdietRest] = useState('');
+    const [ foodAllergy, setfoodAllergy] = useState('');
 
     //for dropdown storage
     const [selected, setSelected] = React.useState([])
@@ -81,7 +88,7 @@ export default function EditProfile( {navigation} ) {
 
     const saveEdit = async (event) => {
         handleStupidList();
-        //console.log(foodAllergyArr + '\n' + dietRestArr + '\n' + favFlavorArr + '\n' + favFoodArr + '\n' + favDrinkArr + '\n'+ favCuisineArr);
+        //console.log(foodAllergyArr + '\n' + dietRestArr + '\n' + favFlavorArr + '\n' + favFoodArr + '\n' + favDrinkArr + '\n'+ favCuisineArr + '\n' + accountType);
         event.preventDefault();
         const response = await fetch('http://' + global.ipv4 + ':3000/api/editProfile', {
 			method: 'POST',
@@ -118,26 +125,33 @@ export default function EditProfile( {navigation} ) {
     }
 
     const handleStupidList = () => {
-        for(i in selected){
+        for( let i in selected){
             if(FoodAllergies.includes(selected[i])){
                 foodAllergyArr.push(selected[i]);
             }
-            if(DietRest.includes(selected[i])){
+            else if(DietRest.includes(selected[i])){
                 dietRestArr.push(selected[i]);
             }
-            if(FavFlavor.includes(selected[i])){
+            else if(FavFlavor.includes(selected[i])){
                 favFlavorArr.push(selected[i]);
             }
-            if(FavFood.includes(selected[i])){
+            else if(FavFood.includes(selected[i])){
                 favFoodArr.push(selected[i]);
             }
-            if(FavDrink.includes(selected[i])){
+            else if(FavDrink.includes(selected[i])){
                 favDrinkArr.push(selected[i]);
             }
-            if(FavCuisine.includes(selected[i])){
+            else if(FavCuisine.includes(selected[i])){
                 favCuisineArr.push(selected[i]);
             }
+            else if(AccountType.includes(selected[i])){
+                test(selected[i]);
+            }
         }
+    }
+
+    const test = (str) => {
+        setaccountType(str);
     }
 
   return (
@@ -172,16 +186,25 @@ export default function EditProfile( {navigation} ) {
                     <View style={{flexDirection: 'column', justifyContent: 'space-evenly'}}>
                         <Text style={styles.element}>NickName</Text>
                         <Text style={styles.element}>Pronouns</Text>
-                        <Text style={styles.element}>Account type</Text>
                     </View>
                     <View style={{flexDirection: 'column', justifyContent: 'space-evenly'}}>
                         <TextInput style={styles.input} maxLength={20} onChangeText = {(val) => setnickName(val)}>{nickName}</TextInput>
                         <TextInput style={styles.input} maxLength={20} onChangeText = {(val) => setPronouns(val)}>{pronouns}</TextInput>
-                        <TextInput style={styles.input} maxLength={20} onChangeText = {(val) => setaccountType(val)}>{accountType}</TextInput>
                     </View>
                 </View>
 
                 <Divider/>
+
+                <View style={{paddingHorizontal: 10}}>
+                    <MultipleSelectList 
+                        setSelected={(val) => setSelected(val)} 
+                        data={AccountType} 
+                        save="value"
+                        label="Account Type"
+                        placeholder='Account Type'
+                        badgeStyles={{backgroundColor: '#E39E6D'}}
+                    />
+                </View>
 
                 <View style={{paddingHorizontal: 10}}>
                     <MultipleSelectList 
@@ -420,4 +443,10 @@ const FavDrink = [
     'Boba tea',
     'Jose Cuervo',
     'Milk',
+]
+
+const AccountType = [
+    "Chef",
+    "Personal",
+    "Business",
 ]
