@@ -295,15 +295,22 @@ router.post('/getPersonalFeed', async (req, res) =>
 {
     const userID = req.body.UserID;
 
-    const result = await userPost.find({ProfileID: userID}).sort({_id: -1}).exec();
+    try
+    {
+        const result = await userPost.find({ProfileID: userID}).sort({_id: -1}).exec();
 
-    if (result != "")
-    {
-        res.status(200).json(result);
+        if (result != "")
+        {
+            res.status(200).json(result);
+        }
+        else
+        {
+            res.status(400).json({error:"No posts found."});
+        }
     }
-    else
+    catch (err)
     {
-        res.status(400).json({error:"No posts found."});
+        res.status(400).json({error:err.message});
     }
 })
 
@@ -331,7 +338,6 @@ router.post('/addComment', async (req, res) =>
 })
 
 // Edit a comment
-// Edit recipes
 router.post('/editComment', async (req, res) => 
 {
     const commentID = req.body.CommentID;
@@ -366,6 +372,30 @@ router.post('/editComment', async (req, res) =>
     catch(error) 
     {
         res.status(400).json({error:error.message});
+    }
+})
+
+// Get all comments on a post
+router.post('/getPostComments', async (req, res) =>
+{
+    const postID = req.body.PostID;
+
+    try
+    {
+        const result = await userComment.find({PostID: postID}).sort({_id: -1}).exec();
+
+        if (result != "")
+        {
+            res.status(200).json(result);
+        }
+        else
+        {
+            res.status(400).json({error:"No comments found."});
+        }
+    }
+    catch (err)
+    {
+        res.status(400).json({error:err.message});
     }
 })
 
