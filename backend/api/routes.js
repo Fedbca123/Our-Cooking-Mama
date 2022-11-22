@@ -310,19 +310,34 @@ router.post('/addPost', upload.single('file'), function (req, res) {
 })
 
 // delete a Post
-router.post('/deletePost/:id', (req, res) => {
+router.post('/deletePost', async (req, res) => {
+    const postId = req.body.PostID;
+    const profileId = req.body.ProfileID;
+    console.log(postId);
+    console.log(profileId);
+    // Checks if id string is valid
+    if(!mongoose.Types.ObjectId.isValid(postId)) {
+        var ret = {id: -1, error: "Can't find instructions"}
+        return res.json(ret);
+      }
     try {
-        userPost.findByIdAndDelete(req.params.id)
-            .then((post) => {
-                if (!post) {
-                    return res.status(404).send();
-                } else {
-                    res.send(post);
-                }
-            })
-            .catch((error) => {
-                res.status(500).send(error);
-            })
+        const findingPost = await userPost.findById(postId);
+        if (!findingPost) {
+            var ret = {error: "Can't find post"}
+            return res.json(ret);
+        } else {
+            console.log(findingPost.ProfileID);
+            // Delete post if findingPost's profileId matches the taken in profileId
+            if (findingPost.ProfileID == profileId) {
+                userPost.findById(postId).deleteOne().exec();
+                var ret = {id: 1, error: 'Post deleted!'}
+                return res.json(ret);
+            } else {
+                var ret = {id: -1, error: "You cannot delete this post! UserIDs do not match!"}
+                return res.json(ret);
+            }
+        }
+
     } catch (error) {
         console.log(error);
     }
