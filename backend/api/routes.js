@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const userRegister = require ('../model/userAccount.js');
 const userProfile = require ('../model/userProfile.js');
 const userPost = require ('../model/userPost.js');
+const userComment = require ('../model/userComment.js');
 const recipe = require ('../model/recipes.js');
 const mongoose = require('mongoose');
 const { json } = require('body-parser');
@@ -101,7 +102,7 @@ router.post('/login', async (req, res, next) =>
 
     const result = await userRegister.findOne({UserName:username}).exec();
 
-    if (result != null)
+    if (result != "")
     {
         var isEqual = await bcrypt.compare(Password, result.Password);
         if (isEqual)
@@ -181,7 +182,7 @@ router.post('/searchProfiles', async (req, res, next) =>
 
     const result = await userRegister.find({UserName: {$regex: query, $options: 'i'}}).exec();
     
-    if (result != null)
+    if (result != "")
     {
         res.status(200).json(result);
     }
@@ -215,7 +216,7 @@ router.post('/addRecipe', async (req, res) =>
 {
     const result = await recipe.findOne({Recipe:req.body.Name}).exec();
 
-    if (result != null)
+    if (result != "")
     {
         err = 'Recipe already exists.';
         res.status(400).json({error:err});
@@ -245,10 +246,11 @@ router.post('/addRecipe', async (req, res) =>
 router.post('/editRecipe', async (req, res) => 
 {
     const recipeId = req.body.RecipeID;
-    const result = await recipe.findOne({ _id: recipeId }).exec();
     try {
+        const result = await recipe.findOne({ _id: recipeId }).exec();
+    
         // check if id is valid
-        if (result == null) {
+        if (result == "") {
             var ret = {RecipeID: -1, error: "Recipe Not Found."}
             return res.json(ret);
         } else {
@@ -258,18 +260,19 @@ router.post('/editRecipe', async (req, res) =>
                 Ingredients: req.body.Ingredients,
                 Recipe: req.body.Name,
                 DatePosted: result.DatePosted,
-                ChefID: req.body.ChefID
+                ChefID: result.ChefID
             }
 
             const updatedRecipe = await recipe.findByIdAndUpdate(recipeId, editedRecipe, {
                 new: true,
-                upsert: true,
             });
             console.log(updatedRecipe);
             res.status(200).json(updatedRecipe)
         }
-    } catch(error) {
-        console.log(error);
+    }
+    catch(error) 
+    {
+        res.status(400).json({error:error.message});
     }
 })
 
@@ -301,6 +304,68 @@ router.post('/getPersonalFeed', async (req, res) =>
     else
     {
         res.status(400).json({error:"No posts found."});
+    }
+})
+
+// Add a comment to a post
+router.post('/addComment', async (req, res) => 
+{
+    const data = new userComment
+    ({
+        Message: req.body.Message,
+        DatePosted: new Date(),
+        CommenterID: req.body.CommenterID,
+        PostID: req.body.PostID
+    })
+    try 
+    {
+        const newComment = await data.save();
+        console.log(newComment);
+        res.status(200).json(newComment)
+    } 
+    catch(error) 
+    {
+        console.log(error);
+    }
+
+})
+
+// Edit a comment
+// Edit recipes
+router.post('/editComment', async (req, res) => 
+{
+    const commentID = req.body.CommentID;
+
+    try {
+        const result = await userComment.findOne({ _id: commentID }).exec();
+
+        // check if id is valid
+        if (result == "") {
+            var ret = {CommentID: -1, error: "Comment Not Found."}
+            return res.status(400).json(ret);
+        } 
+        else 
+        {
+            console.log(result.PostID);
+            // edit comment
+            console.log('Comment found. Please edit.')
+            const editedComment = {
+                Message: req.body.Message,
+                DatePosted: result.DatePosted,
+                CommenterID: result.CommenterID,
+                PostID: result.PostID
+            }
+
+            const updatedComment = await userComment.findByIdAndUpdate(commentID, editedComment, {
+                new: true
+            });
+            console.log(updatedComment);
+            res.status(200).json(updatedComment)
+        }
+    } 
+    catch(error) 
+    {
+        res.status(400).json({error:error.message});
     }
 })
 
