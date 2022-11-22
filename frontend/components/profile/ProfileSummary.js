@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Image, Modal } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Image, Modal, FlatList } from 'react-native'
 import { ScreenWidth } from 'react-native-elements/dist/helpers'
 import { SafeAreaView } from 'react-navigation'
 import { useState } from 'react'
@@ -15,6 +15,14 @@ const ProfileSummary = ({ profile, navigation }) => {
     const [favFood, setFood] = useState('');
     const [favFlavor, setFlavor] = useState('');
     const [profilePic, setProfilePic] = useState('');
+    const Divider = () => <View style={styles.divider}/>
+
+    let favCuisineArr = [];
+    let favFoodArr = [];
+    let favDrinkArr = [];
+    let favFlavorArr = [];
+    let dietRestArr = [];
+    let foodAllergyArr = [];
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -33,7 +41,6 @@ const ProfileSummary = ({ profile, navigation }) => {
             },
             body: JSON.stringify({
                 Query: global._id,
-                // Query: '636b1021df00540ba3ab22d9'
             }),
         }).catch(err => {
             console.log(err);
@@ -61,7 +68,11 @@ const ProfileSummary = ({ profile, navigation }) => {
     return (
         <SafeAreaView>
             <View style={styles.info}>
+                {(profilePic == '')? 
+                <Text></Text>
+                :
                 <Image style={styles.logo} source={{ uri: profilePic }} />
+                }
                 <View style={{ flexDirection: 'column' }}>
                     <Text style={{ fontSize: 30, fontWeight: '700', paddingLeft: 50 }}>{global.signedUser}</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 47 }}>
@@ -90,16 +101,47 @@ const ProfileSummary = ({ profile, navigation }) => {
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
                             <TouchableOpacity onPress={() => setModalVisible(!modalVisible)} style={{ position: 'absolute', right: 0, paddingRight: 5, paddingTop: 5 }}>
-                                <Entypo name="cross" size={30} color="black" />
+                                <Entypo name="cross" size={30} color="#E39E6D" />
                             </TouchableOpacity>
                             <View>
-                                <Text>NickName: { nickName}</Text>
+                                <Text>NickName: {nickName}</Text>
                                 <Text>Pronouns: {pronouns}</Text>
                                 <Text>AccountType: {accountType} </Text>
-                                <Text>Favorite cuisine: {favCuisine}</Text>
-                                <Text>Favorite drink: {favDrink}</Text>
-                                <Text>Favorite food: {favFood}</Text>
-                                <Text>Favorite flavor: {favFlavor}</Text>
+                                
+                                <View style={styles.widget}>
+                                <Text>Favorite cuisine:</Text>
+                                    <FlatList
+                                        data={favCuisine}
+                                        renderItem={({item}) => <Text>{item} </Text>}
+                                        horizontal= {true}
+                                    />
+                                </View>
+                                
+                                <View style={styles.widget}>
+                                    <Text>Favorite drink:</Text>
+                                    <FlatList
+                                        data={favDrink}
+                                        renderItem={({item}) => <Text>{item} </Text>}
+                                        horizontal= {true}
+                                    />
+                                </View>
+                                
+                                <View style={styles.widget}>
+                                <Text>Favorite food:</Text>
+                                    <FlatList
+                                        data={favFood}
+                                        renderItem={({item}) => <Text>{item} </Text>}
+                                        horizontal= {true}
+                                    />
+                                </View>
+                                <View style={styles.widget}>
+                                <Text>Favorite flavor:</Text>
+                                    <FlatList
+                                        data={favFlavor}
+                                        renderItem={({item}) => <Text>{item} </Text>}
+                                        horizontal= {true}
+                                    />
+                                </View>
                             </View>
                         </View>
                     </View>
@@ -107,9 +149,7 @@ const ProfileSummary = ({ profile, navigation }) => {
 
             </View>
 
-            <View style={styles.bio}>
-                <Text>{profile[0].bio}</Text>
-            </View>
+            <Divider/>
 
         </SafeAreaView>
     )
@@ -164,6 +204,8 @@ const styles = StyleSheet.create({
         margin: 20,
         backgroundColor: "white",
         borderRadius: 20,
+        borderColor: '#E39E6D',
+        borderWidth: 2,
         padding: 35,
         alignItems: "center",
         shadowColor: "#000",
@@ -175,6 +217,19 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5
     },
+    divider: {
+        marginVertical: 8,
+        borderBottomWidth: 1,
+        borderBottomColor: 'black'
+    },
+    widget: {
+        height: 50, 
+        borderWidth:1, 
+        padding: 5, 
+        borderColor: '#E39E6D', 
+        borderRadius: 10, 
+        marginVertical: 5
+    }
 })
 
 export default ProfileSummary;
