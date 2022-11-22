@@ -248,27 +248,31 @@ router.post('/searchPosts', async (req, res) =>
 })
 
 // edit a Post
-router.post('/editPost', async (req, res) =>
-{
+router.post('/editPost', upload.single('file'), function (req, res) {
     try {
-        const postId = req.body.PostID;
-        const recipeId = req.body.RecipeID;
-        const profileId = req.body.ProfileID;
-        const post = {
-            Category: req.body.Category,
-            Photo: req.body.Photo,            
-            Caption: req.body.Caption,
-            Tags: req.body.Tags,
-            ProfileID: profileId,
-            RecipeID: recipeId
-        }
+        cloudinary.v2.uploader.upload(req.file.path, async (err, result) => {
+            if (err) {
+                req.json(err.message);
+            }
+            const postId = req.body.PostID;
+            const recipeId = req.body.RecipeID;
+            const profileId = req.body.ProfileID;
+            const post = {
+                Category: req.body.Category,
+                Photo: result.secure_url,            
+                Caption: req.body.Caption,
+                Tags: req.body.Tags,
+                ProfileID: profileId,
+                RecipeID: recipeId
+            }
 
-        const updatedPost = await userPost.findByIdAndUpdate(postId, post, {
-            new: true,
-            upsert: true,
-        });
-        console.log(updatedPost);
-        res.status(200).json(updatedPost)
+            const updatedPost = await userPost.findByIdAndUpdate(postId, post, {
+                new: true,
+                upsert: true,
+            });
+            console.log(updatedPost);
+            res.status(200).json(updatedPost)
+        })
     }
     catch(error) {
         console.log(error);
