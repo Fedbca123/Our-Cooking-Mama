@@ -9,13 +9,14 @@ import Camera from './Screens/Camera';
 import Profile from './Screens/Profile';
 import EditProfile from './Screens/EditProfile';
 import CreatePost from './Screens/CreatePost';
+import EditPost from "./Screens/EditPost.js";
 
 import { LogBox } from 'react-native';
 
 const Stack = createStackNavigator();
 
 // Change me
-global.ipv4 = '10.0.0.243';
+global.ipv4 = '172.25.128.1';
 
 const theme = {
 	...DefaultTheme,
@@ -39,6 +40,7 @@ const App = () => {
 				<Stack.Screen name="Profile" component={Profile} />
 				<Stack.Screen name="EditProfile" component={EditProfile} />
 				<Stack.Screen name="CreatePost" component={CreatePost} />
+				<Stack.Screen name="EditPost" component={EditPost} />
 			</Stack.Navigator>
 			<Toast />
 		</NavigationContainer>

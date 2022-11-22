@@ -30,9 +30,7 @@ const LoginScreen = ({ navigation }) => {
 		}).catch(err => {
 			console.log(err);
 		})
-
 		const data = await response.json()
-
 		if (data.error == '') {
 			navigation.navigate('Home');
 		} else if (data.error == 'Passwords do not match.') {

@@ -14,7 +14,7 @@ export default function Profile({ navigation }) {
       <SafeAreaView style={styles.container}>
         <Header navigation={navigation}></Header>
         <ProfileSummary profile={PROFILE} navigation={navigation}></ProfileSummary>
-        <UserPosts profile={PROFILE[0].posts}></UserPosts>
+        <UserPosts profile={PROFILE[0].posts} navigation={navigation}></UserPosts>
         <BottomTabs navigation={navigation} />
       </SafeAreaView>
     </ImageBackground>

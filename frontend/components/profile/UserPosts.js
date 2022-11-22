@@ -5,11 +5,13 @@ import { FlatList, ScrollView } from 'react-native-gesture-handler'
 import { useState } from 'react'
 import { Entypo } from '@expo/vector-icons';
 
-const UserPosts = ({ profile }) => {
+const UserPosts = ({ profile, navigation }) => {
     const [deletePost, setDeletePost] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
 
-    const handleModal = () => {
-        setDeletePost(!deletePost);
+
+    const editPost = (specificPost) => () => {
+        navigation.navigate('EditPost', { item: specificPost })
     }
 
     const handleDelete = async (event) => {
@@ -26,45 +28,36 @@ const UserPosts = ({ profile }) => {
                 numColumns={3}
                 renderItem={({ item }) => (
                     <View>
-                        <TouchableOpacity onLongPress={handleModal}>
+                        <TouchableOpacity onPress={editPost(item)}>
                             <Image source={{ uri: item.image }} style={{ height: 136, width: 111, resizeMode: 'cover', margin: 5 }}></Image>
                         </TouchableOpacity>
-                    {/* <Text>{item.key}</Text> */}
                     </View>
 
                 )}
             >
             </FlatList>
-
-            <Modal
-            animationType="slide" 
-            visible={deletePost} 
-            transparent={true}
-            onRequestClose={() => {
-                setDeletePost(!deletePost);
-            }}
-            >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <TouchableOpacity onPress={() => setDeletePost(!deletePost)} style={{position: 'absolute', right: 0, paddingRight: 5, paddingTop: 5}}>
-                            <Entypo name="cross" size={30} color="black"/>
-                        </TouchableOpacity>
-                        <View>
-                            <Text>Do you want to delete this post?</Text>
-                            <View style={{flexDirection: 'row', justifyContent: 'space-evenly', paddingTop: 10}}>
-                                <TouchableOpacity onPress={handleDelete}>
-                                    <Text style={{color: 'steelblue'}}>Yes</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={handleModal}>
-                                    <Text style={{color: 'steelblue'}}>No</Text>
-                                </TouchableOpacity>
-                            </View>
+            {/* 
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <Modal
+                    animationType='fade'
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        setModalVisible(!modalVisible);
+                    }}
+                >
+                    <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                        <View style={styles.popcap}>
+                            <Popup post={post}></Popup>
                         </View>
-                    </View>
-                </View>
-            </Modal>
+                    </TouchableOpacity>
+                </Modal>
+            </View> */}
+
 
         </View>
+
+
 
     )
 }
@@ -98,8 +91,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         marginTop: 22
-      },
-      modalView: {
+    },
+    modalView: {
         margin: 20,
         backgroundColor: "white",
         borderRadius: 20,
@@ -107,13 +100,13 @@ const styles = StyleSheet.create({
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {
-          width: 0,
-          height: 2
+            width: 0,
+            height: 2
         },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5
-      },
+    },
 })
 
 export default UserPosts

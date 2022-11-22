@@ -7,7 +7,7 @@ import { ScreenWidth } from 'react-native-elements/dist/helpers';
 import { Ionicons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { MultipleSelectList } from 'react-native-dropdown-select-list'
-import { testID } from 'deprecated-react-native-prop-types/DeprecatedTextPropTypes';
+// import { testID } from 'deprecated-react-native-prop-types/DeprecatedTextPropTypes';
 
 export default function EditProfile( {navigation} ) {
     const background = '../Images/OCMgradientGH.png';
