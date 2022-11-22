@@ -8,6 +8,7 @@ const userPost = require ('../model/userPost.js');
 const recipe = require ('../model/recipes.js');
 const mongoose = require('mongoose');
 const { json } = require('body-parser');
+const { ObjectID, ObjectId } = require('bson');
 
 // For frontend CORS
 router.use(function(req, res, next) {
@@ -241,7 +242,8 @@ router.post('/addRecipe', async (req, res) =>
 })
 
 // Edit recipes
-router.post('/editRecipe', async (req, res) => {
+router.post('/editRecipe', async (req, res) => 
+{
     const recipeId = req.body.RecipeID;
     const result = await recipe.findOne({ _id: recipeId }).exec();
     try {
@@ -272,7 +274,8 @@ router.post('/editRecipe', async (req, res) => {
 })
 
 // Delete recipe
-router.post('/deleteRecipe', async (req, res) => {
+router.post('/deleteRecipe', async (req, res) => 
+{
     try 
     {
         const recipeID = await recipe.findByIdAndDelete(req.body.RecipeID).exec();
@@ -281,6 +284,23 @@ router.post('/deleteRecipe', async (req, res) => {
     catch (error)
     {
         res.status(400).json({error:"Recipe does not exist."});
+    }
+})
+
+// Get personal feed
+router.post('/getPersonalFeed', async (req, res) =>
+{
+    const userID = req.body.UserID;
+
+    const result = await userPost.find({ProfileID: userID}).sort({_id: -1}).exec();
+
+    if (result != "")
+    {
+        res.status(200).json(result);
+    }
+    else
+    {
+        res.status(400).json({error:"No posts found."});
     }
 })
 
