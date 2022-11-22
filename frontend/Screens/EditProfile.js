@@ -1,26 +1,25 @@
 import * as React from 'react';
-import { Image, View, StyleSheet, ImageBackground, Text, TouchableOpacity, TextInput } from 'react-native';
+import { Image, View, StyleSheet, ImageBackground, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { ScreenWidth } from 'react-native-elements/dist/helpers';
 import { Ionicons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
+import { MultipleSelectList } from 'react-native-dropdown-select-list'
 
 export default function EditProfile( {navigation} ) {
-    const background = '../Images/OCMgradient.png';
+    const background = '../Images/OCMgradientGH.png';
     const Divider = () => <View style={styles.divider}/>
-    const [image, setImage] = useState(null);
     const [nickName, setnickName] = useState("");
 	const [pronouns, setPronouns] = useState("");
-    const [favCuisine, setfavCuisine] = useState("");
-	const [favFood, setfavFood] = useState("");
-    const [favDrink, setfavDrink] = useState("");
-	const [favFlavor, setfavFlavor] = useState("");
-    const [dietRest, setdietRest] = useState("");
-	const [foodAllergy, setfoodAllergy] = useState("");
     const [accountType, setaccountType] = useState("");
     const [profilePic, setProfilePic] = useState('');
+
+    //for dropdown storage
+    const [selected, setSelected] = React.useState([])
+
+
     let favCuisineArr = [];
     let favFoodArr = [];
     let favDrinkArr = [];
@@ -75,22 +74,14 @@ export default function EditProfile( {navigation} ) {
         const newProfilePic = result.assets[0].uri;
         if (!result.canceled) { 
             //console.log("Before: " + result.assets[0].uri)
-            setImage(newProfilePic);
+            setProfilePic(newProfilePic);
             //console.log("After: " + image)
         }
     }
 
-    const parseData = () => {
-        favCuisineArr = favCuisine.toString().split(", ");
-        favFoodArr = favFood.toString().split(", ");
-        favDrinkArr = favDrink.toString().split(", ");
-        favFlavorArr = favFlavor.toString().split(", ");
-        dietRestArr = dietRest.toString().split(", ");
-        foodAllergyArr = foodAllergy.toString().split(", ");
-    }
-
     const saveEdit = async (event) => {
-        parseData();
+        handleStupidList();
+        //console.log(foodAllergyArr + '\n' + dietRestArr + '\n' + favFlavorArr + '\n' + favFoodArr + '\n' + favDrinkArr + '\n'+ favCuisineArr);
         event.preventDefault();
         const response = await fetch('http://' + global.ipv4 + ':3000/api/editProfile', {
 			method: 'POST',
@@ -110,7 +101,7 @@ export default function EditProfile( {navigation} ) {
                 AccountType: accountType,
                 PersonalFeedID: global._id,
                 pronouns: pronouns,
-                ProfilePhoto: image
+                ProfilePhoto: profilePic
 			}),
 		}).catch(err => {
 			console.log(err);
@@ -126,84 +117,141 @@ export default function EditProfile( {navigation} ) {
 
     }
 
+    const handleStupidList = () => {
+        for(i in selected){
+            if(FoodAllergies.includes(selected[i])){
+                foodAllergyArr.push(selected[i]);
+            }
+            if(DietRest.includes(selected[i])){
+                dietRestArr.push(selected[i]);
+            }
+            if(FavFlavor.includes(selected[i])){
+                favFlavorArr.push(selected[i]);
+            }
+            if(FavFood.includes(selected[i])){
+                favFoodArr.push(selected[i]);
+            }
+            if(FavDrink.includes(selected[i])){
+                favDrinkArr.push(selected[i]);
+            }
+            if(FavCuisine.includes(selected[i])){
+                favCuisineArr.push(selected[i]);
+            }
+        }
+    }
+
   return (
-    <ImageBackground source={require(background)} style={styles.background}>
-        <SafeAreaView style={{flex: 1}}>
-            
-            <View style={styles.contianerHeader}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Ionicons name="arrow-back" size={40} color="black" />
-                </TouchableOpacity>
+    <ScrollView>
+        <ImageBackground source={require(background)} style={styles.background}>
+            <SafeAreaView style={{flex: 1}}>
+                
+                <View style={styles.contianerHeader}>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <Ionicons name="arrow-back" size={40} color="black" />
+                    </TouchableOpacity>
 
-                <TouchableOpacity onPress={saveEdit}>
-                    <Entypo name="save" size={28} color="black"/>
-                </TouchableOpacity>
-            </View>
-
-            <View style={{}}>
-                {(profilePic == '')? 
-                <Text></Text>
-                :
-                <Image style={styles.logo} source={{ uri: profilePic }} />
-                }
-                <TouchableOpacity onPress={changeProfilePic}>
-                    <Text style={{alignSelf: 'center', color: 'steelblue'}}>Change Profile Picture</Text>
-                </TouchableOpacity>
-            </View>
-
-            <Divider/> 
-
-            <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-                <View style={{flexDirection: 'column', justifyContent: 'space-evenly'}}>
-                    <Text style={styles.element}>NickName</Text>
-                    <Text style={styles.element}>Pronouns</Text>
-                    <Text style={styles.element}>Account type</Text>
+                    <TouchableOpacity onPress={saveEdit}>
+                        <Entypo name="save" size={28} color="black"/>
+                    </TouchableOpacity>
                 </View>
-                <View style={{flexDirection: 'column', justifyContent: 'space-evenly'}}>
-                    <TextInput style={styles.input} maxLength={10} onChangeText = {(val) => setnickName(val)}>{nickName}</TextInput>
-                    <TextInput style={styles.input} maxLength={10} onChangeText = {(val) => setPronouns(val)}>{pronouns}</TextInput>
-                    <TextInput style={styles.input} maxLength={10} onChangeText = {(val) => setaccountType(val)}>{accountType}</TextInput>
+
+                <View style={{}}>
+                    {(profilePic == '')? 
+                    <Text></Text>
+                    :
+                    <Image style={styles.logo} source={{ uri: profilePic }} />
+                    }
+                    <TouchableOpacity onPress={changeProfilePic}>
+                        <Text style={{alignSelf: 'center', color: 'steelblue'}}>Change Profile Picture</Text>
+                    </TouchableOpacity>
                 </View>
-            </View>
 
-            <Divider/>
+                <Divider/> 
 
-            <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-                <View style={{flexDirection: 'column', justifyContent: 'space-evenly'}}>
-                    <Text style={styles.element}>Favorite cuisine</Text>
-                    <Text style={styles.element}>Favorite food</Text>
-                    <Text style={styles.element}>Favorite drink</Text>
-                    <Text style={styles.element}>Favorite flavor</Text>
+                <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
+                    <View style={{flexDirection: 'column', justifyContent: 'space-evenly'}}>
+                        <Text style={styles.element}>NickName</Text>
+                        <Text style={styles.element}>Pronouns</Text>
+                        <Text style={styles.element}>Account type</Text>
+                    </View>
+                    <View style={{flexDirection: 'column', justifyContent: 'space-evenly'}}>
+                        <TextInput style={styles.input} maxLength={20} onChangeText = {(val) => setnickName(val)}>{nickName}</TextInput>
+                        <TextInput style={styles.input} maxLength={20} onChangeText = {(val) => setPronouns(val)}>{pronouns}</TextInput>
+                        <TextInput style={styles.input} maxLength={20} onChangeText = {(val) => setaccountType(val)}>{accountType}</TextInput>
+                    </View>
                 </View>
-                <View style={{flexDirection: 'column', justifyContent: 'space-evenly'}}>
-                    <TextInput style={styles.input} onChangeText = {(val) => setfavCuisine(val)}>{favCuisine}</TextInput>
-                    <TextInput style={styles.input} onChangeText = {(val) => setfavFood(val)}>{favFood}</TextInput>
-                    <TextInput style={styles.input} onChangeText = {(val) => setfavDrink(val)}>{favDrink}</TextInput>
-                    <TextInput style={styles.input} onChangeText = {(val) => setfavFlavor(val)}>{favFlavor}</TextInput>
+
+                <Divider/>
+
+                <View style={{paddingHorizontal: 10}}>
+                    <MultipleSelectList 
+                        setSelected={(val) => setSelected(val)} 
+                        data={FoodAllergies} 
+                        save="value"
+                        label="Food Allergies"
+                        placeholder='Food Allergies'
+                        badgeStyles={{backgroundColor: '#E39E6D'}}
+                    />
                 </View>
-            </View>
 
-            <Text style={styles.disclaimer}>Seperate elements with a comma</Text>
-
-            <Divider/>
-
-            <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-                <View style={{flexDirection: 'column', justifyContent: 'space-evenly'}}>
-                    <Text style={styles.element}>Diet restrictions</Text>
-                    <Text style={styles.element}>Food allergies</Text>
+                <View style={{paddingHorizontal: 10}}>
+                    <MultipleSelectList 
+                        setSelected={(val) => setSelected(val)} 
+                        data={DietRest} 
+                        save="value"
+                        label="Diet Restricitons"
+                        placeholder='Diet Restricitons'
+                        badgeStyles={{backgroundColor: '#E39E6D'}}
+                    />
                 </View>
-                <View style={{flexDirection: 'column', justifyContent: 'space-evenly'}}>
-                    <TextInput style={styles.input} onChangeText = {(val) => setdietRest(val)}>{dietRest}</TextInput>
-                    <TextInput style={styles.input} onChangeText = {(val) => setfoodAllergy(val)}>{foodAllergy}</TextInput>
+
+                <View style={{paddingHorizontal: 10}}>
+                    <MultipleSelectList 
+                        setSelected={(val) => setSelected(val)} 
+                        data={FavFlavor} 
+                        save="value"
+                        label="Favorite Flavor"
+                        placeholder='Favorite Flavor'
+                        badgeStyles={{backgroundColor: '#E39E6D'}}
+                    />
                 </View>
-            </View>
 
-            <Text style={styles.disclaimer}>Seperate elements with a comma</Text>
+                <View style={{paddingHorizontal: 10}}>
+                    <MultipleSelectList 
+                        setSelected={(val) => setSelected(val)} 
+                        data={FavFood} 
+                        save="value"
+                        label="Favorite Food"
+                        placeholder='Favorite Food'
+                        badgeStyles={{backgroundColor: '#E39E6D'}}
+                    />
+                </View>
 
-            <Divider/>
+                <View style={{paddingHorizontal: 10}}>
+                    <MultipleSelectList 
+                        setSelected={(val) => setSelected(val)} 
+                        data={FavDrink} 
+                        save="value"
+                        label="Favorite Drink"
+                        placeholder='Favorite Drink'
+                        badgeStyles={{backgroundColor: '#E39E6D'}}
+                    />
+                </View>
 
-        </SafeAreaView>
-    </ImageBackground>
+                <View style={{paddingHorizontal: 10}}>
+                    <MultipleSelectList 
+                        setSelected={(val) => setSelected(val)} 
+                        data={FavCuisine} 
+                        save="value"
+                        label="Favorite Cuisine"
+                        placeholder='Favorite Cuisine'
+                        badgeStyles={{backgroundColor: '#E39E6D'}}
+                    />
+                </View>
+
+            </SafeAreaView>
+        </ImageBackground>
+    </ScrollView>
   );
 }
 
@@ -217,6 +265,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    height: '150%'
   },
   logo: {
     width: 100,
@@ -261,3 +310,114 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     }
 });
+
+const FoodAllergies = [
+    'Milk',
+    'Eggs',
+    'Peanuts',
+    'Tree nuts',
+    'Seaseme',
+    'Soy',
+    'Fish',
+    'Shellfish',
+    'Wheat',
+    'Gluten',
+    'Triticale',
+    'Celery',
+    'Carrot',
+    'Avocado',
+    'Bell pepper',
+    'Mushroom',
+    'Onion',
+    'Mustard',
+]
+
+const DietRest = [
+    'Vegetarian',
+    'Vegan',
+    'Pescetarian',
+    'Dairy free',
+    'Gluten free',
+    'Paleo',
+    'Keto',
+    'Raw vegan',
+    'Carnivore',
+    'Judaism',
+    'Islam',
+    'Buddhism',
+    'Hinduism',
+]
+
+const FavFlavor = [
+    'Sweet',
+    'Salty',
+    'Sour',
+    'Bitter',
+    'Umami',
+]
+
+const FavCuisine = [
+    'Central African',
+    'East African',
+    'North African',
+    'Southern African',
+    'West African',
+    'Mexican',
+    'Native American',
+    'Canadian',
+    'Haitian',
+    'Jamaican',
+    'Cuban',
+    'American',
+    'Puerto Rican',
+    'Central Asian',
+    'Chinese',
+    'South Asian',
+    'Indian',
+    'Pakistani',
+    'Thai',
+    'Vietnamese',
+    'Indonesian',
+    'Eastern Arabian',
+    'Turkish',
+    'Swiss',
+    'Austrian',
+    'Polish',
+    'Czech',
+    'Russian',
+    'Italian',
+    'Portuguese',
+    'Spanish',
+    'Greek',
+    'Polynesian',
+]
+
+const FavFood = [
+    'Pizza',
+    'Hamburger',
+    'Hot Dog',
+    'Sushi',
+    'Burrito',
+    'Ice cream',
+    'Nachos',
+    'Chili',
+    'Quesadilla',
+    'Chicken wings',
+    'Tacos',
+    'Mac and cheese',
+    'Pasta',
+    'Dumplings',
+]
+
+const FavDrink = [
+    'Water',
+    'Tea',
+    'Coffee',
+    'Coke',
+    'Juice',
+    'Milkshake',
+    'Soda',
+    'Boba tea',
+    'Jose Cuervo',
+    'Milk',
+]
