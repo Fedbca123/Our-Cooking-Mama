@@ -17,8 +17,8 @@ export default function CreatePost({ navigation }) {
 
   async function handleUpload(event) {
     let formdata = new FormData();
-    formdata.append("userId", global._id)
-    formdata.append("recipeId", '63772881990a71a5cf2ff956')
+    formdata.append("UserID", global._id)
+    formdata.append("RecipeID", '63772881990a71a5cf2ff956')
     formdata.append("Category", title)
     formdata.append("Caption", caption)
     formdata.append("Tags", tags)
