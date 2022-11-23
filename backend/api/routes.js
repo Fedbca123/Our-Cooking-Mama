@@ -6,6 +6,7 @@ const userRegister = require ('../model/userAccount.js');
 const userProfile = require ('../model/userProfile.js');
 const userPost = require ('../model/userPost.js');
 const userComment = require ('../model/userComment.js');
+const postLikes = require ('../model/postLikes.js');
 const recipe = require ('../model/recipes.js');
 const mongoose = require('mongoose');
 const { json } = require('body-parser');
@@ -251,7 +252,7 @@ router.post('/editRecipe', async (req, res) =>
     
         // check if id is valid
         if (result == "") {
-            var ret = {RecipeID: -1, error: "Recipe Not Found."}
+            var ret = {RecipeID: -1, error: "Recipe Not Found."};
             return res.json(ret);
         } else {
             // edit recipe
@@ -272,7 +273,7 @@ router.post('/editRecipe', async (req, res) =>
     }
     catch(error) 
     {
-        res.status(400).json({error:error.message});
+        res.status(400).json({error: error.message});
     }
 })
 
@@ -286,7 +287,7 @@ router.post('/deleteRecipe', async (req, res) =>
     } 
     catch (error)
     {
-        res.status(400).json({error:"Recipe does not exist."});
+        res.status(400).json({error: "Recipe does not exist."});
     }
 })
 
@@ -305,12 +306,12 @@ router.post('/getPersonalFeed', async (req, res) =>
         }
         else
         {
-            res.status(400).json({error:"No posts found."});
+            res.status(400).json({error: "No posts found."});
         }
     }
     catch (err)
     {
-        res.status(400).json({error:err.message});
+        res.status(400).json({error: err.message});
     }
 })
 
@@ -332,9 +333,8 @@ router.post('/addComment', async (req, res) =>
     } 
     catch(error) 
     {
-        console.log(error);
+        res.status(400).json({error: error.message});
     }
-
 })
 
 // Edit a comment
@@ -347,14 +347,14 @@ router.post('/editComment', async (req, res) =>
 
         // check if id is valid
         if (result == "") {
-            var ret = {CommentID: -1, error: "Comment Not Found."}
+            var ret = {CommentID: -1, error: "Comment Not Found."};
             return res.status(400).json(ret);
         } 
         else 
         {
             console.log(result.PostID);
             // edit comment
-            console.log('Comment found. Please edit.')
+            console.log('Comment found. Please edit.');
             const editedComment = {
                 Message: req.body.Message,
                 DatePosted: result.DatePosted,
@@ -390,13 +390,95 @@ router.post('/getPostComments', async (req, res) =>
         }
         else
         {
-            res.status(400).json({error:"No comments found."});
+            res.status(400).json({error: "No comments found."});
         }
     }
     catch (err)
     {
-        res.status(400).json({error:err.message});
+        res.status(400).json({error: err.message});
     }
 })
+
+// Add like to a post
+router.post('/addLike', async (req, res) => 
+{
+    const data = new postLikes
+    ({
+        LikersID: req.body.LikersID,
+        DateLiked: new Date(),
+        PostID: req.body.PostID
+    })
+
+    try 
+    {
+        const like = await postLikes.findOne({$and: [{PostID: data.PostID}, {LikersID: data.LikersID}]}).exec();
+        
+        if (like == null)
+        {
+            const newLike = await data.save();
+            res.status(200).json(newLike);
+        }
+        else
+        {
+            res.status(400).json({error: "Post could not be liked."});
+        }
+    } 
+    catch(error) 
+    {
+        res.status(400).json({error:error.message});
+    }
+})
+
+// Remove like from a post
+router.post('/removeLike', async (req, res) => 
+{
+    const postID = req.body.PostID;
+    const likersID = req.body.LikersID;
+
+    try 
+    {
+        const like = postLikes.find({$and: [{PostID: postID}, {LikersID: likersID}]});
+        if (like != "")
+        {
+            const result = await like.deleteOne().exec();
+
+            if (result.deletedCount == 0)
+                res.status(400).json({LikeRemoved: false, error: "You have not liked this post yet."});
+            else
+                res.status(200).json({LikeRemoved: true, error: ""});
+        }
+        else
+            res.status(400).json({error:"You have not liked this post yet."});
+    } 
+    catch (error)
+    {
+        res.status(400).json({LikeRemoved: false, error:error.message});
+    }
+})
+
+// Get all likes on a post
+router.post('/getPostLikes', async (req, res) =>
+{
+    const postID = req.body.PostID;
+
+    try
+    {
+        const result = await postLikes.find({PostID: postID}).sort({_id: -1}).exec();
+
+        if (result != "")
+        {
+            res.status(200).json(result);
+        }
+        else
+        {
+            res.status(400).json({error: "No likes found."});
+        }
+    }
+    catch (err)
+    {
+        res.status(400).json({error: err.message});
+    }
+})
+
 
 module.exports = router;
