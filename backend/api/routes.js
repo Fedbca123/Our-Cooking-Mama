@@ -307,7 +307,7 @@ router.post('/addPost', upload.single('file'), function (req, res) {
         cloudinary.v2.uploader.upload(req.file.path, async (err, result) => {
             const recipeId = req.body.RecipeID;
             const userId = req.body.UserID;
-            const validRecipe = await recipes.findOne({ _id: recipeId }).exec();
+            const validRecipe = await recipe.findOne({ _id: recipeId }).exec();
             const validAccount = await userRegister.findOne({ _id: userId }).exec();
             // check if id is valid
             if (validAccount == null) {
