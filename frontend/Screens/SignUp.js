@@ -111,6 +111,22 @@ const SignUpScreen = ({ navigation }) => {
 		setSeePass(!seePass);
 	}
 
+	function isValidEmail(email) {
+		if(EM == ''){
+			return true;
+		}
+		return /\S+@\S+\.\S+/.test(email);
+	}
+	
+	let otp =''
+	const generateOTP = () =>{
+		for(let i = 0; i <= 3; i++){
+			const randVal = Math.round(Math.random() * 9);
+			otp = otp + randVal;
+		}
+		console.log(otp)
+		return otp;
+	}
 
 	return (
 		<ImageBackground style={styles.background} source={require(background)}>
@@ -154,6 +170,13 @@ const SignUpScreen = ({ navigation }) => {
 					onChangeText={(val) => setEM(val)}
 					backgroundColor='#fff'
 				/>
+
+				{isValidEmail(EM) ? 
+					<View></View>
+				:
+					<Text style={styles.validEmText}>Please enter a valid email</Text>
+				}
+
 				<View style={styles.passWrapper}>
 					<TextInput
 						placeholder="Password"
@@ -330,4 +353,10 @@ const styles = StyleSheet.create({
 		backgroundColor: '#fff',
 		justifyContent: 'space-between'
 	},
+	validEmText: {
+		color: 'red',
+		fontSize: 12,
+		justifyContent: 'center',
+		alignSelf: 'center'
+	}
 });
