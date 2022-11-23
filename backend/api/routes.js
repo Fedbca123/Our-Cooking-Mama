@@ -484,7 +484,7 @@ router.post('/deleteRecipe', async (req, res) =>
     }
 })
 
-// Get personal feed
+// Get personal feed (posts that a specific user made)
 router.post('/getPersonalFeed', async (req, res) =>
 {
     const userID = req.body.UserID;
@@ -504,6 +504,22 @@ router.post('/getPersonalFeed', async (req, res) =>
     }
     catch (err)
     {
+        res.status(400).json({error: err.message});
+    }
+})
+
+// Get main feed (posts from all of a user's followers)
+router.post('/getMainFeed', async (req, res) => {
+    const userID = req.body.UserID;
+    try {
+        // check following array for specific user
+        const result = await following.find({ProfileID: userID}).sort({_id: -1}).exec();
+        if (result != "") {
+            res.status(200).json(result);
+        } else {
+            res.status(400).json({error: "No posts found."});
+        }
+    } catch (err) {
         res.status(400).json({error: err.message});
     }
 })
