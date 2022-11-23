@@ -7,7 +7,7 @@ const userPostSchema = new mongoose.Schema
     Caption: String,
     Tags: [String],
     ProfileID: String,
-    RecipeID: String
+    RecipeID: {type: String, ref: 'Recipes'}
  },
  {
     collection: 'UserPost'      

@@ -6,8 +6,10 @@ const multer = require('multer');
 
 const userRegister = require ('../model/userAccount.js');
 const userProfile = require ('../model/userProfile.js');
-const userPost = require('../model/userPost.js');
+const userPost = require ('../model/userPost.js');
+const recipe = require ('../model/recipes.js');
 const mongoose = require('mongoose');
+const { json } = require('body-parser');
 
 // For frontend CORS
 router.use(function(req, res, next) {
@@ -83,7 +85,7 @@ router.post('/register', async (req, res) =>
     })
 })
 
-//Get all Method
+// Get all Method (Register / User Accounts)
 router.get('/getAll', async (req, res) => 
 {
     try 
@@ -96,11 +98,26 @@ router.get('/getAll', async (req, res) =>
     }
 })
 
+// Get Specific User Profile
+router.post('/getOneProfile', async (req, res) => {
+    try {
+        const query = req.body.Query;
+        const result = await userProfile.findOne({UserID: {$regex: query}}).exec();
+        if (result != null) {
+            res.status(200).json(result);
+        } else {
+            res.status(400).json({error:"User profile not found."});
+        }
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 // Login 
 router.post('/login', async (req, res) => 
 {
     const username = req.body.UserName;
-    var password = req.body.Password;
+    var Password = req.body.Password;
 
     var id = -1;
     var fn = '';
@@ -111,7 +128,7 @@ router.post('/login', async (req, res) =>
 
     if (result != null)
     {
-        var isEqual = await bcrypt.compare(password, result.Password);
+        var isEqual = await bcrypt.compare(Password, result.Password);
         if (isEqual)
         {
             id = result._id;
@@ -135,55 +152,64 @@ router.post('/login', async (req, res) =>
 })
 
 // create/edit Profile
-router.post('/editProfile', async (req, res) => {
-    // TO DO: Replace feed variable with _id from Personal Feed once created
-    const feed = "feedID";
-    // Getting this userId from cookie on frontend, verbatim 'userId'
-    const userId = req.body.userId;
-    const result = await userRegister.findOne({ _id: userId }).exec();
+router.post('/editProfile', upload.single('file'), function (req, res) {
     try {
-        // check if id is valid
-        if (result == null) {
-            var ret = {userId: -1, error: "User Account Not Found."}
-            return res.json(ret);
-        } else {
-            // edit profile
-            console.log('User profile found. Please edit.')
-            const profile = {
-                NickName: req.body.NickName,
-                DietRest: req.body.DietRest,
-                FavCuisine: req.body.FavCuisine,
-                FavDrink: req.body.FavDrink,
-                FavFood: req.body.FavFood,
-                FavoriteFlavor: req.body.FavoriteFlavor,
-                FoodAllerg: req.body.FoodAllerg,
-                UserID: mongoose.Types.ObjectId(userId),
-                AccountType: req.body.AccountType,
-                PersonalFeedID: feed,
-                Pronouns: req.body.pronouns,
-                ProfilePhoto: req.body.ProfilePhoto
+        // TO DO: Replace feed variable with _id from Personal Feed once created
+        const feed = "feedID";
+        // Getting this userId from cookie on frontend, verbatim 'userId'
+        cloudinary.v2.uploader.upload(req.file.path, async (err, result) => {
+            if (err) {
+                req.json(err.message);
             }
+            const userId = req.body.userId;
+            const validAccount = await userRegister.findOne({ _id: userId }).exec();
             try {
-                const updatedProfile = await userProfile.findByIdAndUpdate(userId, profile, {
-                    new: true,
-                    upsert: true,
-                });
-                console.log(updatedProfile);
-                res.status(200).json(updatedProfile)
+                // check if id is valid
+                if (validAccount == null) {
+                    var ret = {userId: -1, error: "User Account Not Found."}
+                    return res.json(ret);
+                } else {
+                    // edit profile
+                    console.log('User profile found. Please edit.')
+                    const profile = {
+                        NickName: req.body.NickName,
+                        DietRest: req.body.DietRest,
+                        FavCuisine: req.body.FavCuisine,
+                        FavDrink: req.body.FavDrink,
+                        FavFood: req.body.FavFood,
+                        FavoriteFlavor: req.body.FavoriteFlavor,
+                        FoodAllerg: req.body.FoodAllerg,
+                        UserID: mongoose.Types.ObjectId(userId),
+                        AccountType: req.body.AccountType,
+                        PersonalFeedID: feed,
+                        Pronouns: req.body.pronouns,
+                        ProfilePhoto: result.secure_url
+                    }
+                    try {
+                        const updatedProfile = await userProfile.findByIdAndUpdate(userId, profile, {
+                            new: true,
+                            upsert: true,
+                        });
+                        console.log(updatedProfile);
+                        res.status(200).json(updatedProfile)
+                    } catch(error) {
+                        // Profile creation/update error
+                        console.log(error);
+                        error = "Cannot find user account.";
+                        res.status(400).json(error);
+                    }
+                }
             } catch(error) {
-                // Profile creation/update error
                 console.log(error);
-                error = "Cannot find user account.";
-                res.status(400).json(error);
             }
-        }
+        })
     } catch(error) {
         console.log(error);
     }
 })
 
-// Search profiles
-router.post('/searchProfiles', async (req, res) =>
+// Search for profiles only
+router.post('/searchProfiles', async (req, res, next) =>
 {
     const query = req.body.Query;
 
@@ -224,29 +250,53 @@ router.post('/searchPosts', async (req, res) =>
 })
 
 // edit a Post
-router.post('/editPost', async (req, res) =>
-{
+router.post('/editPost', upload.single('file'), function (req, res) {
     try {
-        const postId = req.body.PostID;
-        const recipeId = req.body.RecipeID;
-        const profileId = req.body.ProfileID;
-        const post = {
-            Category: req.body.Category,
-            Photo: req.body.Photo,            
-            Caption: req.body.Caption,
-            Tags: req.body.Tags,
-            ProfileID: profileId,
-            RecipeID: recipeId
-        }
-
-        const updatedPost = await userPost.findByIdAndUpdate(postId, post, {
-            new: true,
-            upsert: true,
-        });
-        console.log(updatedPost);
-        res.status(200).json(updatedPost)
-    }
-    catch(error) {
+        cloudinary.v2.uploader.upload(req.file.path, async (err, result) => {
+            const recipeId = req.body.RecipeID;
+            const postId = req.body.PostID;
+            const profileId = req.body.ProfileID;
+            const validRecipe = await userPost.findOne({ RecipeID: recipeId }).exec();
+            const validPost = await userPost.findOne({ _id: postId }).exec();
+            // check if id is valid
+            if (validPost == null) {
+                var ret = {postId: -1, error: "User Post Not Found."}
+                return res.json(ret);
+            }
+            if (validRecipe == null) {
+                if (err) {
+                    res.json(err.message);
+                }
+                const post = {
+                    Category: req.body.Category,
+                    Photo: result.secure_url,            
+                    Caption: req.body.Caption,
+                    Tags: req.body.Tags,
+                    ProfileID: profileId,
+                    
+                }
+                const updatedPost = await userPost.findByIdAndUpdate(postId, post, {
+                    new: true,
+                });
+                console.log(updatedPost);
+                res.status(200).json(updatedPost)
+            } else {
+                const post = {
+                    Category: req.body.Category,
+                    Photo: result.secure_url,            
+                    Caption: req.body.Caption,
+                    Tags: req.body.Tags,
+                    ProfileID: profileId,
+                    RecipeID: recipeId
+                }
+                const updatedPost = await userPost.findByIdAndUpdate(postId, post, {
+                    new: true,
+                });
+                console.log(updatedPost);
+                res.status(200).json(updatedPost)
+            }
+        })
+    } catch(error) {
         console.log(error);
     }
 })
@@ -255,26 +305,53 @@ router.post('/editPost', async (req, res) =>
 router.post('/addPost', upload.single('file'), function (req, res) {
     try {
         cloudinary.v2.uploader.upload(req.file.path, async (err, result) => {
-            if (err) {
-                req.json(err.message);
+            const recipeId = req.body.RecipeID;
+            const userId = req.body.UserID;
+            const validRecipe = await recipes.findOne({ _id: recipeId }).exec();
+            const validAccount = await userRegister.findOne({ _id: userId }).exec();
+            // check if id is valid
+            if (validAccount == null) {
+                var ret = {userId: -1, error: "User Account Not Found."}
+                return res.json(ret);
             }
-            const userId = req.body.userId;
-            const recipeId = req.body.recipeId;
-            var post = new userPost ({
-                Category: req.body.Category,
-                Photo: result.secure_url,
-                Caption: req.body.Caption,
-                Tags: req.body.Tags,
-                ProfileID: mongoose.Types.ObjectId(userId),
-                RecipeID: mongoose.Types.ObjectId(recipeId)
-            })
-            try {
-                const newPost = await post.save();
-                console.log(newPost);
-                res.status(200).json(newPost)
-            } catch(error) {
-                console.log(error);
-            }
+            if (validRecipe == null) {
+                if (err) {
+                    res.json(err.message);
+                }
+                var post = new userPost ({
+                    Category: req.body.Category,
+                    Photo: result.secure_url,
+                    Caption: req.body.Caption,
+                    Tags: req.body.Tags,
+                    ProfileID: mongoose.Types.ObjectId(userId)
+                })
+                try {
+                    const newPost = await post.save();
+                    console.log(newPost);
+                    res.status(200).json(newPost)
+                } catch(error) {
+                    console.log(error);
+                }
+            } else {
+                if (err) {
+                    req.json(err.message);
+                }
+                var post = new userPost ({
+                    Category: req.body.Category,
+                    Photo: result.secure_url,
+                    Caption: req.body.Caption,
+                    Tags: req.body.Tags,
+                    ProfileID: mongoose.Types.ObjectId(userId),
+                    RecipeID: mongoose.Types.ObjectId(recipeId)
+                })
+                try {
+                    const newPost = await post.save();
+                    console.log(newPost);
+                    res.status(200).json(newPost)
+                } catch(error) {
+                    console.log(error);
+                }
+            }    
         })
     } catch(error) {
         console.log(error);
@@ -282,35 +359,55 @@ router.post('/addPost', upload.single('file'), function (req, res) {
 })
 
 // delete a Post
-router.post('/deletePost/:id', (req, res) => {
+router.post('/deletePost', async (req, res) => {
+    const postId = req.body.PostID;
+    const profileId = req.body.ProfileID;
+    console.log(postId);
+    console.log(profileId);
+    // Checks if id string is valid
+    if(!mongoose.Types.ObjectId.isValid(postId)) {
+        var ret = {id: -1, error: "Can't find instructions"}
+        return res.json(ret);
+      }
     try {
-        userPost.findByIdAndDelete(req.params.id)
-            .then((post) => {
-                if (!post) {
-                    return res.status(404).send();
-                } else {
-                    res.send(post);
-                }
-            })
-            .catch((error) => {
-                res.status(500).send(error);
-            })
+        const findingPost = await userPost.findById(postId);
+        if (!findingPost) {
+            var ret = {error: "Can't find post"}
+            return res.json(ret);
+        } else {
+            console.log(findingPost.ProfileID);
+            // Delete post if findingPost's profileId matches the taken in profileId
+            if (findingPost.ProfileID == profileId) {
+                userPost.findById(postId).deleteOne().exec();
+                var ret = {id: 1, error: 'Post deleted!'}
+                return res.json(ret);
+            } else {
+                var ret = {id: -1, error: "You cannot delete this post! UserIDs do not match!"}
+                return res.json(ret);
+            }
+        }
+
     } catch (error) {
-        console.log(error);
+    	console.log(error);
     }
 })
 
-router.post('/getOneProfile', async (req, res) => {
-    try {
-        const query = req.body.Query;
-        const result = await userProfile.findOne({UserID: {$regex: query}}).exec();
-        if (result != null) {
-            res.status(200).json(result);
-        } else {
-            res.status(400).json({error:"User profile not found."});
-        }
-    } catch (error) {
-        console.log(error);
+// Search for profiles, recipes, and posts.
+router.post('/universalSearch', async (req, res, next) =>
+{
+    const query = req.body.Query;
+
+    const userSearch = await userRegister.find({UserName: {$regex: query, $options: 'i'}}).exec();
+    const postSearch = await userPost.find({Tags: {$regex: query, $options: 'i'}}).exec();
+    const recipeSearch = await recipe.find({Recipe: {$regex: query, $options: 'i'}}).exec();
+
+    if (userSearch == "" && postSearch == "" && recipeSearch == "")
+    {
+        res.status(400).json({error:"No results found."});
+    }
+    else
+    {
+        res.status(200).json({Users: userSearch, Posts: postSearch, Recipes: recipeSearch});
     }
 })
 
@@ -373,6 +470,19 @@ router.post('/editRecipe', async (req, res) => {
         }
     } catch(error) {
         console.log(error);
+    }
+})
+
+// Delete recipe
+router.post('/deleteRecipe', async (req, res) => {
+    try 
+    {
+        const recipeID = await recipe.findByIdAndDelete(req.body.RecipeID).exec();
+        res.status(200).json(recipeID);
+    } 
+    catch (error)
+    {
+        res.status(400).json({error:"Recipe does not exist."});
     }
 })
 
