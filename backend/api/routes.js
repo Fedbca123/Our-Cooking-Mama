@@ -252,30 +252,49 @@ router.post('/searchPosts', async (req, res) =>
 router.post('/editPost', upload.single('file'), function (req, res) {
     try {
         cloudinary.v2.uploader.upload(req.file.path, async (err, result) => {
-            if (err) {
-                req.json(err.message);
-            }
-            const postId = req.body.PostID;
             const recipeId = req.body.RecipeID;
+            const postId = req.body.PostID;
             const profileId = req.body.ProfileID;
-            const post = {
-                Category: req.body.Category,
-                Photo: result.secure_url,            
-                Caption: req.body.Caption,
-                Tags: req.body.Tags,
-                ProfileID: profileId,
-                RecipeID: recipeId
+            const validRecipe = await recipes.findOne({ _id: recipeId }).exec();
+            const validPost = await userPost.findOne({ _id: postId }).exec();
+            // check if id is valid
+            if (validPost == null) {
+                var ret = {postId: -1, error: "User Account Not Found."}
+                return res.json(ret);
             }
-
-            const updatedPost = await userPost.findByIdAndUpdate(postId, post, {
-                new: true,
-                upsert: true,
-            });
-            console.log(updatedPost);
-            res.status(200).json(updatedPost)
+            if (validRecipe == null) {
+                if (err) {
+                    res.json(err.message);
+                }
+                const post = {
+                    Category: req.body.Category,
+                    Photo: result.secure_url,            
+                    Caption: req.body.Caption,
+                    Tags: req.body.Tags,
+                    ProfileID: profileId,
+                }
+                const updatedPost = await userPost.findByIdAndUpdate(postId, post, {
+                    new: true,
+                });
+                console.log(updatedPost);
+                res.status(200).json(updatedPost)
+            } else {
+                const post = {
+                    Category: req.body.Category,
+                    Photo: result.secure_url,            
+                    Caption: req.body.Caption,
+                    Tags: req.body.Tags,
+                    ProfileID: profileId,
+                    RecipeID: recipeId
+                }
+                const updatedPost = await userPost.findByIdAndUpdate(postId, post, {
+                    new: true,
+                });
+                console.log(updatedPost);
+                res.status(200).json(updatedPost)
+            }
         })
-    }
-    catch(error) {
+    } catch(error) {
         console.log(error);
     }
 })
