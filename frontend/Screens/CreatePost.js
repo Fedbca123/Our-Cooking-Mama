@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, Image, TouchableOpacity, TextInput, ImageBackgr
 import { useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { ScreenHeight, ScreenWidth } from 'react-native-elements/dist/helpers';
-import { Entypo } from '@expo/vector-icons';
+import { Entypo, Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-navigation';
 
 export default function CreatePost({ navigation }) {
@@ -47,7 +47,7 @@ export default function CreatePost({ navigation }) {
     <ImageBackground source={require(background)} style={styles.background}>
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
-          <Entypo name={'arrow-long-left'} size={28} color='#000' onPress={() => navigation.navigate('Camera')} style={styles.backButton} />
+          <Ionicons name={'arrow-back'} size={28} color='#000' onPress={() => navigation.navigate('Camera')} style={styles.backButton} />
           <Text style={styles.newPost}>New Post</Text>
         </View>
 
@@ -105,9 +105,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     height: (ScreenHeight) / 10,
-    paddingTop: 20,
+    paddingTop: 40,
     alignContent: 'center',
     justifyContent: 'center',
+    alignItems: 'center'
   },
   newPost: {
     fontSize: 30,
