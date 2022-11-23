@@ -388,6 +388,9 @@ router.post('/deletePost', async (req, res) => {
         }
 
     } catch (error) {
+    	console.log(error);
+    }
+})
 
 // Search for profiles, recipes, and posts.
 router.post('/universalSearch', async (req, res, next) =>
