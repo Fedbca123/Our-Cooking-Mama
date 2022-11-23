@@ -8,6 +8,7 @@ const userRegister = require ('../model/userAccount.js');
 const userProfile = require ('../model/userProfile.js');
 const userPost = require('../model/userPost.js');
 const mongoose = require('mongoose');
+const recipes = require('../model/recipes.js');
 
 // For frontend CORS
 router.use(function(req, res, next) {
@@ -283,26 +284,53 @@ router.post('/editPost', upload.single('file'), function (req, res) {
 router.post('/addPost', upload.single('file'), function (req, res) {
     try {
         cloudinary.v2.uploader.upload(req.file.path, async (err, result) => {
-            if (err) {
-                req.json(err.message);
+            const recipeId = req.body.RecipeID;
+            const userId = req.body.UserID;
+            const validRecipe = await recipes.findOne({ _id: recipeId }).exec();
+            const validAccount = await userRegister.findOne({ _id: userId }).exec();
+            // check if id is valid
+            if (validAccount == null) {
+                var ret = {userId: -1, error: "User Account Not Found."}
+                return res.json(ret);
             }
-            const userId = req.body.userId;
-            const recipeId = req.body.recipeId;
-            var post = new userPost ({
-                Category: req.body.Category,
-                Photo: result.secure_url,
-                Caption: req.body.Caption,
-                Tags: req.body.Tags,
-                ProfileID: mongoose.Types.ObjectId(userId),
-                RecipeID: mongoose.Types.ObjectId(recipeId)
-            })
-            try {
-                const newPost = await post.save();
-                console.log(newPost);
-                res.status(200).json(newPost)
-            } catch(error) {
-                console.log(error);
-            }
+            if (validRecipe == null) {
+                if (err) {
+                    res.json(err.message);
+                }
+                var post = new userPost ({
+                    Category: req.body.Category,
+                    Photo: result.secure_url,
+                    Caption: req.body.Caption,
+                    Tags: req.body.Tags,
+                    ProfileID: mongoose.Types.ObjectId(userId)
+                })
+                try {
+                    const newPost = await post.save();
+                    console.log(newPost);
+                    res.status(200).json(newPost)
+                } catch(error) {
+                    console.log(error);
+                }
+            } else {
+                if (err) {
+                    req.json(err.message);
+                }
+                var post = new userPost ({
+                    Category: req.body.Category,
+                    Photo: result.secure_url,
+                    Caption: req.body.Caption,
+                    Tags: req.body.Tags,
+                    ProfileID: mongoose.Types.ObjectId(userId),
+                    RecipeID: mongoose.Types.ObjectId(recipeId)
+                })
+                try {
+                    const newPost = await post.save();
+                    console.log(newPost);
+                    res.status(200).json(newPost)
+                } catch(error) {
+                    console.log(error);
+                }
+            }    
         })
     } catch(error) {
         console.log(error);
