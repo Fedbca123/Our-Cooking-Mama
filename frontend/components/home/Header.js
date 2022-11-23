@@ -16,7 +16,7 @@ const Header = ({ navigation }) => {
         event.preventDefault()
         // IP address is unique, expo/express can't resolve 'localhost' so you need to ipconfig in cmd and replace with the ipv4
         // This should be no issue once deployed on heroku
-        const response = await fetch('http://' + global.ipv4 + ':3000/api/searchProfiles', {
+        const response = await fetch('http://' + global.ipv4 + ':3000/api/universalSearch', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -28,20 +28,8 @@ const Header = ({ navigation }) => {
         }).catch(err => {
             console.log(err);
         })
-
         const data = await response.json()
-        // console.log(data[0]._id);
-        if (data.length == 0) {
-            Toast.show({
-                type: 'error',
-                text1: 'user NOT FOUND!!!!!!!!!11',
-            })
-        } else {
-            Toast.show({
-                type: 'success',
-                text1: 'LETS GO!!!!'
-            })
-        }
+        navigation.navigate('SearchResults', { data : data})
     }
 
     return (

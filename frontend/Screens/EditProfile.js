@@ -57,7 +57,7 @@ export default function EditProfile( {navigation} ) {
         })
         const data = await response.json();
         if (data.error == "User profile not found.") {
-            console.log("not slay!")
+            console.log("User profile not found.")
         } else {
             setnickName(data.NickName)
             setPronouns(data.Pronouns)
@@ -79,10 +79,9 @@ export default function EditProfile( {navigation} ) {
             allowsEditing: false,
         });
         const newProfilePic = result.assets[0].uri;
+        console.log(newProfilePic);
         if (!result.canceled) { 
-            //console.log("Before: " + result.assets[0].uri)
             setProfilePic(newProfilePic);
-            //console.log("After: " + image)
         }
     }
 
