@@ -85,8 +85,8 @@ export default function Settings({navigation}) {
             >
 
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 30, paddingTop: 40}}>
-                    <Button icon='arrow-long-left' onPress={() => navigation.goBack()}/>
-                    <Button icon={"retweet"} onPress={() => {
+                    <Button icon='arrow-back' onPress={() => navigation.goBack()}/>
+                    <Button icon={"repeat"} onPress={() => {
                         setType(type == CameraType.back ? CameraType.front : CameraType.back)
                     }}/>
                     <Button
@@ -106,14 +106,14 @@ export default function Settings({navigation}) {
             <View style={styles.camButton}>
                 {image ? 
                 <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-                    <Button title={"Re-take"} icon="retweet" onPress={() => setImage(null)}/>
-                    <Button title={"Save and use"} icon="check" onPress={saveImage}/>
+                    <Button title={"Re-take"} icon="repeat" onPress={() => setImage(null)}/>
+                    <Button title={"Save and use"} icon="save" onPress={saveImage}/>
                 </View>
                 :
                 <View style={{flexDirection: 'row', justifyContent:'space-evenly'}}>
                     <Button icon="camera" onPress={takePicture} />
                     <View style={{position: 'absolute', right: 0, paddingRight: 20}}>
-                        <Button icon ="archive" onPress={openGallery} />
+                        <Button icon ="images" onPress={openGallery} />
                     </View>
                 </View>
                 }
