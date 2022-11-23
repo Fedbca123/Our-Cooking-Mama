@@ -4,7 +4,10 @@ const bcrypt = require("bcrypt");
 
 const userRegister = require("../model/userAccount.js");
 const userProfile = require("../model/userProfile.js");
+const userPost = require("../model/userPost.js");
+const recipe = require("../model/recipes.js");
 const mongoose = require("mongoose");
+const { json } = require("body-parser");
 
 // For frontend CORS
 router.use(function (req, res, next) {
@@ -52,13 +55,30 @@ router.post("/register", async (req, res) => {
 	});
 });
 
-//Get all Method
+// Get all Method (Register / User Accounts)
 router.get("/getAll", async (req, res) => {
 	try {
 		const data = await userRegister.find();
 		res.json(data);
 	} catch (error) {
 		res.status(500).json({ message: error.message });
+	}
+});
+
+// Get Specific User Profile
+router.post("/getOneProfile", async (req, res) => {
+	try {
+		const query = req.body.Query;
+		const result = await userProfile
+			.findOne({ UserID: { $regex: query } })
+			.exec();
+		if (result != null) {
+			res.status(200).json(result);
+		} else {
+			res.status(400).json({ error: "User profile not found." });
+		}
+	} catch (error) {
+		console.log(error);
 	}
 });
 
@@ -130,7 +150,7 @@ router.post("/editProfile", async (req, res) => {
 				AccountType: req.body.AccountType,
 				PersonalFeedID: feed,
 				Pronouns: req.body.pronouns,
-                ProfilePhoto: req.body.ProfilePhoto
+				ProfilePhoto: req.body.ProfilePhoto,
 			};
 			try {
 				const updatedProfile = await userProfile.findByIdAndUpdate(
@@ -155,6 +175,7 @@ router.post("/editProfile", async (req, res) => {
 	}
 });
 
+// Search for profiles only
 router.post("/searchProfiles", async (req, res, next) => {
 	const query = req.body.Query;
 
@@ -166,6 +187,102 @@ router.post("/searchProfiles", async (req, res, next) => {
 		res.status(200).json(result);
 	} else {
 		res.status(400).json({ error: "No results found." });
+	}
+});
+
+// Search for profiles, recipes, and posts.
+router.post("/universalSearch", async (req, res, next) => {
+	const query = req.body.Query;
+
+	const userSearch = await userRegister
+		.find({ UserName: { $regex: query, $options: "i" } })
+		.exec();
+	const postSearch = await userPost
+		.find({ Tags: { $regex: query, $options: "i" } })
+		.exec();
+	const recipeSearch = await recipe
+		.find({ Recipe: { $regex: query, $options: "i" } })
+		.exec();
+
+	if (userSearch == "" && postSearch == "" && recipeSearch == "") {
+		res.status(400).json({ error: "No results found." });
+	} else {
+		res.status(200).json({
+			Users: userSearch,
+			Posts: postSearch,
+			Recipes: recipeSearch,
+		});
+	}
+});
+
+// Add recipe
+router.post("/addRecipe", async (req, res) => {
+	const result = await recipe.findOne({ Recipe: req.body.Name }).exec();
+
+	if (result != null) {
+		err = "Recipe already exists.";
+		res.status(400).json({ error: err });
+	} else {
+		const data = new recipe({
+			Ingredients: req.body.Ingredients,
+			Recipe: req.body.Name,
+			DatePosted: new Date(),
+			ChefID: req.body.ChefID,
+		});
+		try {
+			const newRecipe = await data.save();
+			console.log(newRecipe);
+			res.status(200).json(newRecipe);
+		} catch (error) {
+			console.log(error);
+		}
+	}
+});
+
+// Edit recipes
+router.post("/editRecipe", async (req, res) => {
+	const recipeId = req.body.RecipeID;
+	const result = await recipe.findOne({ _id: recipeId }).exec();
+	try {
+		// check if id is valid
+		if (result == null) {
+			var ret = { RecipeID: -1, error: "Recipe Not Found." };
+			return res.json(ret);
+		} else {
+			// edit recipe
+			console.log("Recipe found. Please edit.");
+			const editedRecipe = {
+				Ingredients: req.body.Ingredients,
+				Recipe: req.body.Name,
+				DatePosted: result.DatePosted,
+				ChefID: req.body.ChefID,
+			};
+
+			const updatedRecipe = await recipe.findByIdAndUpdate(
+				recipeId,
+				editedRecipe,
+				{
+					new: true,
+					upsert: true,
+				},
+			);
+			console.log(updatedRecipe);
+			res.status(200).json(updatedRecipe);
+		}
+	} catch (error) {
+		console.log(error);
+	}
+});
+
+// Delete recipe
+router.post("/deleteRecipe", async (req, res) => {
+	try {
+		const recipeID = await recipe
+			.findByIdAndDelete(req.body.RecipeID)
+			.exec();
+		res.status(200).json(recipeID);
+	} catch (error) {
+		res.status(400).json({ error: "Recipe does not exist." });
 	}
 });
 

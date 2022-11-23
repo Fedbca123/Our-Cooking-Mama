@@ -1,14 +1,19 @@
-import { useImperativeHandle } from "react";
+// import { useImperativeHandle } from "react";
 import { Link, useMatch, useResolvedPath } from "react-router-dom";
+import { useCookies } from "react-cookie";
 // import { NavBar, Nav, NavDropdown } from 'react-boostrap';
 
 export default function NavBar() {
 	const path = window.location.pathname;
+	const [cookies, setCookie] = useCookies(["user"]);
+	if (cookies.id <= 0) {
+		window.location.href = "/login";
+	}
 
 	return (
 		<nav className="nav">
 			<Link to="/homepage" className="site-title">
-				Our Cooking Mama
+				Welcome, Chef {cookies.FirstName}!
 			</Link>
 
 			<ul>

@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import Popup from "../../components/PopUp/popUp";
-
+import { useCookies } from "react-cookie";
 import NavBar from '../../components/NavBar-Components/NavBar';
 
 export const HomePage = (props) => {
 
     const [buttonPopup, setButtonPopup] = useState(false);
+    const [cookies, setCookie] = useCookies(["user"]);
+
+    if(cookies.id <= 0){
+        window.location.href = "/login";
+    } //once cookie expires, logout user
 
     return (
             <><NavBar />
