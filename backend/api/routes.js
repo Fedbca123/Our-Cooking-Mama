@@ -255,11 +255,11 @@ router.post('/editPost', upload.single('file'), function (req, res) {
             const recipeId = req.body.RecipeID;
             const postId = req.body.PostID;
             const profileId = req.body.ProfileID;
-            const validRecipe = await recipes.findOne({ _id: recipeId }).exec();
+            const validRecipe = await userPost.findOne({ RecipeID: recipeId }).exec();
             const validPost = await userPost.findOne({ _id: postId }).exec();
             // check if id is valid
             if (validPost == null) {
-                var ret = {postId: -1, error: "User Account Not Found."}
+                var ret = {postId: -1, error: "User Post Not Found."}
                 return res.json(ret);
             }
             if (validRecipe == null) {
@@ -272,6 +272,7 @@ router.post('/editPost', upload.single('file'), function (req, res) {
                     Caption: req.body.Caption,
                     Tags: req.body.Tags,
                     ProfileID: profileId,
+                    
                 }
                 const updatedPost = await userPost.findByIdAndUpdate(postId, post, {
                     new: true,
