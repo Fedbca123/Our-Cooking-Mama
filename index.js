@@ -7,6 +7,7 @@ const fs = require("fs");
 const mongoose = require("mongoose");
 require("dotenv").config();
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
 
@@ -26,6 +27,9 @@ app.listen(port, () => {
 mongoose.connect(process.env.DATABASE_URI);
 const database = mongoose.connection;
 
+// -------- deployment -------- 
+__dirname = path.resolve();
+
 if (process.env.NODE_ENV === 'production') 
 {
   // Set static folder
@@ -35,6 +39,7 @@ if (process.env.NODE_ENV === 'production')
     res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
   });
 }
+// -------- deployment -------- 
 
 database.on("error", (error) => {
 	console.log(error);
