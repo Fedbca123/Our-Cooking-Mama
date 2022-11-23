@@ -584,6 +584,23 @@ router.post('/editComment', async (req, res) =>
     }
 })
 
+// Delete a comment
+router.post('/deleteComment', async (req, res) => {
+    const commentID = req.body.CommentID;
+    const result = await userComment.findOne({ _id: commentID }).exec();
+    // check if id is valid
+    if (result == null) {
+        var ret = {CommentID: -1, error: "Comment Not Found."};
+        return res.status(400).json(ret);
+    } 
+    try {
+        const deleteComment = await userComment.findByIdAndDelete(commentID).exec();
+        res.status(200).json(deleteComment);
+    } catch (error) {
+        res.status(400).json({error: "Comment does not exist."});
+    }
+})
+
 // Get all comments on a post
 router.post('/getPostComments', async (req, res) =>
 {
