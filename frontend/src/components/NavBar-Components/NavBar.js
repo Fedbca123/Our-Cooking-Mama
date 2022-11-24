@@ -13,7 +13,7 @@ export default function NavBar() {
 	return (
 		<nav className="nav">
 			<Link to="/homepage" className="site-title">
-				Welcome, Chef {cookies.FirstName}!
+				Welcome Chef {cookies.FirstName}!
 			</Link>
 
 			<ul>

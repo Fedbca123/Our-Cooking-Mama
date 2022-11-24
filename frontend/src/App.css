@@ -69,3 +69,28 @@ button {
     background-color: #E39E6D;
 }
 
+.chef {
+    max-width: 25%;
+    background-color: #e39e6da6;
+    display: flex;
+    margin-left: 25px;
+    margin-top: 25px;
+}
+.following {
+    display: flex;
+    font-size: 30px;
+    margin-left: 25px;
+    margin-right:73%;
+    text-align: left;
+}
+
+.bio {
+    display: flex;
+    font-size: 25px;
+    margin-left: 25px;
+    margin-right:73%;
+    text-align: left;
+    background-color: #E39E6D;
+
+}
+
