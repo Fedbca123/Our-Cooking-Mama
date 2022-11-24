@@ -5,6 +5,7 @@ import { useRoute } from '@react-navigation/native';
 import { ScreenHeight, ScreenWidth } from 'react-native-elements/dist/helpers';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-navigation';
+import { KeyboardAvoidingView } from 'react-native';
 
 export default function CreatePost({ navigation }) {
   const route = useRoute();
@@ -44,27 +45,31 @@ export default function CreatePost({ navigation }) {
 	}
 
   return (
-    <ImageBackground source={require(background)} style={styles.background}>
-      <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
-          <Ionicons name={'arrow-back'} size={28} color='#000' onPress={() => navigation.navigate('Camera')} style={styles.backButton} />
-          <Text style={styles.newPost}>New Post</Text>
-        </View>
+    <KeyboardAvoidingView style={{flex:1}}
+      behavior={Platform.OS === "ios" ? "padding" : null}
+    >
+      <ImageBackground source={require(background)} style={styles.background}>
+        <SafeAreaView style={styles.container}>
+          <View style={styles.header}>
+            <Ionicons name={'arrow-back'} size={28} color='#000' onPress={() => navigation.navigate('Camera')} style={styles.backButton} />
+            <Text style={styles.newPost}>New Post</Text>
+          </View>
 
-        <TextInput style={styles.input} placeholder='Enter a title' onChangeText={(val) => setTitle(val)} />
+          <TextInput style={styles.input} placeholder='Enter a title' onChangeText={(val) => setTitle(val)} />
 
-        <Image source={{ uri: image }} style={styles.img} />
+          <Image source={{ uri: image }} style={styles.img} />
 
-        <TextInput style={styles.input} placeholder='Write a caption' onChangeText={(val) => setCaption(val)}></TextInput>
+            <TextInput style={styles.input} placeholder='Write a caption' onChangeText={(val) => setCaption(val)}></TextInput>
 
-        <TextInput style={styles.input} placeholder='Enter tags i.e. #vegan #nutallergy' onChangeText={(val) => setTags(val)} />
+            <TextInput style={styles.input} placeholder='Enter tags i.e. #vegan #nutallergy' onChangeText={(val) => setTags(val)} />
 
-        <TouchableOpacity style={styles.uploadButton} onPress={handleUpload}>
-          <Text style={{ alignContent: 'center' }}>Upload</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.uploadButton} onPress={handleUpload}>
+            <Text style={{ alignContent: 'center' }}>Upload</Text>
+          </TouchableOpacity>
 
-      </SafeAreaView>
-    </ImageBackground>
+        </SafeAreaView>
+      </ImageBackground>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -73,20 +78,21 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 50
+    paddingTop: 50,
   },
   img: {
     width: (ScreenWidth) - 20,
     height: (ScreenWidth) - 20,
     marginTop: 5,
     marginBottom: 5,
-    resizeMode: 'stretch'
+    resizeMode: 'stretch',
+    flex:.75
   },
   uploadButton: {
     width: 100,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#f406ff',
+    backgroundColor: '#E39E6D',
     alignContent: 'center',
     alignItems: 'center',
     paddingTop: 11,
@@ -108,7 +114,7 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     alignContent: 'center',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   newPost: {
     fontSize: 30,
