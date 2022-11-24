@@ -17,7 +17,7 @@ import { LogBox } from 'react-native';
 const Stack = createStackNavigator();
 
 // Change me
-global.ipv4 = '172.30.64.1';
+global.ipv4 = '172.23.96.1';
 
 const theme = {
 	...DefaultTheme,
