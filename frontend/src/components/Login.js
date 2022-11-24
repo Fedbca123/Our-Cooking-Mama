@@ -40,17 +40,6 @@ function Login() {
 				if (res._id <= 0) {
 					setMessage("User/Password combination incorrect");
 				} else {
-					// var user = {
-					// 	FirstName: res.FirstName,
-					// 	LastName: res.LastName,
-					// 	_id: res._id,
-					// };
-					// localStorage.setItem("user_data", JSON.stringify(user));
-
-					// console.log(user);
-
-					// adds user info to cookie
-
 					setCookie("id", res._id, { path: "/" });
 					setCookie("FirstName", res.FirstName, { path: "/" });
 					setCookie("LastName", res.LastName, { path: "/" });

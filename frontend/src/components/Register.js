@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { buildPath } from "./bPath";
 
 import NavBarLanding from "./NavBar-Components/NavBarLanding";
-import ChefHat from './Images/chefHat.png';
+import ChefHat from "./Images/chefHat.png";
 
 function Register() {
 	var fs;
@@ -90,10 +90,9 @@ function Register() {
 			<NavBarLanding />
 
 			<img src={ChefHat} className="chefHat" alt="White Chef Hat." />
-			
+
 			<div id="loginDiv" className="registerForm">
 				<form onSubmit={doRegister}>
-
 					<p>First Name</p>
 					<input
 						type="text"
@@ -101,7 +100,6 @@ function Register() {
 						placeholder="Gordon"
 						ref={(c) => (fs = c)}
 					/>
-
 					<p>Last Name</p>
 					<input
 						type="text"
@@ -109,7 +107,6 @@ function Register() {
 						placeholder="Ramsey"
 						ref={(c) => (ls = c)}
 					/>
-
 					<p>Email</p>
 					<input
 						type="email"
@@ -117,7 +114,6 @@ function Register() {
 						placeholder="GRam@gmail.com"
 						ref={(c) => (email = c)}
 					/>
-
 					<p>Username</p>
 					<input
 						type="text"
@@ -125,7 +121,6 @@ function Register() {
 						placeholder="Username"
 						ref={(c) => (un = c)}
 					/>
-
 					<p>Password</p>
 					<input
 						type="password"
@@ -133,17 +128,21 @@ function Register() {
 						placeholder="********"
 						ref={(c) => (pass = c)}
 					/>
-
 					<p>Confirm Password</p>
 					<input
 						type="password"
-						id="loginPassword"
+						id="Password Retype"
 						placeholder="********"
 						ref={(c) => (reType = c)}
-					/> <br />
-					
-					<button type="submit" className="login" onClick={doRegister}>Register</button>
-					
+					/>{" "}
+					<br />
+					<button
+						type="submit"
+						className="login"
+						onClick={doRegister}
+					>
+						Register
+					</button>
 				</form>
 
 				<button className="link-btn" onClick={() => navigate("/login")}>

@@ -34,7 +34,6 @@ function App() {
 	//const toggleForm = (formName) => {
 	//	setCurrentForm(formName);
 	//};
-	var cookie = new Cookie();
 
 	return (
 		<div className="App">
