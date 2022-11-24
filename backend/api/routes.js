@@ -722,52 +722,74 @@ router.post('/getPostComments', async (req, res) =>
 
 // Follow a user
 router.post('/follow', async (req, res) => {
-    const userToBeFollowed = req.body.followedProfileID;
-    const userToBeFollowing = req.body.followingProfileID;
-    const resultFollowed = await userProfile.findOne({ _id: userToBeFollowed }).exec();
-    const resultFollowing = await userProfile.findOne({ _id: userToBeFollowing }).exec();
+    const influencerID = req.body.FollowedProfileID;
+    const creeperID = req.body.FollowingProfileID;
+    var followingUpdate, followedUpdate;
+    const resultFollowed = await userProfile.findOne({ UserID: influencerID }).exec();
+    const resultFollowing = await userProfile.findOne({ UserID: creeperID }).exec();
     try {
         // check if both users are valid accounts
         if (resultFollowed == null) {
-            var ret = { userId: -1, error: "User Account To Be Followed Not Found." }
+            var ret = { userId: -1, error: "User Profile: " + influencerID + " To Be Followed Not Found." }
             return res.json(ret);
         } 
         if (resultFollowing == null) {
-            var ret = { userId: -1, error: "User Account To Be Following Not Found." }
+            var ret = { userId: -1, error: "User Profile: " + creeperID + " To Be Following Not Found." }
             return res.json(ret);
         }
 
-        // check if user is already in lists
-        const followingQuery = await following.findOne({ _id: userToBeFollowing }).exec();
-        if (followingQuery != null) {
-            var ret = { userId: -1, error: "User is already in list of following." }
-            return res.json(ret);
+        // Pull the following document for creeper
+        const followingDocument = await following.findOne({ ProfileID: creeperID }).exec();
+        if (followingDocument != null) {
+            // check if influencer is already in creeper's following document
+            if (followingDocument.Following.includes(influencerID)) {
+                // if so, gtfo
+                var ret = { error: "User: " + influencerID + " Already Followed." }
+                return res.json(ret);
+            } else {
+                // if not, update following document with influencer in the Following
+                followingDocument.Following.push(influencerID);
+                followingUpdate = await following.findByIdAndUpdate(creeperID, followingDocument);
+                console.log(followingUpdate);
+            }
         } else {
+            // create new following with whatever
             const newFollowing = new following
             ({
-                Following: userToBeFollowing.push(),
-                ProfileID: mongoose.Types.ObjectId(userToBeFollowing),
+                Following: [influencerID],
+                ProfileID: mongoose.Types.ObjectId(creeperID)
             })
-            const newFollower = new followers 
-            ({
-                Followers: userToBeFollowed.push(),
-                ProfileID: mongoose.Types.ObjectId(userToBeFollowed)
-            })
-            const followingUpdate = await newFollowing.findByIdAndUpdate(userToBeFollowing, newFollowing, {
-                new: true,
-                upsert: true,
-            });
-            const followerUpdate = await followers.findByIdAndUpdate(userToBeFollowed, newFollower, {
-                new: true,
-                upsert: true,
-            });
+            followingUpdate = await newFollowing.save();
             console.log(followingUpdate);
-            console.log(followerUpdate);
-            res.status(200).json(followingUpdate)
-            res.status(200).json(followerUpdate)
         }
+
+         // Pull the followed document for influencer
+         const followedDocument = await followers.findOne({ ProfileID: influencerID }).exec();
+         if (followedDocument != null) {
+             // check if creeper is already in influencer's followed document
+             if (followedDocument.Followers.includes(creeperID)) {
+                 // if so, gtfo
+                 var ret = { error: "User: " + creeperID + " Already Followed." }
+                 return res.json(ret);
+             } else {
+                 // if not, update following document with creeper in the Followed
+                 followedDocument.Followers.push(creeperID);
+                 followedUpdate = await followers.findByIdAndUpdate(influencerID, followedDocument);
+                 console.log(followedUpdate);
+             }
+         } else {
+             // create new follower
+             const newFollower = new followers
+             ({
+                 Followers: [creeperID],
+                 ProfileID: mongoose.Types.ObjectId(influencerID)
+             })
+             followedUpdate = await newFollower.save();
+             console.log(followedUpdate);
+         }
+         res.status(200).json({ followingUpdate, followedUpdate });
     } catch(error) {
-        console.log(error);
+        console.error(error);
     }
 })
 
