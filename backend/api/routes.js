@@ -50,7 +50,7 @@ const imageFilter = function (req, file, cb) {
 
 var upload = multer({ storage: storage, fileFilter: imageFilter });
 
-// Post Method
+//Post Method
 router.post('/register', async (req, res) => 
 {
     bcrypt.hash(req.body.Password, 10, async (err, hash) => 
@@ -121,7 +121,7 @@ router.post('/getOneProfile', async (req, res) => {
 })
 
 // Login 
-router.post('/login', async (req, res, next) => 
+router.post('/login', async (req, res) => 
 {
     const username = req.body.UserName;
     var Password = req.body.Password;
@@ -396,7 +396,7 @@ router.post('/addPost', upload.single('file'), function (req, res) {
         cloudinary.v2.uploader.upload(req.file.path, async (err, result) => {
             const recipeId = req.body.RecipeID;
             const userId = req.body.UserID;
-            const validRecipe = await recipes.findOne({ _id: recipeId }).exec();
+            const validRecipe = await recipe.findOne({ _id: recipeId }).exec();
             const validAccount = await userRegister.findOne({ _id: userId }).exec();
             // check if id is valid
             if (validAccount == null) {
@@ -416,6 +416,7 @@ router.post('/addPost', upload.single('file'), function (req, res) {
                 })
                 try {
                     const newPost = await post.save();
+                    pf.updateOne({ProfileID: userId}, {$push: {Photos: newPost._id}});
                     console.log(newPost);
                     res.status(200).json(newPost)
                 } catch(error) {
@@ -435,6 +436,7 @@ router.post('/addPost', upload.single('file'), function (req, res) {
                 })
                 try {
                     const newPost = await post.save();
+                    pf.updateOne({ProfileID: userId}, {$push: {Photos: newPost._id}});
                     console.log(newPost);
                     res.status(200).json(newPost)
                 } catch(error) {
@@ -468,6 +470,7 @@ router.post('/deletePost', async (req, res) => {
             // Delete post if findingPost's profileId matches the taken in profileId
             if (findingPost.ProfileID == profileId) {
                 userPost.findById(postId).deleteOne().exec();
+                pf.updateOne({ProfileID: userId}, {$pull: {Photos: postId}});
                 var ret = {id: 1, error: 'Post deleted!'}
                 return res.json(ret);
             } else {
