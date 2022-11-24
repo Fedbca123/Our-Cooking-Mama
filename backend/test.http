@@ -1,0 +1,74 @@
+# GET  http://192.168.1.252:3000/api/getAll 
+# Content-Type: application/json
+
+# POST http://localhost:3000/api/register HTTP/1.1
+# Content-Type: application/json
+
+# {
+#     "FirstName": "Chrystian",
+#     "LastName": "Orren",
+#     "UserName": "cmoney",
+#     "Email": "cmoney@email.com",
+#     "Password": "password"
+# }
+
+# POST http://192.168.1.252:3000/api/login
+# Content-Type: application/json
+
+# {
+#     "UserName": "cmoney",
+#     "Password": "password"
+# }
+
+POST http://192.168.1.252:3000/api/editProfile
+Content-Type: application/json
+
+{
+    "NickName": "Hershey",
+    "DietRest": ["test", "test"],
+    "FavCuisine": ["test", "test"],
+    "FavDrink": ["test", "test"],
+    "FavFood": ["test", "test"],
+    "FavoriteFlavor": ["test", "test"],
+    "FoodAllerg": ["test", "test"],
+    "userId": "636aed36e4b93a6fd7eb221f",
+    "AccountType": "Personal",
+    "PersonalFeedID": "test",
+    "Pronouns": "dog/doge"
+}
+
+# POST http://192.168.1.252:3000/api/getOneProfile
+# Content-Type: application/json
+
+# {
+#     "Query": "636aed36e4b93a6fd7eb221f"
+# }
+
+# POST http://192.168.1.252:3000/api/searchPosts
+# Content-Type: application/json
+
+# {
+#     "Query": "nuts"
+# }
+
+# POST http://192.168.1.252:3000/api/deletePost
+# Content-Type: application/json
+
+# {
+#     "PostID": "637e7b1a2b3bd83bb0b47118",
+#     "ProfileID": "636aed36e4b93a6fd7eb221f"
+# }
+
+# POST http://192.168.1.252:3000/api/searchProfiles
+# Content-Type: application/json
+
+# {
+#     "Query": "cmoney"
+# }
+
+# POST http://192.168.1.252:3000/api/universalSearch
+# Content-Type: application/json
+
+# {
+#     "Query": "TEST"
+# }
