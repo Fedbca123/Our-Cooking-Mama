@@ -7,50 +7,78 @@ import SearchResultsHeader from '../components/home/SearchResultsHeader'
 export default function SearchResults({ route, navigation }) {
     const background = '../Images/OCMgradient.png'
     const { data } = route.params
-    let users;
-    let posts;
-    let recipes;
-    if (data.Users[0] != null)
-    {
-        users = data.Users[0]
-    } else {
-        users = "No result!"
-    }
+    let usersExists = false;
+    let postsExists = false;
+    let recipesExists = false;
 
-    if (data.Posts[0] != null)
-    {
-        posts = data.Posts[0]
-    } else {
-        posts.Photo = background;
-    }
+    if (!data.error) {
+        if (data.Users.length > 0) {
+            usersExists = true
+        } else {
+            usersExists = false
+        }
 
-    if (data.Recipes[0] != null)
-    {
-        recipes = data.Recipes[0]
-    } else {
-        recipes = "No result!"
-    }
+        if (data.Posts.length > 0) {
+            postsExists = true
+        } else {
+            postsExists = false
+        }
 
+        if (data.Recipes.length > 0) {
+            recipesExists = true
+        } else {
+            recipesExists = false
+        }
+    }
     return (
         <ImageBackground style={styles.background} source={require(background)}>
             <SafeAreaView style={styles.container}>
                 <SearchResultsHeader navigation={navigation}></SearchResultsHeader>
-                <Text>HERE ARE THE USER RESULTS!</Text>
-                <Text>{users.UserName}</Text>
-                <Text>HERE ARE THE POST RESULTS!</Text>
-                {/* <Text>{posts}</Text> */}
-                <Image source={{ uri: posts.Photo }} style={{ height: 136, width: 111, resizeMode: 'cover', margin: 5 }}></Image>
-                <Text>HERE ARE THE RECIPES RESULTS!</Text>
-                <Text>{recipes}</Text>
-
-
-
-
-
-
+                <View style={styles.userPart}>
+                    <Text style={{ fontSize: 30, }}>User Results</Text>
+                    <UserResult usersExists={usersExists} data={data}></UserResult>
+                </View>
+                <View style={styles.postPart}>
+                    <Text style={{ fontSize: 30, }}>Post Results</Text>
+                    <PostResult postsExists={postsExists} data={data}></PostResult>
+                </View>
+                <View style={styles.recipePart}>
+                    <Text style={{ fontSize: 30, }}>Recipe Results</Text>
+                    <RecipeResult recipesExists={recipesExists} data={data}></RecipeResult>
+                </View>
             </SafeAreaView>
         </ImageBackground>
     );
+}
+
+const UserResult = ({ usersExists, data }) => {
+    let content
+    if (usersExists) {
+        content = <Text style={{ fontSize: 20 }}>{data.Users[0].UserName}</Text>
+    } else {
+        content = <Text style={{ fontSize: 20 }}>No users found!</Text>
+    }
+    return content
+}
+
+const PostResult = ({ postsExists, data }) => {
+    let content
+    if (postsExists) {
+        content = <Image source={{ uri: data.Posts[0].Photo }} style={{ height: 200, width: 200, resizeMode: 'cover', margin: 5 }}></Image>
+    } else {
+        content = <Text style={{ fontSize: 20 }}>No posts found!</Text>
+    }
+    return content
+}
+
+const RecipeResult = ({ recipesExists, data }) => {
+    let content
+    if (recipesExists) {
+        content = <Text style={{ fontSize: 20 }}>{data.Recipes[0].Recipe}</Text>
+    } else {
+        content = <Text style={{ fontSize: 20 }}>No recipes found!</Text>
+    }
+    return content
 }
 
 const styles = StyleSheet.create({
@@ -61,4 +89,16 @@ const styles = StyleSheet.create({
     background: {
         flex: 1,
     },
+    userPart: {
+        marginBottom: 60,
+        alignItems: 'center'
+    },
+    postPart: {
+        marginBottom: 60,
+        alignItems: 'center'
+    },
+    recipePart: {
+        marginBottom: 60,
+        alignItems: 'center'
+    }
 });

@@ -1,18 +1,21 @@
 import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 
-const FoodReal = () => {
+const FoodReal = ({ navigation }) => {
+    const onPress = () => {
+        navigation.navigate('Camera')
+    }
     return (
         <View style={styles.container}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={onPress}>
                 <Image style={styles.stories} source={require('../../Images/breakfast.jpg')} />
                 <Text style={styles.storyText} >Breakfast</Text>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={onPress}>
                 <Image style={styles.stories} source={require('../../Images/lunch.jpg')} />
                 <Text style={styles.storyText} >Lunch</Text>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={onPress}>
                 <Image style={styles.stories} source={require('../../Images/dinner.jpg')} />
                 <Text style={styles.storyText} >Dinner</Text>
             </TouchableOpacity>
