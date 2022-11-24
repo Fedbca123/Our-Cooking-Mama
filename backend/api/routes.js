@@ -7,6 +7,7 @@ const multer = require('multer');
 const userRegister = require ('../model/userAccount.js');
 const userProfile = require ('../model/userProfile.js');
 const userPost = require ('../model/userPost.js');
+const pf = require ('../model/personalFeed.js');
 const recipe = require ('../model/recipes.js');
 const mongoose = require('mongoose');
 const { json } = require('body-parser');
@@ -152,15 +153,77 @@ router.post('/login', async (req, res) =>
 })
 
 // create/edit Profile
-router.post('/editProfile', upload.single('file'), function (req, res) {
+router.post('/editProfile', upload.single('file'), async (req, res) => {
+
+    var feed = await pf.findOne({ProfileID: req.body.userId}).exec();
+    console.log("Feed is " + feedID);
+    if (feed == null)
+    {
+        const feed = new pf ({
+            Photos: [],
+            ProfileID: req.body.userId,
+        });
+
+        const result = await feed.save();
+        console.log(result);
+        var feedID = result._id;
+    }
+    else 
+        var feedID = feed._id;
+
     try {
-        // TO DO: Replace feed variable with _id from Personal Feed once created
-        const feed = "feedID";
-        // Getting this userId from cookie on frontend, verbatim 'userId'
-        cloudinary.v2.uploader.upload(req.file.path, async (err, result) => {
-            if (err) {
-                req.json(err.message);
-            }
+        // If file is provided
+        if (req.file != null) {
+            // Getting this userId from cookie on frontend, verbatim 'userId'
+            cloudinary.v2.uploader.upload(req.file.path, async (err, result) => {
+                if (err) {
+                    req.json(err.message);
+                }
+                const userId = req.body.userId;
+                const validAccount = await userRegister.findOne({ _id: userId }).exec();
+                try {
+                    // check if id is valid
+                    if (validAccount == null) {
+                        var ret = {userId: -1, error: "User Account Not Found."}
+                        return res.json(ret);
+                    } else {
+                        // edit profile
+                        console.log('User profile found. Please edit.')
+                        var profile = {
+                            NickName: req.body.NickName,
+                            DietRest: req.body.DietRest,
+                            FavCuisine: req.body.FavCuisine,
+                            FavDrink: req.body.FavDrink,
+                            FavFood: req.body.FavFood,
+                            FavoriteFlavor: req.body.FavoriteFlavor,
+                            FoodAllerg: req.body.FoodAllerg,
+                            UserID: mongoose.Types.ObjectId(userId),
+                            AccountType: req.body.AccountType,
+                            PersonalFeedID: feedID,
+                            Pronouns: req.body.pronouns,
+                            ProfilePhoto: result.secure_url
+                        }
+                        try {
+                            const updatedProfile = await userProfile.findByIdAndUpdate(userId, profile, {
+                                new: true,
+                                upsert: true,
+                            });
+                            console.log(updatedProfile);
+                            res.status(200).json(updatedProfile)
+                        } catch(error) {
+                            // Profile creation/update error
+                            console.log(error);
+                            error = "Cannot find user account.";
+                            res.status(400).json(error);
+                        }
+                    }
+                } catch(error) {
+                    console.log(error);
+                }
+            })
+        } 
+        // File not provided
+        else {
             const userId = req.body.userId;
             const validAccount = await userRegister.findOne({ _id: userId }).exec();
             try {
@@ -170,20 +233,41 @@ router.post('/editProfile', upload.single('file'), function (req, res) {
                     return res.json(ret);
                 } else {
                     // edit profile
-                    console.log('User profile found. Please edit.')
-                    const profile = {
-                        NickName: req.body.NickName,
-                        DietRest: req.body.DietRest,
-                        FavCuisine: req.body.FavCuisine,
-                        FavDrink: req.body.FavDrink,
-                        FavFood: req.body.FavFood,
-                        FavoriteFlavor: req.body.FavoriteFlavor,
-                        FoodAllerg: req.body.FoodAllerg,
-                        UserID: mongoose.Types.ObjectId(userId),
-                        AccountType: req.body.AccountType,
-                        PersonalFeedID: feed,
-                        Pronouns: req.body.pronouns,
-                        ProfilePhoto: result.secure_url
+                    console.log('User profile found. Please edit. (no file)');
+                    const prof = await userProfile.findOne({UserID: userId}).exec();
+                    console.log(prof);
+                    if (prof != null) {
+                        var profile = {
+                            NickName: req.body.NickName,
+                            DietRest: req.body.DietRest,
+                            FavCuisine: req.body.FavCuisine,
+                            FavDrink: req.body.FavDrink,
+                            FavFood: req.body.FavFood,
+                            FavoriteFlavor: req.body.FavoriteFlavor,
+                            FoodAllerg: req.body.FoodAllerg,
+                            UserID: mongoose.Types.ObjectId(userId),
+                            AccountType: req.body.AccountType,
+                            PersonalFeedID: feedID,
+                            Pronouns: req.body.pronouns,
+                            ProfilePhoto: prof.ProfilePhoto
+                        }
+                    }
+                    else {
+                        console.log("Here");
+                        var profile = {
+                            NickName: req.body.NickName,
+                            DietRest: req.body.DietRest,
+                            FavCuisine: req.body.FavCuisine,
+                            FavDrink: req.body.FavDrink,
+                            FavFood: req.body.FavFood,
+                            FavoriteFlavor: req.body.FavoriteFlavor,
+                            FoodAllerg: req.body.FoodAllerg,
+                            UserID: mongoose.Types.ObjectId(userId),
+                            AccountType: req.body.AccountType,
+                            PersonalFeedID: feedID,
+                            Pronouns: req.body.pronouns,
+                            ProfilePhoto: ""
+                        }
                     }
                     try {
                         const updatedProfile = await userProfile.findByIdAndUpdate(userId, profile, {
@@ -202,7 +286,7 @@ router.post('/editProfile', upload.single('file'), function (req, res) {
             } catch(error) {
                 console.log(error);
             }
-        })
+        }
     } catch(error) {
         console.log(error);
     }
@@ -327,6 +411,7 @@ router.post('/addPost', upload.single('file'), function (req, res) {
                 })
                 try {
                     const newPost = await post.save();
+                    pf.updateOne({ProfileID: userId}, {$push: {Photos: newPost._id}});
                     console.log(newPost);
                     res.status(200).json(newPost)
                 } catch(error) {
@@ -346,6 +431,7 @@ router.post('/addPost', upload.single('file'), function (req, res) {
                 })
                 try {
                     const newPost = await post.save();
+                    pf.updateOne({ProfileID: userId}, {$push: {Photos: newPost._id}});
                     console.log(newPost);
                     res.status(200).json(newPost)
                 } catch(error) {
@@ -379,6 +465,7 @@ router.post('/deletePost', async (req, res) => {
             // Delete post if findingPost's profileId matches the taken in profileId
             if (findingPost.ProfileID == profileId) {
                 userPost.findById(postId).deleteOne().exec();
+                pf.updateOne({ProfileID: userId}, {$pull: {Photos: postId}});
                 var ret = {id: 1, error: 'Post deleted!'}
                 return res.json(ret);
             } else {
