@@ -23,33 +23,24 @@ export const HomePage = (props) => {
     } //once cookie expires, logout user
 
     async function addPost(event){
-        // event.PreventDefault();
-
-        // console.log(tagString.value);
         tags = tagString.value.split(" ");
-        console.log(title.target.value);
-        console.log(photo_url.value);
-        console.log(tags);
-        console.log(caption.target.value);
+        // console.log(title.target.value);
+        // console.log(photo_url.value);
+        // console.log(tags);
+        // console.log(caption.target.value);
 
         let formdata = new FormData();
         formdata.append("UserID", cookies.id);
+        // api doensnt like recipe id as -1 it needs something that looks like below
         formdata.append("RecipeID", "63772881990a71a5cf2ff956");
         formdata.append("Category", title.target.value);
         formdata.append("Caption", caption.target.value);
         formdata.append("Tags", tags);
-        // formdata.append("file", photo_url);
         formdata.append('file', photo_url.files[0], 'file.jpg');
-
-        console.log(formdata.getAll("file"));
 
             const response = await fetch(buildPath('api/addPost'), {
                 method: 'POST',
                 body: formdata,
-                // headers: {
-                //     'Content-Type': 'multipart/form-data',
-                //     'Accept': 'application/json'
-                // }
             }).then(response => {
                 console.log("IMAGE UPLOADED!!!")
 		    }).catch(err => {
