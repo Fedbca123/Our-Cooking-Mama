@@ -607,7 +607,7 @@ router.post('/getPersonalFeed', async (req, res) =>
 })
 
 // Get main feed (posts from all of a user's followers)
-router.get('/getMainFeed', async (req, res) => {
+router.post('/getMainFeed', async (req, res) => {
     const profileId = req.body.ProfileID;
     var mainFeedUpdate;
     try {
