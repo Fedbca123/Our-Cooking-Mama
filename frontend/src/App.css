@@ -30,10 +30,15 @@ p{
     padding: 2.25rem;
 }
 
-.landingLogo {
+.landing {
+    margin: 25px;
+    font-size: 25px;
+}
+
+.landingLogo, .landingLogo2, .landingLogo3  {
     max-width: 25%;
     justify-content: center;
-    display: flex;
+    
     text-align: center;
 }
 

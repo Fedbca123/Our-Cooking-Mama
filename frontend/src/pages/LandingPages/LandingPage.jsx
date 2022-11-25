@@ -14,8 +14,10 @@ export const LandingPage = (props) => {
                 <h1>Welcome Chef!</h1>
 
                 <img src={Logo} className="landingLogo" alt="Logo: pixel bowl of soup" />
+                <img src={Logo} className="landingLogo2" alt="Logo: pixel bowl of soup" />
+                <img src={Logo} className="landingLogo3" alt="Logo: pixel bowl of soup" />
 
-                <p>
+                <p className="landing">
                     Featuring your new social media and web platform for foodies galore! Post 
                     about your meals throughout the day and even gain access to their recipes 
                     - a centralized way to socialize and share about a beloved pasttime. Learn 
