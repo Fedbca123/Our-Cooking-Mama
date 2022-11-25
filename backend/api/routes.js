@@ -608,14 +608,18 @@ router.post('/getPersonalFeed', async (req, res) =>
 
 // Get main feed (posts from all of a user's followers)
 router.post('/getMainFeed', async (req, res) => {
-    const userID = req.body.UserID;
+    const profileId = req.body.ProfileID;
+    var mainFeedUpdate;
     try {
-        // check following array for specific user
-        const result = await following.find({ProfileID: userID}).sort({_id: -1}).exec();
-        if (result != "") {
-            res.status(200).json(result);
+        // check for existence of following document for specific user
+        const result = await following.find({ProfileID: profileId}).exec();
+        console.log(result);
+        if (result == null) {
+            res.status(400).json({error: "No following document for: " + profileId + " found."});
         } else {
-            res.status(400).json({error: "No posts found."});
+            // get 2 latest posts for every user in following array
+            const followingPosts = result.Following.sort();
+            mainFeedUpdate = await mainFeed.findByIdAndUpdate(profileId, followingPosts);
         }
     } catch (err) {
         res.status(400).json({error: err.message});
@@ -725,14 +729,14 @@ router.post('/getPostComments', async (req, res) =>
 
 // Follow a user
 router.post('/follow', async (req, res) => {
-    const influencerID = req.body.FollowedProfileID;
+    const influencerID = req.body.FollowerProfileID;
     const creeperID = req.body.FollowingProfileID;
-    var followingUpdate, followedUpdate;
-    const resultFollowed = await userProfile.findOne({ UserID: influencerID }).exec();
+    var followingUpdate, followerUpdate;
+    const resultFollower = await userProfile.findOne({ UserID: influencerID }).exec();
     const resultFollowing = await userProfile.findOne({ UserID: creeperID }).exec();
     try {
         // check if both users are valid accounts
-        if (resultFollowed == null) {
+        if (resultFollower == null) {
             var ret = { userId: -1, error: "User Profile: " + influencerID + " To Be Followed Not Found." }
             return res.json(ret);
         } 
@@ -741,8 +745,9 @@ router.post('/follow', async (req, res) => {
             return res.json(ret);
         }
 
-        // Pull the following document for creeper
+        // Pull the following document for creeper --> influencer
         const followingDocument = await following.findOne({ ProfileID: creeperID }).exec();
+        console.log("Following (creeper --> influencer) Document: " + followingDocument);
         if (followingDocument != null) {
             // check if influencer is already in creeper's following document
             if (followingDocument.Following.includes(influencerID)) {
@@ -752,8 +757,8 @@ router.post('/follow', async (req, res) => {
             } else {
                 // if not, update following document with influencer in the Following
                 followingDocument.Following.push(influencerID);
-                followingUpdate = await following.findByIdAndUpdate(creeperID, followingDocument);
-                console.log(followingUpdate);
+                followingUpdate = await followingDocument.save();
+                console.log("newUpdate " + followingUpdate);
             }
         } else {
             // create new following with whatever
@@ -766,19 +771,20 @@ router.post('/follow', async (req, res) => {
             console.log(followingUpdate);
         }
 
-         // Pull the followed document for influencer
-         const followedDocument = await followers.findOne({ ProfileID: influencerID }).exec();
-         if (followedDocument != null) {
-             // check if creeper is already in influencer's followed document
-             if (followedDocument.Followers.includes(creeperID)) {
-                 // if so, gtfo
-                 var ret = { error: "User: " + creeperID + " Already Followed." }
-                 return res.json(ret);
+         // Pull the follower document for creeper <-- influencer
+         const followerDocument = await followers.findOne({ ProfileID: influencerID }).exec();
+         console.log("Follower (creeper <-- influencer) Document: " + followerDocument);
+         if (followerDocument != null) {
+             // check if creeper is already in influencer's follower document
+             if (followerDocument.Followers.includes(creeperID)) {
+                // if so, gtfo
+                var ret = { error: "User: " + creeperID + " Already Follower." }
+                return res.json(ret);
              } else {
-                 // if not, update following document with creeper in the Followed
-                 followedDocument.Followers.push(creeperID);
-                 followedUpdate = await followers.findByIdAndUpdate(influencerID, followedDocument);
-                 console.log(followedUpdate);
+                // if not, update following document with creeper in the Followed
+                followerDocument.Followers.push(creeperID);
+                followerUpdate = await followerDocument.save();
+                console.log("newUpdate " + followerUpdate);
              }
          } else {
              // create new follower
@@ -787,10 +793,10 @@ router.post('/follow', async (req, res) => {
                  Followers: [creeperID],
                  ProfileID: mongoose.Types.ObjectId(influencerID)
              })
-             followedUpdate = await newFollower.save();
-             console.log(followedUpdate);
+             followerUpdate = await newFollower.save();
+             console.log(followerUpdate);
          }
-         res.status(200).json({ followingUpdate, followedUpdate });
+         res.status(200).json({ followingUpdate, followerUpdate });
     } catch(error) {
         console.error(error);
     }
