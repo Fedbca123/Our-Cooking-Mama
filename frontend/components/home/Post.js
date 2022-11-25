@@ -74,8 +74,8 @@ const share = async () => {
 const PostHeader = ({ post }) => (
     <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 5, alignItems: 'center' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Image source={{ uri: post.profile_picture }} style={styles.pfp} />
-            <Text style={{ marginLeft: 5, fontWeight: '700' }}> {post.user}</Text>
+            <Image source={"https://townsquare.media/site/694/files/2019/01/GettyImages-868643608.jpg"} style={styles.pfp} />
+            <Text style={{ marginLeft: 5, fontWeight: '700' }}> {post.ProfileID}</Text>
         </View>
         <View>
             <Text style={{ fontWeight: '900' }}>...</Text>
@@ -85,7 +85,7 @@ const PostHeader = ({ post }) => (
 
 const PostImage = ({ post }) => (
     <View style={{ width: '100%', height: 450, }}>
-        <Image source={{ uri: post.imageUrl }} style={{ height: '100%', resizeMode: 'cover' }}></Image>
+        <Image source={{ uri: post.Photo }} style={{ height: '100%', resizeMode: 'cover' }}></Image>
     </View>
 )
 
@@ -109,7 +109,7 @@ const Icon = ({ imgStyle, imgUrl }) => (
 
 const Likes = ({ post }) => (
     <View style={{ flexDirection: 'row', marginTop: 4 }}>
-        <Text style={{ fontWeight: '600' }}>{post.likes.toLocaleString('en')} likes</Text>
+        <Text style={{ fontWeight: '600' }}>hardcoded # likes</Text>
     </View>
 )
 
@@ -117,7 +117,7 @@ const Caption = ({ post }) => (
     <View style={{ marginTop: 5 }}>
         <Text>
             <Text style={{ fontWeight: '600' }}>{post.user} </Text>
-            <Text>{post.title}</Text>
+            <Text>{post.Caption}</Text>
             {/* BELOW HAS INVISIBLE CHARACTERS THIS IS AWFUL BUT I DONT KNOW HOW TO STRETCH THE CAPTION TO WIDTH OF SCREEN! OR ELSE IT WILL SHNRINK EVERYTHING */}
             <Text>ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ</Text>
         </Text>
@@ -131,11 +131,11 @@ const Popup = ({ post }) => (
                 <Text style={{ fontWeight: '900', color: 'blue', }}>Tags or food type(bfast lunch dinner) here: </Text>
                 <Text style={{ fontWeight: '900', color: 'blue', }}>n/a</Text>
             </Text>
-            <Image source={{ uri: post.imageUrl }} style={{ height: '50%', resizeMode: 'cover', width: 300, height: 250 }}></Image>
+            <Image source={{ uri: post.Photo }} style={{ height: '50%', resizeMode: 'cover', width: 300, height: 250 }}></Image>
         </View>
 
         <View style={{ marginTop: 20, marginHorizontal: 10, alignItems: 'center' }}>
-            <Text style={{ fontSize: 20, fontWeight: '600' }}>{post.caption}</Text>
+            <Text style={{ fontSize: 20, fontWeight: '600' }}>{post.Category}</Text>
         </View>
     </View>
 )

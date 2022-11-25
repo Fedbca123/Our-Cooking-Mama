@@ -1,10 +1,10 @@
 export const PROFILE = [
     {
-        user: 'cristian',
-        bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Porttitor massa id neque aliquam vestibulum. Arcu vitae elementum curabitur vitae nunc sed velit dignissim sodales.',
+        user: 'hardcoded',
+        bio: 'hardcoded',
         profile_picture: 'https://st.depositphotos.com/1269204/1219/i/600/depositphotos_12196477-stock-photo-smiling-men-isolated-on-the.jpg',
-        followers: 357,
-        following: 511,
+        followers: 69,
+        following: 69,
         posts: [
             {
                 key: '1',

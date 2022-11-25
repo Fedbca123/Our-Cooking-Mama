@@ -27,24 +27,51 @@ export const bottomTabIcons = [
 
 
 const BottomTabs = ({ navigation }) => {
-    const [activeTab, setActivetab] = useState('Home')
+    async function loadProfile() {
+        const response = await fetch('http://' + global.ipv4 + ':3000/api/getPersonalFeed', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+                UserID: global._id,
+            }),
+        }).catch(err => {
+            console.log(err);
+        })
+        const data = await response.json()
+        navigation.navigate('Profile', { data: data });
+    }
 
-    // const Icon = ({icon, navigation}) => {
-    //     <TouchableOpacity>
-    //         <Image source={icon.img} style={styles.icon}></Image>
-    //     </TouchableOpacity>
-    // }
+    async function loadFeed() {
+        console.log(global._id)
+        const response = await fetch('http://' + global.ipv4 + ':3000/api/getMainFeed', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+                ProfileID: global._id,
+            }),
+        }).catch(err => {
+            console.log(err);
+        })
+        const data = await response.json()
 
+        console.log(data);
+        navigation.navigate('Home', { data: data });
+    }
     return (
         <View style={styles.container}>
-            {/* <Divider width={20} orientation='horizontal'/> */}
             <TouchableOpacity onPress={() => navigation.navigate('Camera')}>
                 <Entypo name="camera" size={33} color="black" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <TouchableOpacity onPress={loadFeed}>
                 <Entypo name="home" size={33} color="black" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+            <TouchableOpacity onPress={loadProfile}>
                 <Ionicons name="person" size={33} color="black" />
             </TouchableOpacity>
         </View>

@@ -7,14 +7,15 @@ import UserPosts from '../components/profile/UserPosts';
 
 import { PROFILE } from '../dummydata/profile'
 
-export default function Profile({ navigation }) {
+export default function Profile({ navigation, route }) {
   const background = '../Images/OCMgradient.png'
+  const { data } = route.params
   return (
     <ImageBackground style={styles.background} source={require(background)}>
       <SafeAreaView style={styles.container}>
         <Header navigation={navigation}></Header>
         <ProfileSummary profile={PROFILE} navigation={navigation}></ProfileSummary>
-        <UserPosts profile={PROFILE[0].posts} navigation={navigation}></UserPosts>
+        <UserPosts profile={data} navigation={navigation}></UserPosts>
         <BottomTabs navigation={navigation} />
       </SafeAreaView>
     </ImageBackground>

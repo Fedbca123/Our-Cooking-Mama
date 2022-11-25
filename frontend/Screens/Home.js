@@ -5,24 +5,26 @@ import { NavigationContainer } from '@react-navigation/native';
 import FoodReal from '../components/home/FoodReal';
 import Header from '../components/home/Header';
 import Post from '../components/home/Post';
-import BottomTabs, {bottomTabIcons} from '../components/BottomTabs';
+import BottomTabs, { bottomTabIcons } from '../components/BottomTabs';
 
 import { POSTS } from '../dummydata/posts'
 
-export default function Home({navigation}) {
+export default function Home({ navigation, route }) {
   const background = '../Images/OCMgradient.png'
-
+  const { data } = route.params
+  // console.log(data.posts[0])
+  let dataPosts = data.posts[0];
   return (
     <ImageBackground style={styles.background} source={require(background)}>
       <SafeAreaView style={styles.container}>
         <Header navigation={navigation}></Header>
         <FoodReal navigation={navigation}></FoodReal>
         <ScrollView>
-          {POSTS.map((post,index) => (
+          {dataPosts.map((post, index) => (
             <Post post={post} key={index}></Post>
           ))}
         </ScrollView>
-        <BottomTabs  navigation={navigation}/>
+        <BottomTabs navigation={navigation} />
       </SafeAreaView>
     </ImageBackground>
   );

@@ -12,11 +12,7 @@ const LoginScreen = ({ navigation }) => {
 	const [PW, setPW] = useState("");
 
 	async function handleLogin(event) {
-		// navigation.navigate('Home');
 		event.preventDefault()
-		// IP address is unique, expo/express can't resolve 'localhost' so you need to ipconfig in cmd and replace with the ipv4
-		// This should be no issue once deployed on heroku
-
 		const response = await fetch('http://' + global.ipv4 + ':3000/api/login', {
 			method: 'POST',
 			headers: {
@@ -32,7 +28,9 @@ const LoginScreen = ({ navigation }) => {
 		})
 		const data = await response.json()
 		if (data.error == '') {
-			navigation.navigate('Home');
+			global._id = data._id;
+			global.signedUser = data.FirstName;
+			loadFeed();
 		} else if (data.error == 'Passwords do not match.') {
 			Toast.show({
 				type: 'error',
@@ -44,9 +42,25 @@ const LoginScreen = ({ navigation }) => {
 				text1: 'Username / Password combination is incorrect'
 			})
 		}
+	}
 
-		global._id = data._id;
-		global.signedUser = data.FirstName;
+	async function loadFeed() {
+		console.log(global._id)
+		const response = await fetch('http://' + global.ipv4 + ':3000/api/getMainFeed', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+			},
+			body: JSON.stringify({
+				ProfileID: global._id,
+			}),
+		}).catch(err => {
+			console.log(err);
+		})
+		const data = await response.json()
+		console.log(data);
+		navigation.navigate('Home', { data: data });
 	}
 
 	const switchS = () => { //handles screen switching

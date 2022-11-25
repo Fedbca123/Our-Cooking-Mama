@@ -29,7 +29,7 @@ const UserPosts = ({ profile, navigation }) => {
                 renderItem={({ item }) => (
                     <View>
                         <TouchableOpacity onPress={editPost(item)}>
-                            <Image source={{ uri: item.image }} style={{ height: 136, width: 111, resizeMode: 'cover', margin: 5 }}></Image>
+                            <Image source={{ uri: item.Photo }} style={{ height: 136, width: 111, resizeMode: 'cover', margin: 5 }}></Image>
                         </TouchableOpacity>
                     </View>
 
