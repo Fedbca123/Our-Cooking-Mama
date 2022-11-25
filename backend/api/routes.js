@@ -621,16 +621,14 @@ router.get('/getMainFeed', async (req, res) => {
             console.log("Following: " + result.Following);
             const followingPosts = result.Following.map(async (influencerID) => {
                 try {
-                    foo = await userPost.find({ProfileID: influencerID}).sort({_id: -1}).exec();
-                    console.log("FOOOOOOO: " + foo);
-                    return foo;
+                    userPosts = await userPost.find({ProfileID: influencerID}).sort({_id: -1}).exec();
+                    return userPosts;
                 } catch (error) {
                     console.error(error);
                     return {error: error.message};
                 }
             });
-            console.log(followingPosts);
-            res.status(200).json(followingPosts);
+            res.status(200).json({ posts: await Promise.all(followingPosts) });
         }
     } catch (err) {
         res.status(400).json({error: err.message});
