@@ -59,6 +59,7 @@ const LoginScreen = ({ navigation }) => {
 			console.log(err);
 		})
 		const data = await response.json()
+		
 		console.log(data);
 		navigation.navigate('Home', { data: data });
 	}
