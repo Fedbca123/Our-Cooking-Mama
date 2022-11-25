@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import NavBarLanding from '../../components/NavBar-Components/NavBarLanding';
+import Chef from './../../components/Images/chef.png';
 
 export const AboutUs = (props) => {
 
@@ -11,6 +12,12 @@ export const AboutUs = (props) => {
             <div className="AboutUs">
                 <h1 className="aboutTitles">About Us</h1>
 
+                <div className="chefImages">
+                    <img src={Chef} className="chef1" alt="pixelated person with chef coat and chef hat on." />
+                    <img src={Chef} className="chef1" alt="pixelated person with chef coat and chef hat on." />
+                    <img src={Chef} className="chef1" alt="pixelated person with chef coat and chef hat on." />
+                </div>
+                
                 <div className="MeetTheTeam">
                     <h2>Meet Our Team</h2>
                     <ul>
