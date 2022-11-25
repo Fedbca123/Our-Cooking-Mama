@@ -3,11 +3,26 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput } from 'reac
 import { Ionicons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 
-const Header = ({ navigation }) => {
-
+const Header = ({ navigation, data }) => {
+    async function loadFeed() {
+        const response = await fetch('http://' + global.ipv4 + ':3000/api/getMainFeed', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+                ProfileID: global._id,
+            }),
+        }).catch(err => {
+            console.log(err);
+        })
+        const data = await response.json()
+        navigation.navigate('Home', { data: data });
+    }
     return (
         <View style={styles.contianer}>
-            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <TouchableOpacity onPress={loadFeed}>
                 <Ionicons name="arrow-back" size={40} color="black" />
             </TouchableOpacity>
 

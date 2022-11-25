@@ -45,7 +45,6 @@ const LoginScreen = ({ navigation }) => {
 	}
 
 	async function loadFeed() {
-		console.log(global._id)
 		const response = await fetch('http://' + global.ipv4 + ':3000/api/getMainFeed', {
 			method: 'POST',
 			headers: {
@@ -59,8 +58,6 @@ const LoginScreen = ({ navigation }) => {
 			console.log(err);
 		})
 		const data = await response.json()
-		
-		console.log(data);
 		navigation.navigate('Home', { data: data });
 	}
 

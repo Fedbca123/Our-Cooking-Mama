@@ -4,10 +4,27 @@ import { Ionicons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 
 const EditPostHeader = ({ navigation }) => {
+    async function loadProfile() {
+
+        const response = await fetch('http://' + global.ipv4 + ':3000/api/getPersonalFeed', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+                UserID: global._id,
+            }),
+        }).catch(err => {
+            console.log(err);
+        })
+        const data = await response.json()
+        navigation.navigate('Profile', { data: data });
+    }
 
     return (
         <View style={styles.contianer}>
-            <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+            <TouchableOpacity onPress={loadProfile}>
                 <Ionicons name="arrow-back" size={40} color="black" />
             </TouchableOpacity>
 

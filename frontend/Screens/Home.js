@@ -12,7 +12,6 @@ import { POSTS } from '../dummydata/posts'
 export default function Home({ navigation, route }) {
   const background = '../Images/OCMgradient.png'
   const { data } = route.params
-  // console.log(data.posts[0])
   let dataPosts = data.posts[0];
   return (
     <ImageBackground style={styles.background} source={require(background)}>

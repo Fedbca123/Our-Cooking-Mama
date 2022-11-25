@@ -71,17 +71,21 @@ const ProfileSummary = ({ profile, navigation }) => {
                 {(profilePic == '')? 
                 <Text></Text>
                 :
-                <Image style={styles.logo} source={{ uri: profilePic }} />
+                <Image style={styles.logo} source={{ uri: profile.ProfilePhoto }} />
                 }
                 <View style={{ flexDirection: 'column' }}>
-                    <Text style={{ fontSize: 30, fontWeight: '700', paddingLeft: 50 }}>{global.signedUser}</Text>
+                    <Text style={{ fontSize: 30, fontWeight: '700', paddingLeft: 50 }}>
+                        <Text>{profile.NickName} </Text>
+                        <Text style={{fontSize: 18, fontWeight: '400',paddingLeft: 50 }}>{profile.Pronouns}</Text>
+                    </Text>
+                    
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 47 }}>
                         <Text style={{ color: '#75b9be' }}>Foodies</Text>
                         <Text style={{ color: '#75b9be' }}>Fooders</Text>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 47 }}>
-                        <Text style={{ fontSize: 20, fontWeight: '500' }}>{profile[0].following}</Text>
-                        <Text style={{ fontSize: 20, fontWeight: '500' }}>{profile[0].followers}</Text>
+                        <Text style={{ fontSize: 20, fontWeight: '500' }}>hardcoded</Text>
+                        <Text style={{ fontSize: 20, fontWeight: '500' }}>hardcoded</Text>
                     </View>
 
                     <TouchableOpacity onPress={handleModal}>

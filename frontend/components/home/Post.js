@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Modal, Touchable, Share } from 'react-native'
 import { Divider } from 'react-native-elements'
 import { FontAwesome } from '@expo/vector-icons';
@@ -6,10 +6,35 @@ import { FontAwesome5 } from '@expo/vector-icons';
 
 const Post = ({ post }) => {
     const [modalVisible, setModalVisible] = useState(false);
+    const [profileStats, setProfile] = useState([]);
+
+    useEffect(() => {
+        console.log(post.ProfileID)
+        async function loadProfile() {
+        
+            const response = await fetch('http://' + global.ipv4 + ':3000/api/getOneProfile', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({
+                    Query: post.ProfileID,
+                }),
+            }).catch(err => {
+                console.log(err);
+            })
+            const data = await response.json()
+            setProfile(data);
+        }
+        loadProfile();
+    }, [] );
+
+    console.log("Im not crazy " +profileStats)
     return (
         <View style={{ marginBottom: 30 }}>
             <Divider width={1} orientation='vertical' color='black' />
-            <PostHeader post={post} />
+            <PostHeader post={profileStats} />
             <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
                 <PostImage post={post}></PostImage>
             </TouchableOpacity>
@@ -74,8 +99,8 @@ const share = async () => {
 const PostHeader = ({ post }) => (
     <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 5, alignItems: 'center' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Image source={"https://townsquare.media/site/694/files/2019/01/GettyImages-868643608.jpg"} style={styles.pfp} />
-            <Text style={{ marginLeft: 5, fontWeight: '700' }}> {post.ProfileID}</Text>
+            <Image source={{uri : post.ProfilePhoto}} style={styles.pfp} />
+            <Text style={{ marginLeft: 5, fontWeight: '700' }}> {post.NickName}</Text>
         </View>
         <View>
             <Text style={{ fontWeight: '900' }}>...</Text>
@@ -116,7 +141,7 @@ const Likes = ({ post }) => (
 const Caption = ({ post }) => (
     <View style={{ marginTop: 5 }}>
         <Text>
-            <Text style={{ fontWeight: '600' }}>{post.user} </Text>
+            <Text style={{ fontWeight: '600' }}>{post.NickName}</Text>
             <Text>{post.Caption}</Text>
             {/* BELOW HAS INVISIBLE CHARACTERS THIS IS AWFUL BUT I DONT KNOW HOW TO STRETCH THE CAPTION TO WIDTH OF SCREEN! OR ELSE IT WILL SHNRINK EVERYTHING */}
             <Text>ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ</Text>
@@ -128,8 +153,8 @@ const Popup = ({ post }) => (
     <View>
         <View style={{ alignItems: 'center' }}>
             <Text style={{ marginTop: 15 }}>
-                <Text style={{ fontWeight: '900', color: 'blue', }}>Tags or food type(bfast lunch dinner) here: </Text>
-                <Text style={{ fontWeight: '900', color: 'blue', }}>n/a</Text>
+                <Text style={{ fontWeight: '900', color: 'blue', }}>Tags: </Text>
+                <Text style={{ fontWeight: '900', color: 'blue', }}>{post.Tags} </Text>
             </Text>
             <Image source={{ uri: post.Photo }} style={{ height: '50%', resizeMode: 'cover', width: 300, height: 250 }}></Image>
         </View>
