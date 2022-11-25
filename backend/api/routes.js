@@ -607,19 +607,30 @@ router.post('/getPersonalFeed', async (req, res) =>
 })
 
 // Get main feed (posts from all of a user's followers)
-router.post('/getMainFeed', async (req, res) => {
+router.get('/getMainFeed', async (req, res) => {
     const profileId = req.body.ProfileID;
     var mainFeedUpdate;
     try {
         // check for existence of following document for specific user
-        const result = await following.find({ProfileID: profileId}).exec();
+        const result = await following.findOne({ProfileID: profileId}).exec();
         console.log(result);
         if (result == null) {
             res.status(400).json({error: "No following document for: " + profileId + " found."});
         } else {
-            // get 2 latest posts for every user in following array
-            const followingPosts = result.Following.sort();
-            mainFeedUpdate = await mainFeed.findByIdAndUpdate(profileId, followingPosts);
+            // get all posts for every user in following array
+            console.log("Following: " + result.Following);
+            const followingPosts = result.Following.map(async (influencerID) => {
+                try {
+                    foo = await userPost.find({ProfileID: influencerID}).sort({_id: -1}).exec();
+                    console.log("FOOOOOOO: " + foo);
+                    return foo;
+                } catch (error) {
+                    console.error(error);
+                    return {error: error.message};
+                }
+            });
+            console.log(followingPosts);
+            res.status(200).json(followingPosts);
         }
     } catch (err) {
         res.status(400).json({error: err.message});
