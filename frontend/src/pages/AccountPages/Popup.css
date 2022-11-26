@@ -3,6 +3,9 @@
     background-image: linear-gradient(to bottom right, #e3c26d84, #f5b71a88, #f5631a88, #f5751a88);
     border-style: ridge;
     border-color: black;
+
+    font-family: 'VT323';
+    font-size: 21px;
 }
 
 .modal>.header {
