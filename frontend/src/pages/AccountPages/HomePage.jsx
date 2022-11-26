@@ -62,7 +62,8 @@ export const HomePage = (props) => {
 
     //Function to Check Results from Universal Search API
     async function displaySearchFeed(event){
-        connsole.log("Searching...")
+        setQuery(event.target.value);   //set what's typed to be the query value
+        console.log("Searching...")
 
         const response = await fetch(buildPath("api/universalSearch"), {
             method: "POST",
@@ -80,6 +81,8 @@ export const HomePage = (props) => {
         const data = await response.json()
 
         if(!data.error){
+            console.log("Results found.")
+
             if(data.Users.length > 0) {
                 setProfilesExist(true);
                 setProfilesArray(data.Users);
@@ -102,8 +105,19 @@ export const HomePage = (props) => {
     const SearchProfileFeed = () => {
         let content
         if(profilesExist) {
-            //Need to feed profiles within profilesArray into card grid
-            content = <Text>{profilesArray[0].UserName}</Text> //this only prints the first result found for profiles
+            //Need to feed profiles within profilesArray into card grid...is this the solution?
+            {profilesArray.map((item, index) => {
+                return(
+                    <div className="col-11 col-md-6 col-lg-3 mx-0 mb-4">
+                        <div className="card p-0 overflow-hidden h-100 shadow">
+                            <img src={item.ProfilePhoto} className="card-img-top" />
+                            <div className="card-body"> 
+                                <h5 className="card-title">{item.UserName}</h5>
+                            </div>
+                        </div>
+                    </div>
+                )
+            })}
         } else {content = <Text>No users match your quest search!</Text>}
 
         return content
@@ -115,7 +129,7 @@ export const HomePage = (props) => {
         if(postsExist) {
             //Need to feed posts within postsArray into card grid
             content = <Text>{postsArray[0].Photo}</Text> //this only prints the first result found for posts
-        } else {content = <Text>No posts match your quest search!</Text>}
+        } else {content = <Text>No posts match your quest search!</Text>} 
 
         return content
     }
@@ -146,7 +160,8 @@ export const HomePage = (props) => {
                         className="search-input"
                         placeholder="Searching for..."
                         value={q} /*setting the value of useState q any time the user types in the search box */
-                        onChange={ (e) => setQuery(e.target.value) }
+                        //onChange={ (e) => setQuery(e.target.value) }
+                        onChange={ displaySearchFeed(q) } /*Unsure if this is where to make call to displaySearchFeed*/
                     />
                 </label>
             </div>
