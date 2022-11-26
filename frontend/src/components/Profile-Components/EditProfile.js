@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Dropdown from 'react-bootstrap/Dropdown';
 
 import { buildPath } from "./../bPath";
 import { useCookies } from "react-cookie";
@@ -148,9 +149,37 @@ export const EditProfile = (props) => {
         <div className="editProf">
             <h1>Edit Profile</h1>
 
-            <form onSubmit={saveEdit}>
-                
-            </form>
+            <div className="drop">
+                <Dropdown>
+                    <Dropdown.Toggle variant="success" id="dropdown-basic">
+                        Account Type
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                        <Dropdown.Item href="#/action-1">Chef</Dropdown.Item>
+                        <br/>
+                        <Dropdown.Item href="#/action-2">Personal</Dropdown.Item>
+                        <br/>
+                        <Dropdown.Item href="#/action-3">Buisness</Dropdown.Item>
+                        <br />
+                    </Dropdown.Menu>
+                </Dropdown>
+
+                <Dropdown>
+                    <Dropdown.Toggle variant="success" id="dropdown-basic">
+                        Food Allergies
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                        <Dropdown.Item href="#/action-1">Milk</Dropdown.Item>
+                        <br/>
+                        <Dropdown.Item href="#/action-2">Garlic</Dropdown.Item>
+                        <br/>
+                        <Dropdown.Item href="#/action-3">Peanuts</Dropdown.Item>
+                        <br />
+                    </Dropdown.Menu>
+                </Dropdown>
+            </div>
         </div>
     );
 }

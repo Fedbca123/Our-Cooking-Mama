@@ -141,3 +141,12 @@ button {
 .editProf {
     margin: 25px;
 }
+
+.drop {
+    display:flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: .0025rem;
+}
