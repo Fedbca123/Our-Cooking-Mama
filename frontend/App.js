@@ -11,6 +11,7 @@ import EditProfile from './Screens/EditProfile';
 import CreatePost from './Screens/CreatePost';
 import EditPost from "./Screens/EditPost.js";
 import SearchResults from "./Screens/SearchResults.js";
+import OtherProfile from './Screens/OtherProfile';
 
 import { LogBox } from 'react-native';
 
@@ -45,6 +46,7 @@ const App = () => {
 				<Stack.Screen name="CreatePost" component={CreatePost} />
 				<Stack.Screen name="EditPost" component={EditPost} />
 				<Stack.Screen name="SearchResults" component={SearchResults} />
+				<Stack.Screen name="OtherProfile" component={OtherProfile} />
 			</Stack.Navigator>
 			<Toast />
 		</NavigationContainer>
