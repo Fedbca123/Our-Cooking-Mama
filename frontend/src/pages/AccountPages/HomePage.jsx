@@ -192,7 +192,7 @@ export const HomePage = (props) => {
                     <input type="text" onChange={(val) => setTitle(val)}></input>
                     <br />
                     Add an image:
-                    <input type="file" accept="iamge/*" ref={(c) => (photo_url = c)}></input>
+                    <input type="file" accept="image/*" ref={(c) => (photo_url = c)}></input>
                     <br />
                     Write a caption:
                     <input type="text" onChange={(val) => setCaption(val)}></input>
