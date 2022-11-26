@@ -70,6 +70,9 @@ const BottomTabs = ({ navigation }) => {
             <TouchableOpacity onPress={loadFeed}>
                 <Entypo name="home" size={33} color="black" />
             </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('SearchResults')}>
+                <Entypo name="magnifying-glass" size={33} color="black" />
+            </TouchableOpacity>
             <TouchableOpacity onPress={loadProfile}>
                 <Ionicons name="person" size={33} color="black" />
             </TouchableOpacity>
@@ -101,5 +104,3 @@ const styles = StyleSheet.create({
 })
 
 export default BottomTabs;
-
-// 2:03:29
