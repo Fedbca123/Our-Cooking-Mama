@@ -19,6 +19,7 @@ const UserPosts = ({ profile, navigation }) => {
         handleModal();
         console.log("Deleting..");
     }
+    
 
     return (
         <View style={styles.container}>

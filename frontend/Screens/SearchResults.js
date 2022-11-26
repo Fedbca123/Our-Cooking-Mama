@@ -39,6 +39,7 @@ export default function SearchResults({ route, navigation }) {
 
         if(data.error == "No results found."){
             Toast.show({
+                type: 'error',
                 text1: "No results found."
             })
         }else{
