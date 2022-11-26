@@ -5,7 +5,7 @@ import NavBar from '../../components/NavBar-Components/NavBar';
 import './Popup.css';
 import { buildPath } from "../../components/bPath";
 import Post from "./Post";
-import Card from "../../components/SearchResults-Components/Card";
+import Card from "../../components/SearchResults-Components/RecipeCard";
 
 export const HomePage = (props) => {
 

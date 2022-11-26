@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import NavBar from '../../components/NavBar-Components/NavBar';
-import ProfileSum from "../../components/ProfileComponents/ProfileSum";
+import ProfileSum from "../../components/Profile-Components/ProfileSum";
 
 export const ProfilePage = (props) => {
 

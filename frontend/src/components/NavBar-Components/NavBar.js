@@ -19,7 +19,6 @@ export default function NavBar() {
 			<ul>
 				<CustomLink to="/homepage">Home Page</CustomLink>
 				<CustomLink to="/profile">Profile</CustomLink>
-				<CustomLink to="/search">Search</CustomLink>
 				<CustomLink to="/">Log Out</CustomLink>
 			</ul>
 		</nav>
