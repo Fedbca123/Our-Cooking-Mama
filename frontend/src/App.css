@@ -81,7 +81,10 @@ button {
 
 .chef {
     max-width: 25%;
+
     background-color: #e39e6da6;
+    background-image: linear-gradient(to bottom right, #e3c26d84, #f5b71a88, #f5631a88, #f5751a88);
+    
     display: flex;
     margin-left: 25px;
     margin-top: 25px;
