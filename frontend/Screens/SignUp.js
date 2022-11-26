@@ -84,7 +84,7 @@ const SignUpScreen = ({ navigation }) => {
 	}
 
 	const switchL = () => {
-		navigation.navigate('Login');
+		navigation.navigate('LoginScreen');
 	}
 
 	function hasNumber(myString) {
