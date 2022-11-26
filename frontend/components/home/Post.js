@@ -11,7 +11,7 @@ const Post = ({ post }) => {
     useEffect(() => {
         console.log(post.ProfileID)
         async function loadProfile() {
-        
+
             const response = await fetch('http://' + global.ipv4 + ':3000/api/getOneProfile', {
                 method: 'POST',
                 headers: {
@@ -28,9 +28,7 @@ const Post = ({ post }) => {
             setProfile(data);
         }
         loadProfile();
-    }, [] );
-
-    console.log("Im not crazy " +profileStats)
+    }, []);
     return (
         <View style={{ marginBottom: 30 }}>
             <Divider width={1} orientation='vertical' color='black' />
@@ -38,9 +36,6 @@ const Post = ({ post }) => {
             <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
                 <PostImage post={post}></PostImage>
             </TouchableOpacity>
-
-
-
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <Modal
                     animationType='fade'
@@ -57,18 +52,10 @@ const Post = ({ post }) => {
                     </TouchableOpacity>
                 </Modal>
             </View>
-
-
-
-
-
-
-
             <View style={{ marginHorizontal: 15, marginVertical: 10 }}>
                 <PostFooter></PostFooter>
                 <Likes post={post}></Likes>
                 <Caption post={post}></Caption>
-
             </View>
         </View>
     )
@@ -99,7 +86,7 @@ const share = async () => {
 const PostHeader = ({ post }) => (
     <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 5, alignItems: 'center' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Image source={{uri : post.ProfilePhoto}} style={styles.pfp} />
+            <Image source={{ uri: post.ProfilePhoto }} style={styles.pfp} />
             <Text style={{ marginLeft: 5, fontWeight: '700' }}> {post.NickName}</Text>
         </View>
         <View>
@@ -194,7 +181,6 @@ const styles = StyleSheet.create({
         width: '85%',
         height: '85%',
     },
-
 })
 
 export default Post

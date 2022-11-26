@@ -29,6 +29,7 @@ const theme = {
 }
 
 const App = () => {
+	// below is for the demo! good luck!
 	// LogBox.ignoreAllLogs();
 	global._id = 0;
 	global.signedUser = '';

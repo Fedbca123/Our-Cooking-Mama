@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet, Button, ImageBackground, TextInput, Image, TouchableOpacity } from 'react-native'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import React from 'react';
 import Toast from 'react-native-toast-message';
 
@@ -12,13 +12,6 @@ const LoginScreen = ({ navigation }) => {
 	const [PW, setPW] = useState("");
 
 	async function handleLogin(event) {
-		if(UN === '' || PW === '') {
-			Toast.show({
-				type: 'error',
-				text1: 'All fields are required'
-			})
-			return
-		}
 		event.preventDefault()
 		const response = await fetch('http://' + global.ipv4 + ':3000/api/login', {
 			method: 'POST',
