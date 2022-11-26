@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TextInput } from 'react-native';
-import { Text, View, StyleSheet, Image, SafeAreaView, ImageBackground, TouchableOpacity, KeyboardAvoidingView  } from 'react-native';
+import { Text, View, StyleSheet, Image, SafeAreaView, ImageBackground, TouchableOpacity, KeyboardAvoidingView, ScrollView  } from 'react-native';
 import EditPostHeader from '../components/profile/EditPostHeader'
 import * as ImagePicker from 'expo-image-picker';
 
@@ -25,12 +25,13 @@ export default function EditPost({ route, navigation }) {
         if (!result.canceled) { 
             setPostImage(result.assets[0].uri);
         }
+
     }
 
     // Grabs post image and stores in postImage
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-          setPostImage(item.image);
+          setPostImage(item.Photo);
         });
     
         return unsubscribe;
@@ -72,7 +73,7 @@ export default function EditPost({ route, navigation }) {
     }
 
     return (
-        <KeyboardAvoidingView
+            <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : null}
                 style={{flex:1}}
             >
@@ -92,17 +93,17 @@ export default function EditPost({ route, navigation }) {
 
                         <View style={{flexDirection: 'row', marginVertical: 5, flex: 1, alignItems: 'center'}}>
                             {/* <Text>Title: </Text> */}
-                            <TextInput style={styles.input} onChangeText={(val) => setTitle(val)} ></TextInput>
+                            <TextInput style={styles.input} onChangeText={(val) => setTitle(val)} >{item.Category}</TextInput>
                         </View>
 
                         <View style={{flexDirection: 'row', marginVertical: 5, flex: 1, alignItems: 'center'}}>
                             {/* <Text>Caption: </Text> */}
-                            <TextInput style={styles.input} onChangeText={(val) => setCaption(val)}></TextInput>
+                            <TextInput style={styles.input} onChangeText={(val) => setCaption(val)}>{item.Caption}</TextInput>
                         </View>
 
                         <View style={{flexDirection: 'row', marginVertical: 5, flex: 1, alignItems: 'center'}}>
                             {/* <Text>Tags: </Text> */}
-                            <TextInput style={styles.input} onChangeText={(val) => setTags(val)}></TextInput>
+                            <TextInput style={styles.input} onChangeText={(val) => setTags(val)}>{item.Tags}</TextInput>
                         </View>
 
                         <TouchableOpacity onPress={saveChanges}>
