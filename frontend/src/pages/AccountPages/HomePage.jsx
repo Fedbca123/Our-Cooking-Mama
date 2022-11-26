@@ -11,7 +11,6 @@ export const HomePage = (props) => {
 
     const [cookies, setCookie] = useCookies(["user"]);
     
-
     const [title, setTitle] = useState("");
     // const [category, setCategory] = useState("");
     const [caption, setCaption] = useState("");
@@ -48,6 +47,59 @@ export const HomePage = (props) => {
 		    }).catch(err => {
 			    console.log(err);
 		    });
+    }
+
+    //Function to Check Results from Universal Search API
+    async function validateSearchFeed(event){
+
+        //Variables for Checking Results after Universal Search Call
+        let usersExist = false;
+        let postsExist = false;
+        let recipesExist = false;
+
+        if(!data.error){
+            if(data.Users.length > 0) {
+                usersExist = true;
+            } else { usersExist = false; }
+            
+            if(data.Posts.length > 0) {
+                postsExist = true;
+            } else { postsExist = false; }
+
+            if(data.Recipes.length > 0) {
+                recipesExist = true;
+            } else { recipesExist = false; }
+        }
+    }
+
+    //Results if Users Are Searched
+    const SearchUserFeed = ({ usersExist, data }) => {
+        let content
+        if(usersExist) {
+            content = <Text>{data.Users[0].UserName}</Text>
+        } else {content = <Text>No users match your quest search!</Text>}
+
+        return content
+    }
+
+    //Results if Posts are Searched
+    const SearchPostFeed = ({ postsExist, data }) => {
+        let content
+        if(postsExist) {
+            content = <Text>{data.Posts[0].Photo}</Text>
+        } else {content = <Text>No posts match your quest search!</Text>}
+
+        return content
+    }
+
+    //Results if Recipes are Searched
+    const SearchRecipeFeed = ({ recipesExist, data }) => {
+        let content
+        if(recipesExist) {
+            content = <Text>{data.Recipes[0].Recipe}</Text>
+        } else {content = <Text>No recipes match your quest search! Is this a new route for you to create?</Text>}
+
+        return content
     }
 
     return (

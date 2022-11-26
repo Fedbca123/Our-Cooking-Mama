@@ -11,13 +11,6 @@ export const SearchPage = (props) => {
     //Set Search Query to Empty String
     const[q, setQ] = useState("");
 
-    //Set Variables for Search Results
-    const[userExist, setUsersExisting] = useState(false);
-    const[postsExist, setPostsExisting] = useState(false);
-    const[recipesExist, setRecipesExisting] = useState(false);
-    //const[isLoaded, setIsLoaded] = useState(false);
-    //const[items, setItems] = useState([]);
-
     //Function to Call Universal Search API (Search for Profiles, Posts, or Recipes)
     async function loadSearchFeed(event){
         event.preventDefault();
@@ -35,53 +28,6 @@ export const SearchPage = (props) => {
             console.log(error);
         });
         const data = await response.json()
-    }
-
-    //Function to Check Results from Universal Search API
-    async function validateSearchFeed(event){
-        if(!data.error){
-            if(data.Users.length > 0) {
-                (usersExist) => setUsersExisting(true)
-            } else { (usersExist) => setUsersExisting(false) }
-            
-            if(data.Posts.length > 0) {
-                (postsExist) => setPostsExisting(true)
-            } else { (postsExist) => setPostsExisting(false) }
-
-            if(data.Recipes.length > 0) {
-                (recipesExist) => setRecipesExisting(true)
-            } else { (recipesExist) => setRecipesExisting(false) }
-        }
-    }
-
-    //Results if Users Are Searched
-    const SearchUserFeed = ({ usersExist, data }) => {
-        let content
-        if(usersExist) {
-            content = <Text></Text>
-        } else {content = <Text></Text>}
-
-        return content
-    }
-
-    //Results if Posts are Searched
-    const SearchPostFeed = ({ postsExist, data }) => {
-        let content
-        if(postsExist) {
-            content = <Text></Text>
-        } else {content = <Text></Text>}
-
-        return content
-    }
-
-    //Results if Recipes are Searched
-    const SearchRecipeFeed = ({ recipesExist, data }) => {
-        let content
-        if(recipesExist) {
-            content = <Text></Text>
-        } else {content = <Text></Text>}
-
-        return content
     }
 
     return (
@@ -103,11 +49,6 @@ export const SearchPage = (props) => {
                             onChange={ (e) => setQ(e.target.value) }
                         />
                     </label>
-                </div>
-
-                {/*Results Display for Recipe Cards Component */}
-                <div className="results-wrapper">
-                    <Card />
                 </div>
             </div>
         </div>
