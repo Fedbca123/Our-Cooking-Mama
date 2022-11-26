@@ -25,6 +25,7 @@ import AboutUs from "./pages/LandingPages/AboutUs";
 import HomePage from "./pages/AccountPages/HomePage";
 import ProfilePage from "./pages/AccountPages/ProfilePage";
 //import SearchPage from "./pages/AccountPages/SearchPage";
+import EditProfile from "./pages/AccountPages/EditProfile";
 
 // Cookies imports
 // import { useCookies } from "react-cookie";
@@ -53,6 +54,7 @@ function App() {
 
 				<Route path="/homepage" element={<HomePage />} />
 				<Route path="/profile" element={<ProfilePage />} />
+				<Route path="/editProfile" element={<EditProfile />} />
 			</Routes>
 		</div>
 	);

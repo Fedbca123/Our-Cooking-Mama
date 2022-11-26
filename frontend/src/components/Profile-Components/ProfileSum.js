@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { buildPath } from "./../bPath";
 
@@ -17,6 +18,7 @@ export const ProfileSum = (props) => {
     const [favFlavor, setFlavor] = useState('');
     const [profilePic, setProfilePic] = useState('');
 
+    const navigate = useNavigate();
     const [cookies, setCookie] = useCookies(["user"]);
     //const myCookie = cookies.get('cookie-name');
 
@@ -69,6 +71,10 @@ export const ProfileSum = (props) => {
         
     return (
         <div>
+            <div className="editProfile">
+                <button onClick={() => navigate("/editProfile")}> Edit Profile </button>
+            </div>
+
             {(profilePic == '')? 
                 <img src={Chef} className="chef" alt="pixelated person with chef coat and chef hat on." />
                 :

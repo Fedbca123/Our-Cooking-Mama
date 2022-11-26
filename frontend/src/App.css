@@ -125,3 +125,10 @@ button {
     flex-direction: column;
     padding:5px;
 }
+
+.editProfile {
+    display: flex;
+    justify-content: right;
+    margin-top: 15px;
+    margin-right: 15px;
+}
