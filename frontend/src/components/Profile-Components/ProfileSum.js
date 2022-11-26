@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { buildPath } from "./../bPath";
+import { useCookies } from "react-cookie";
 
 import Chef from "./../Images/chef.png";
-import { useCookies } from "react-cookie";
 
 export const ProfileSum = (props) => {
 

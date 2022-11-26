@@ -84,6 +84,11 @@ button {
 
     background-color: #e39e6da6;
     background-image: linear-gradient(to bottom right, #e3c26d84, #f5b71a88, #f5631a88, #f5751a88);
+
+    border-style: ridge;
+    border-radius: 0px;
+    border-width: 5px;
+    border-image: linear-gradient(to bottom right, #e3c26d84, #f5b71a88, #f5631a88, #f5751a88);
     
     display: flex;
     margin-left: 25px;
@@ -131,4 +136,8 @@ button {
     justify-content: right;
     margin-top: 15px;
     margin-right: 15px;
+}
+
+.editProf {
+    margin: 25px;
 }
