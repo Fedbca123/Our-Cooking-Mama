@@ -3,6 +3,8 @@ const router = express.Router()
 const bcrypt = require('bcrypt');
 const cloudinary = require('cloudinary');
 const multer = require('multer');
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const userRegister = require ('../model/userAccount.js');
 const userProfile = require ('../model/userProfile.js');
@@ -76,20 +78,65 @@ router.post('/register', async (req, res) =>
                     LastName: req.body.LastName,
                     UserName: req.body.UserName,
                     Email: req.body.Email,
-                    Password: hash
+                    Password: hash,
+                    Verified: false
                })
                 try 
                 {
                     const newUser = await data.save();
-                    console.log(newUser);
-                    res.status(200).json(newUser)
+
+                    const msg = {
+                        to: newUser.Email,
+                        from: 'yourcookingmamaapp@gmail.com',
+                        subject: 'Please verify your email.',
+                        text: 
+                            "Welcome to Your Cooking Mama. You must verify your email to access our site/app.\n" +
+                            "Please click the following link to verify your email:\n\n" +  
+                            "http://localhost:3000/api/verifyEmail?UserID=" + result._id,
+                    }
+                    sgMail
+                    .send(msg)
+                    .then(() => {
+                        console.log('Email sent')
+                    })
+                    .catch((error) => {
+                        console.error(error)
+                    })
+
+                    res.status(400).json(newUser);
                 } catch(error) 
                 {
-                    console.log(error);
+                    res.status(400).json({error: error.message});
                 }
             }            
         }
     })
+})
+
+// Verify email endpoint
+router.get('/verifyEmail', async (req, res) =>
+{
+    const userID = req.query.UserID;
+
+    if (!mongoose.Types.ObjectId.isValid(userID))
+        res.status(400).json({Message: "User ID is not valid."});
+
+    try
+    {
+        const user = await userRegister.findOneAndUpdate({_id: userID}, {$set: {Verified: true}}, {new: true}).exec();
+        if (user != null)
+        {
+            res.status(200).json({Message: "User has been verified."});
+        }
+        else
+        {
+            res.status(400).json({Message: "User not found."});
+        }
+    }
+    catch (err)
+    {
+        res.status(500).json({Message: err.message});
+    }
 })
 
 // Get all Method (Register / User Accounts)
@@ -133,16 +180,41 @@ router.post('/login', async (req, res) =>
 
     const result = await userRegister.findOne({UserName:username}).exec();
 
-    if (result != "") {
+    if (result != null) {
         var isEqual = await bcrypt.compare(Password, result.Password);
         if (isEqual)
         {
-            id = result._id;
-            fn = result.FirstName;
-            ln = result.LastName;
-            error = '';
-            var ret = { _id:id, FirstName:fn, LastName:ln, error:error};
-            res.status(200).json(ret);
+            if (result.Verified == false)
+            {
+                const msg = {
+                    to: result.Email,
+                    from: 'yourcookingmamaapp@gmail.com',
+                    subject: 'Please verify your email.',
+                    text: 
+                        "Welcome to Your Cooking Mama. You must verify your email to access our site/app.\n" +
+                        "Please click the following link to verify your email:\n\n" +  
+                        "http://localhost:3000/api/verifyEmail?UserID=" + result._id,
+                }
+                sgMail
+                .send(msg)
+                .then(() => {
+                    console.log('Email sent')
+                })
+                .catch((error) => {
+                    console.error(error)
+                })
+
+                res.status(400).json({ _id:id, FirstName:fn, LastName:ln, error:"Account is not verified. Please check your email to verify."});
+            }
+            else
+            {
+                id = result._id;
+                fn = result.FirstName;
+                ln = result.LastName;
+                error = '';
+                var ret = { _id:id, FirstName:fn, LastName:ln, error:error};
+                res.status(200).json(ret);
+            }
         }
         else
         {
@@ -508,7 +580,7 @@ router.post('/addRecipe', async (req, res) =>
 {
     const result = await recipe.findOne({Recipe:req.body.Name}).exec();
 
-    if (result != "")
+    if (result != null)
     {
         err = 'Recipe already exists.';
         res.status(400).json({error:err});
@@ -542,7 +614,7 @@ router.post('/editRecipe', async (req, res) =>
         const result = await recipe.findOne({ _id: recipeId }).exec();
     
         // check if id is valid
-        if (result == "") {
+        if (result == null) {
             var ret = {RecipeID: -1, error: "Recipe Not Found."};
             return res.json(ret);
         } else {
@@ -666,7 +738,7 @@ router.post('/editComment', async (req, res) =>
         const result = await userComment.findOne({ _id: commentID }).exec();
 
         // check if id is valid
-        if (result == "") {
+        if (result == null) {
             var ret = {CommentID: -1, error: "Comment Not Found."};
             return res.status(400).json(ret);
         } 
