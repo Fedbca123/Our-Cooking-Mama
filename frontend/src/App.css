@@ -103,12 +103,25 @@ button {
     text-align: left;
 }
 
-.bio {
+.bio, .profileFavs {
     display: flex;
     font-size: 25px;
+    margin-top: 10px;
     margin-left: 25px;
     margin-right:73%;
     text-align: left;
-    background-color: #E39E6D;
+    background-image: linear-gradient(to bottom right, #e3c26d84, #f5b71a88, #f5751a88);
 }
 
+.profileFavs {
+    font-size: 18px;
+}
+
+.profList {
+    display: flex;
+    text-align: left;
+    align-items: center;
+    justify-content: left;
+    flex-direction: column;
+    padding:5px;
+}
