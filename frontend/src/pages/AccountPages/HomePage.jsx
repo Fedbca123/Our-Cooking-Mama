@@ -12,39 +12,86 @@ export const HomePage = (props) => {
     //Search Functionality Variables
     const[error, setError] = useState(null); //Set in Case of Error
     const[query, setQuery] = useState("");  //Set Search Query to Empty String
-    const[profilesExist, setProfilesExist] = useState(false)
-    const[postsExist, setPostsExist] = useState(false)
-    const[recipesExist, setRecipesExist] = useState(false)
-    const[profilesArray, setProfilesArray] = useState([])
-    const[postsArray, setPostsArray] = useState([])
-    const[recipesArray, setRecipesArray] = useState([])
+    const[profilesExist, setProfilesExist] = useState(false);
+    const[postsExist, setPostsExist] = useState(false);
+    const[recipesExist, setRecipesExist] = useState(false);
+    const[profilesArray, setProfilesArray] = useState([]);
+    const[postsArray, setPostsArray] = useState([]);
+    const[recipesArray, setRecipesArray] = useState([]);
+    var q;
 
     //Cookies Variables
     const [cookies, setCookie] = useCookies(["user"]);
-    
+    //variables for add Post
     const [title, setTitle] = useState("");
     // const [category, setCategory] = useState("");
     const [caption, setCaption] = useState("");
     var tagString;
     var photo_url;
     var tags;
-    
+    //variables for add recipe
+    const [recipeName, setRecipeName] = useState("");
+    const [recipe, setRecipe] = useState("");
+    const date = new Date();
+    var ingredientString;
+    var ingredients;
 
     if(cookies.id <= 0){
         window.location.href = "/login";
     } //once cookie expires, logout user
 
+    async function addRecipe(event){
+
+        var obj = {Ingredients : ingredients, Recipe: recipe, DatePosted: date.getTime(), ChefID: cookies.id};
+        var js =  JSON.stringify(obj);
+
+        if(ingredientString === ""|| recipe === ""){
+            console.log("Please fill in all fields.");
+            return "-1";
+        } else {
+            try {
+                const response = await fetch(buildPath('/addRecipe'), {
+                    method: "POST",
+                    body: js,
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                });
+
+                var res = JSON.parse(await response.text());
+
+                if(res.id <= 0){
+                    return "63772881990a71a5cf2ff956";
+                } else {
+                    return res.id;
+                }
+
+
+            } catch(e){
+
+            }
+        }
+
+
+        return "63772881990a71a5cf2ff956";
+
+    }
+
     async function addPost(event){
         tags = tagString.value.split(" ");
+        ingredients = ingredientString.value.split(",");
         // console.log(title.target.value);
         // console.log(photo_url.value);
         // console.log(tags);
         // console.log(caption.target.value);
 
+        let recipeID = addRecipe();
+
         let formdata = new FormData();
         formdata.append("UserID", cookies.id);
         // api doensnt like recipe id as -1 it needs something that looks like below
-        formdata.append("RecipeID", "63772881990a71a5cf2ff956");
+        formdata.append("RecipeID", recipeID);
         formdata.append("Category", title.target.value);
         formdata.append("Caption", caption.target.value);
         formdata.append("Tags", tags);
@@ -110,7 +157,7 @@ export const HomePage = (props) => {
                 return(
                     <div className="col-11 col-md-6 col-lg-3 mx-0 mb-4">
                         <div className="card p-0 overflow-hidden h-100 shadow">
-                            <img src={item.ProfilePhoto} className="card-img-top" />
+                            <img src={item.ProfilePhoto} className="card-img-top" alt="Post"/>
                             <div className="card-body"> 
                                 <h5 className="card-title">{item.UserName}</h5>
                             </div>
@@ -118,7 +165,7 @@ export const HomePage = (props) => {
                     </div>
                 )
             })}
-        } else {content = <Text>No users match your quest search!</Text>}
+        } else {content = <span>No users match your quest search!</span>}
 
         return content
     }
@@ -128,8 +175,8 @@ export const HomePage = (props) => {
         let content
         if(postsExist) {
             //Need to feed posts within postsArray into card grid
-            content = <Text>{postsArray[0].Photo}</Text> //this only prints the first result found for posts
-        } else {content = <Text>No posts match your quest search!</Text>} 
+            content = <span>{postsArray[0].Photo}</span> //this only prints the first result found for posts
+        } else {content = <span>No posts match your quest search!</span>} 
 
         return content
     }
@@ -139,8 +186,8 @@ export const HomePage = (props) => {
         let content
         if(recipesExist) {
             //Need to feed recipes within recipesArray into card grid
-            content = <Text>{recipesArray.Recipe}</Text> //this only prints the first result found for recipes
-        } else {content = <Text>No recipes match your quest search! Is this something new for you to create?</Text>}
+            content = <span>{recipesArray.Recipe}</span> //this only prints the first result found for recipes
+        } else {content = <span>No recipes match your quest search! Is this something new for you to create?</span>}
 
         return content
     }
@@ -199,6 +246,15 @@ export const HomePage = (props) => {
                     <br />
                     What tags do you wanna add?
                     <input type="text" placeholder="#sweet #nutallergy" ref={(c) => {tagString = c}}></input>
+                    <br />
+                    What is the recipe for this dish?
+                    <input type="text" placeholder="" onChange={(val) => setRecipe(val)}></input>
+                    <br />
+                    What is the name of the recipe?
+                    <input type="text" placeholder="Mama's homemade chicken" onChange={(val) => setRecipeName(val)}></input>
+                    <br />
+                    Please list ingredients used: (separate each with a comma)
+                    <input type="text" placeholder="ex. salt, pepper, chicken breast" ref={(c) => {ingredientString = c}}></input>
                     </div>
                     <div className="actions">
                     <button onClick={addPost}>Submit</button>
