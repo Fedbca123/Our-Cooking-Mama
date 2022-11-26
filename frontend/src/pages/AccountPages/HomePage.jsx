@@ -4,6 +4,8 @@ import { useCookies } from "react-cookie";
 import NavBar from '../../components/NavBar-Components/NavBar';
 import './Popup.css';
 import { buildPath } from "../../components/bPath";
+import Post from "./Post";
+import Card from "../../components/Recipes-Display/Card";
 
 export const HomePage = (props) => {
 
@@ -92,6 +94,10 @@ export const HomePage = (props) => {
                 </div>
                 )}
             </Popup>
+
+            <Post/>
+
+            {/* <Card/> */}
 
 
             </>
