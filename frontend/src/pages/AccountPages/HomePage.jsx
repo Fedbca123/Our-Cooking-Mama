@@ -5,10 +5,21 @@ import NavBar from '../../components/NavBar-Components/NavBar';
 import './Popup.css';
 import { buildPath } from "../../components/bPath";
 import Post from "./Post";
-import Card from "../../components/Recipes-Display/Card";
+import Card from "../../components/SearchResults-Components/Card";
 
 export const HomePage = (props) => {
 
+    //Search Functionality Variables
+    const[error, setError] = useState(null); //Set in Case of Error
+    const[query, setQuery] = useState("");  //Set Search Query to Empty String
+    const[profilesExist, setProfilesExist] = useState(false)
+    const[postsExist, setPostsExist] = useState(false)
+    const[recipesExist, setRecipesExist] = useState(false)
+    const[profilesArray, setProfilesArray] = useState([])
+    const[postsArray, setPostsArray] = useState([])
+    const[recipesArray, setRecipesArray] = useState([])
+
+    //Cookies Variables
     const [cookies, setCookie] = useCookies(["user"]);
     
     const [title, setTitle] = useState("");
@@ -50,54 +61,72 @@ export const HomePage = (props) => {
     }
 
     //Function to Check Results from Universal Search API
-    async function validateSearchFeed(event){
+    async function displaySearchFeed(event){
+        connsole.log("Searching...")
 
-        //Variables for Checking Results after Universal Search Call
-        let usersExist = false;
-        let postsExist = false;
-        let recipesExist = false;
+        const response = await fetch(buildPath("api/universalSearch"), {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+            body: JSON.stringify({
+                Query: query,
+            }),
+        }).catch(err => {
+            console.log(error);
+        });
+
+        const data = await response.json()
 
         if(!data.error){
             if(data.Users.length > 0) {
-                usersExist = true;
-            } else { usersExist = false; }
+                setProfilesExist(true);
+                setProfilesArray(data.Users);
+            } else { setProfilesExist(false); }
             
             if(data.Posts.length > 0) {
-                postsExist = true;
-            } else { postsExist = false; }
+                setPostsExist(true);
+                setPostsArray(data.Posts);
+            } else { setPostsExist(false); }
 
             if(data.Recipes.length > 0) {
-                recipesExist = true;
-            } else { recipesExist = false; }
+                setRecipesExist(true);
+                setRecipesArray(data.Recipes);
+            } else { setRecipesExist(false); }
         }
+        console.log(data)
     }
 
     //Results if Users Are Searched
-    const SearchUserFeed = ({ usersExist, data }) => {
+    const SearchProfileFeed = () => {
         let content
-        if(usersExist) {
-            content = <Text>{data.Users[0].UserName}</Text>
+        if(profilesExist) {
+            //Need to feed profiles within profilesArray into card grid
+            content = <Text>{profilesArray[0].UserName}</Text> //this only prints the first result found for profiles
         } else {content = <Text>No users match your quest search!</Text>}
 
         return content
     }
 
     //Results if Posts are Searched
-    const SearchPostFeed = ({ postsExist, data }) => {
+    const SearchPostFeed = () => {
         let content
         if(postsExist) {
-            content = <Text>{data.Posts[0].Photo}</Text>
+            //Need to feed posts within postsArray into card grid
+            content = <Text>{postsArray[0].Photo}</Text> //this only prints the first result found for posts
         } else {content = <Text>No posts match your quest search!</Text>}
 
         return content
     }
 
     //Results if Recipes are Searched
-    const SearchRecipeFeed = ({ recipesExist, data }) => {
+    const SearchRecipeFeed = () => {
         let content
         if(recipesExist) {
-            content = <Text>{data.Recipes[0].Recipe}</Text>
-        } else {content = <Text>No recipes match your quest search! Is this a new route for you to create?</Text>}
+            //Need to feed recipes within recipesArray into card grid
+            content = <Text>{recipesArray.Recipe}</Text> //this only prints the first result found for recipes
+        } else {content = <Text>No recipes match your quest search! Is this something new for you to create?</Text>}
 
         return content
     }
@@ -105,6 +134,32 @@ export const HomePage = (props) => {
     return (
             <><NavBar />
             <h1>Home Page</h1>
+
+            {/*Search Bar Component*/}
+            <h2>Search for Your Food Adventure!</h2>
+            <div className="search-wrapper">
+                <label htmlFor="search-form">
+                    <input 
+                        type="search"
+                        name="search-form"
+                        id="search-form"
+                        className="search-input"
+                        placeholder="Searching for..."
+                        value={q} /*setting the value of useState q any time the user types in the search box */
+                        onChange={ (e) => setQuery(e.target.value) }
+                    />
+                </label>
+            </div>
+
+            <h3>Discover Profiles</h3>
+            <SearchProfileFeed />
+
+            <h3>Discover Posts</h3>
+            <SearchPostFeed />
+
+            <h3>Discover Recipes</h3>
+            <SearchRecipeFeed />
+
             <Popup
             trigger={<button className="button"> Create Post </button>}
             modal
