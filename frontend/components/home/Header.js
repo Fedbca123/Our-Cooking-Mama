@@ -39,13 +39,17 @@ const Header = ({ navigation }) => {
             </TouchableOpacity>
 
             <View style={styles.searchContainer}>
-                <TextInput
+                {/* <TextInput
                     style={styles.searchBar}
                     onChangeText={setQuery}
                     onSubmitEditing={search}
                     value={searchQuery}
                     placeholder="Search"
-                />
+                /> */}
+                <Text style={{
+                    fontSize: 25,
+                    fontWeight: 'bold',
+                }}>Hello, {global.signedUser}!</Text>
             </View>
 
         </View>
