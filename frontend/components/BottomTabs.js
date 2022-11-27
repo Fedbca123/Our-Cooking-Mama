@@ -46,6 +46,7 @@ const BottomTabs = ({ navigation }) => {
     }
 
     async function loadFeed() {
+        console.log("Loading feed... global id is: " + global._id)
         const response = await fetch('http://' + global.ipv4 + ':3000/api/getMainFeed', {
             method: 'POST',
             headers: {

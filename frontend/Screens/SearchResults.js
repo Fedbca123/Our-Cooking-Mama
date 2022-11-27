@@ -106,7 +106,7 @@ export default function SearchResults({ route, navigation }) {
                     height={200}
                     renderItem={({item}) => (
                         <View style={styles.postWrapper}>
-                            <Image source={{uri : item.Photo}} style={{width:40, height: 40}}></Image>
+                            <Image source={item.Photo ? {uri : item.Photo} : null} style={{width:40, height: 40}}></Image>
                             <Text style={{marginLeft: 10}}>{item.Category}</Text>
                         </View>
                     )}

@@ -120,7 +120,7 @@ const OtherProfileSummary = ({ profile, navigation }) => {
                 {(profilePic == '')? 
                 <Image style={styles.logo} source={require(chefHat)} />
                 :
-                <Image style={styles.logo} source={{ uri: profile.ProfilePhoto }} />
+                <Image style={styles.logo} source={profile.ProfilePhoto ? {uri : profile.ProfilePhoto} : null} />
                 }
                 <View style={{ flexDirection: 'column' }}>
                     <Text style={{ fontSize: 30, fontWeight: '700', paddingLeft: 10 }}>
