@@ -86,7 +86,7 @@ export default function EditPost({ route, navigation }) {
         >
             <ImageBackground style={{ flex: 1 }} source={require(background)}>
                 <SafeAreaView style={styles.container}>
-                    <EditPostHeader navigation={navigation} post={{ item }} ></EditPostHeader>
+                    <EditPostHeader navigation={navigation} ID={{ postID }} ></EditPostHeader>
 
                     {postImage ?
                         <Image source={{ uri: postImage }} style={{ height: 300, width: 300, resizeMode: 'cover', margin: 5, flex: 4 }}></Image>

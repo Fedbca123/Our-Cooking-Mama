@@ -447,7 +447,7 @@ router.post('/deletePost', async (req, res) => {
             // Delete post if findingPost's profileId matches the taken in profileId
             if (findingPost.ProfileID == profileId) {
                 userPost.findById(postId).deleteOne().exec();
-                pf.updateOne({ ProfileID: userId }, { $pull: { Photos: postId } });
+                pf.updateOne({ ProfileID: profileId }, { $pull: { Photos: postId } });
                 var ret = { id: 1, error: 'Post deleted!' }
                 return res.json(ret);
             } else {
