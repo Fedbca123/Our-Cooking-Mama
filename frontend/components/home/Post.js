@@ -7,9 +7,9 @@ import { FontAwesome5 } from '@expo/vector-icons';
 const Post = ({ post }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [profileStats, setProfile] = useState([]);
+    const [recipeStats, setRecipe] = useState([]);
 
     useEffect(() => {
-        console.log(post.ProfileID)
         async function loadProfile() {
 
             const response = await fetch('http://' + global.ipv4 + ':3000/api/getOneProfile', {
@@ -29,6 +29,28 @@ const Post = ({ post }) => {
         }
         loadProfile();
     }, []);
+
+    useEffect(() => {
+        async function loadProfile() {
+
+            const response = await fetch('http://' + global.ipv4 + ':3000/api/getRecipe', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({
+                    RecipeID: post.RecipeID,
+                }),
+            }).catch(err => {
+                console.log(err);
+            })
+            const data = await response.json()
+            setRecipe(data);
+        }
+        loadProfile();
+    }, []);
+
     return (
         <View style={{ marginBottom: 30 }}>
             <Divider width={1} orientation='vertical' color='black' />
@@ -47,7 +69,7 @@ const Post = ({ post }) => {
                 >
                     <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
                         <View style={styles.popcap}>
-                            <Popup post={post}></Popup>
+                            <Popup post={post} recipeStats={recipeStats}></Popup>
                         </View>
                     </TouchableOpacity>
                 </Modal>
@@ -136,18 +158,34 @@ const Caption = ({ post }) => (
     </View>
 )
 
-const Popup = ({ post }) => (
+const Popup = ({ post, recipeStats }) => (
     <View>
         <View style={{ alignItems: 'center' }}>
             <Text style={{ marginTop: 15 }}>
                 <Text style={{ fontWeight: '900', color: 'blue', }}>Tags: </Text>
-                <Text style={{ fontWeight: '900', color: 'blue', }}>{post.Tags} </Text>
+                <Text style={{ fontWeight: '900', color: 'black', }}>{post.Tags} </Text>
+                <Text style={{ fontWeight: '900', color: 'blue', }}>Category: </Text>
+                <Text style={{ fontWeight: '900', color: 'black', }}>{post.Category} </Text>
             </Text>
             <Image source={{ uri: post.Photo }} style={{ height: '50%', resizeMode: 'stretch', width: 300, height: 250 }}></Image>
         </View>
 
-        <View style={{ marginTop: 20, marginHorizontal: 10, alignItems: 'center' }}>
-            <Text style={{ fontSize: 20, fontWeight: '600' }}>{post.Category}</Text>
+        <View style={{ marginTop: 20, marginHorizontal: 10, alignItems: 'center', borderBottomWidth: 1, borderBottomColor: 'black' }}>
+            <Text style={{ marginBottom: 15 }}>
+                <Text style={{ fontSize: 20, fontWeight: '600' }}>Dish Name: </Text>
+                <Text style={{ fontSize: 20, fontWeight: '600', color: 'blue' }}>{recipeStats.Recipe}</Text>
+            </Text>
+        </View>
+
+        <View style={{ marginTop: 20, marginHorizontal: 10, alignItems: 'center', borderBottomWidth: 1, borderBottomColor: 'black' }}>
+            <Text style={{ marginBottom: 15 }}>
+                <Text style={{ fontSize: 20, fontWeight: '600' }}>Place / Person of Origin: </Text>
+                <Text style={{ fontSize: 20, fontWeight: '600', color: 'blue' }}>{recipeStats.ChefID}</Text>
+            </Text>
+        </View>
+        <View style={{ marginTop: 10, alignItems: 'center' }}>
+            <Text style={{ fontSize: 20, fontWeight: '600', marginBottom: 10 }}>Recipe / Review</Text>
+            <Text style={{ fontSize: 20, fontWeight: '600', color:'blue' }}>{recipeStats.Ingredients}</Text>
         </View>
     </View>
 )
