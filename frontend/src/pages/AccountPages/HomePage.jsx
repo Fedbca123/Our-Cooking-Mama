@@ -28,25 +28,20 @@ export const HomePage = (props) => {
     // const [category, setCategory] = useState("");
     const [caption, setCaption] = useState("");
     var tagString;
-    var photo_url;
     var tags;
     //variables for add recipe
     const [recipeName, setRecipeName] = useState("");
     const [chefName, setChefName] = useState("")
     const [recipe, setRecipe] = useState("");
-
+    var ingredientString;
+    var ingredients;
 
 
     const [file, setFile] = useState();
     function handleChange(event) {
-        setFile(event.target.files[0])
+        setFile(event.target.files[0]);
     }
 
-
-    const date = new Date();
-    // var postDate;
-    var ingredientString;
-    var ingredients;
 
     if(cookies.id <= 0){
         window.location.href = "/login";
@@ -54,22 +49,9 @@ export const HomePage = (props) => {
 
     async function addRecipe(event){
 
-        // let tmp = date.getMonth() + 1;
-        // postDate = toString(tmp);
-        // tmp = date.
-
-        // console.log(ingredients);
-        // console.log(recipeName.target.value);
-        // console.log(cookies.id);
-
         var obj = {Ingredients : ingredients, Name: recipeName.target.value, ChefID: chefName.value};
         var js =  JSON.stringify(obj);
 
-        // console.log("Name: " + typeof(obj.Name));
-        // console.log("Ingredients: " + typeof(obj.Ingredients));
-        // console.log("Ingredients VALUES: " + obj.Ingredients);
-        // console.log("ChefID: " + typeof(obj.ChefID));
-        // console.log("js: " + js);
 
         if(ingredientString === ""|| recipeName.target.value === ""){
             console.log("Please fill in all fields.");
@@ -277,7 +259,6 @@ export const HomePage = (props) => {
                     <input type="text" onChange={(val) => setTitle(val)}></input>
                     <br />
                     Add an image:
-                    {/* <input type="file" accept="image/*" ref={(c) => (photo_url = c)}></input> */}
                     <input type="file" onChange={handleChange}/>
                     <br />
                     Write a caption:
@@ -289,10 +270,10 @@ export const HomePage = (props) => {
                     What is the recipe for this dish?
                     <input type="text" placeholder="" onChange={(val) => setRecipe(val)}></input>
                     <br />
-                    What is the name of the recipe?
+                    Who made this recipe?
                     <input type="text" placeholder="Mama's homemade chicken" onChange={(val) => setChefName(val)}></input>
                     <br />
-                    Who made this recipe?
+                    What is the name of the recipe?
                     <input type="text" placeholder="Mama, Me" onChange={(val) => setRecipeName(val)}></input>
                     <br />
                     Please list ingredients used: (separate each with a comma)

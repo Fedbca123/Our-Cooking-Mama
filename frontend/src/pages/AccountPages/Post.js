@@ -7,7 +7,9 @@ function Post() {
 
 	return (
 		<div className="post">
-			<h3>UserName</h3>
+			<div className="postHeader">
+				<h3>UserName</h3>
+			</div>
 
 			<image
 				className="postImage"
