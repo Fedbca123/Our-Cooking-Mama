@@ -744,7 +744,7 @@ router.post('/altGetMainFeed', async (req, res) => {
         } else {
             // get all posts for every user in following array
             console.log("Following: " + result.Following);
-            const followingPosts = await userPost.find({ProfileID: {$in: result.Following}}).sort({id: -1}).exec();
+            const followingPosts = await userPost.find({ProfileID: {$in: result.Following}}).sort({_id: -1}).exec();
             res.status(200).json({posts: followingPosts});
         }
     } catch (err) {
