@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { Entypo, Ionicons } from '@expo/vector-icons';
 
 const OtherProfileSummary = ({ profile, navigation }) => {
+    const chefHat = '../../Images/chefImg.png';
     const [modalVisible, setModalVisible] = useState(false);
     const [nickName, setNickName] = useState('');
     const [pronouns, setPronouns] = useState('');
@@ -85,8 +86,21 @@ const OtherProfileSummary = ({ profile, navigation }) => {
         setModalVisible(true);
     }
 
-    const handleFollow = () => {
-        //console.log(profile._id)
+    const handleFollow = async () => {
+        const response = await fetch('http://' + global.ipv4 + ':3000/api/follow', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+			},
+			body: JSON.stringify({
+				FollowerProfileID: profile._id,
+				FollowingProfileID: global._id
+			}),
+		}).catch(err => {
+			console.log(err);
+		})
+		const data = await response.json()
     }
 
     return (
@@ -104,7 +118,7 @@ const OtherProfileSummary = ({ profile, navigation }) => {
 
             <View style={styles.info}>
                 {(profilePic == '')? 
-                <Text></Text>
+                <Image style={styles.logo} source={require(chefHat)} />
                 :
                 <Image style={styles.logo} source={{ uri: profile.ProfilePhoto }} />
                 }
