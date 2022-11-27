@@ -22,7 +22,7 @@ app.listen(port, () => {
 	console.log("Server started at port: " + port);
 });
 
-mongoose.connect(process.env.DATABASE_URI);
+mongoose.connect("mongodb+srv://LPPOOSD:POOSDCOP4331@largeprojectpoosd.szcssnv.mongodb.net/LPCOP?retryWrites=true&w=majority");
 const database = mongoose.connection;
 
 database.on("error", (error) => {
