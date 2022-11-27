@@ -3,7 +3,7 @@ import { ImageBackground, SafeAreaView, StyleSheet } from 'react-native'
 
 import BottomTabs from '../components/BottomTabs';
 import OtherProfileSummary from '../components/profile/OtherProfileSummary';
-import UserPosts from '../components/profile/UserPosts';
+import OtherUserPosts from '../components/profile/OtherUserPosts';
 
 const OtherProfile = ({ navigation, route }) => {
     const { item } = route.params;
@@ -48,15 +48,14 @@ const OtherProfile = ({ navigation, route }) => {
             setFeed(data);
         }
         getFeed();
-
+        console.log(feed)
     }, [] );
 
     return(
         <ImageBackground style={styles.background} source={require(background)}>
         <SafeAreaView style={styles.container}>
-          {/* <Header navigation={navigation} data={item}></Header> */}
           <OtherProfileSummary profile={profileStats} navigation={navigation}></OtherProfileSummary>
-          <UserPosts profile={feed} navigation={navigation}></UserPosts>
+          <OtherUserPosts profile={feed} navigation={navigation}></OtherUserPosts>
           <BottomTabs navigation={navigation} />
         </SafeAreaView>
       </ImageBackground>
@@ -69,6 +68,6 @@ const styles = StyleSheet.create({
     container: {
     },
     background: {
-      flex: 1,
+      //flex: 1,
     },
   });
