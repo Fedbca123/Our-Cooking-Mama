@@ -12,7 +12,7 @@ import { POSTS } from '../dummydata/posts'
 export default function Home({ navigation, route }) {
   const background = '../Images/OCMgradient.png'
   const { data } = route.params
-  let dataPosts = data.posts[1];
+  let dataPosts = data.posts;
   return (
     <ImageBackground style={styles.background} source={require(background)}>
       <SafeAreaView style={styles.container}>
@@ -20,7 +20,11 @@ export default function Home({ navigation, route }) {
         <FoodReal navigation={navigation}></FoodReal>
         <ScrollView>
           {dataPosts.map((post, index) => (
-            <Post post={post} key={index}></Post>
+            <View>
+              {post.map((data, index) => (
+                <Post post={data} key={index}></Post>
+              ))}
+            </View>
           ))}
         </ScrollView>
         <BottomTabs navigation={navigation} />
