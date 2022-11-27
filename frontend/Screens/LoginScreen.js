@@ -31,10 +31,10 @@ const LoginScreen = ({ navigation }) => {
 			global._id = data._id;
 			global.signedUser = data.FirstName;
 			loadFeed();
-		} else if (data.error == 'Passwords do not match.') {
+		} else if (data.error == 'Account is not verified. Please check your email to verify.') {
 			Toast.show({
 				type: 'error',
-				text1: 'Username / Password combination is incorrect'
+				text1: 'Please verify your e-mail!'
 			})
 		} else {
 			Toast.show({

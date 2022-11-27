@@ -61,7 +61,7 @@ const SignUpScreen = ({ navigation }) => {
 					if (data._id != null) {
 						Toast.show({
 							type: 'success',
-							text1: 'You have successfully signed up!'
+							text1: 'Check your e-mail to verify your account!'
 						})
 						navigation.navigate('LoginScreen');
 					} else {
