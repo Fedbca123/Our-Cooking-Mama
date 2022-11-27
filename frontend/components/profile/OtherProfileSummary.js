@@ -17,40 +17,67 @@ const OtherProfileSummary = ({ profile, navigation }) => {
     const [profilePic, setProfilePic] = useState('');
     const Divider = () => <View style={styles.divider}/>
 
+    const [follower, setFollower] = useState();
+    const [following, setFollowing] = useState();
+
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
           getData();
         });
     
         return unsubscribe;
-      }, [navigation]);
+    }, [navigation]);
+
+    const getCounts = async () => {
+		const responseFollowing = await fetch('http://' + global.ipv4 + ':3000/api/getFollowingCount', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+			},
+			body: JSON.stringify({
+				ProfileID: profile._id,
+			}),
+		}).catch(err => {
+			console.log(err);
+		})
+		const dataFollowing = await responseFollowing.json()
+        if(dataFollowing.status != 400){
+            setFollowing(dataFollowing.Following);
+        }
+
+        const responseFollowers = await fetch('http://' + global.ipv4 + ':3000/api/getFollowerCount', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+			},
+			body: JSON.stringify({
+				ProfileID: profile._id,
+			}),
+		}).catch(err => {
+			console.log(err);
+		})
+		const dataFollowers = await responseFollowers.json()
+        if(dataFollowers.status != 400){
+            setFollower(dataFollowers.Followers);
+        }
+    }
+
+    if(follower == null || following == null){
+        getCounts();
+    }
 
     const getData = async () => {
-        const response = await fetch('http://' + global.ipv4 + ':3000/api/getOneProfile', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({
-                Query: profile._id,
-            }),
-        }).catch(err => {
-            console.log(err);
-        })
-        const data = await response.json();
-        if (data.error == "User profile not found.") {
-            console.log("not slay!")
-        } else {
-            setNickName(data.NickName)
-            setPronouns(data.Pronouns)
-            setAccountType(data.AccountType)
-            setCuisine(data.FavCuisine)
-            setDrink(data.FavDrink)
-            setFood(data.FavFood)
-            setFlavor(data.FavoriteFlavor)
-            setProfilePic(data.ProfilePhoto)
-        }
+        setProfilePic(profile.ProfilePhoto);
+        setAccountType(profile.AccountType);
+        setNickName(profile.NickName);
+        setPronouns(profile.Pronouns);
+        setCuisine(profile.FavCuisine);
+        setDrink(profile.FavDrink);
+        setFood(profile.FavFood);
+        setFlavor(profile.FavoriteFlavor);
+        getCounts();
     }
 
     const handleModal = () => {
@@ -59,11 +86,11 @@ const OtherProfileSummary = ({ profile, navigation }) => {
     }
 
     const handleFollow = () => {
-
+        //console.log(profile._id)
     }
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{}}>
 
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -92,8 +119,8 @@ const OtherProfileSummary = ({ profile, navigation }) => {
                         <Text style={{ color: '#75b9be' }}>Followers</Text>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 15 }}>
-                        <Text style={{ fontSize: 20, fontWeight: '500' }}>hardcoded</Text>
-                        <Text style={{ fontSize: 20, fontWeight: '500' }}>hardcoded</Text>
+                        <Text style={{ fontSize: 20, fontWeight: '500' }}>{following}</Text>
+                        <Text style={{ fontSize: 20, fontWeight: '500', marginRight: 50 }}>{follower}</Text>
                     </View>
 
                     <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
@@ -196,7 +223,7 @@ const styles = StyleSheet.create({
     info: {
         flexDirection: 'row',
         paddingLeft: 20,
-        width: ScreenWidth
+        width: ScreenWidth,
     },
     bio: {
         paddingVertical: 5,
@@ -266,7 +293,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginHorizontal: 20,
         marginVertical: 10,
-        paddingTop: 10
+        paddingTop: 10,
     }
 })
 
