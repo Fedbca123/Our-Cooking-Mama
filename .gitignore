@@ -1,2 +1,3 @@
 #server URL
 /node_modules
+**/env
