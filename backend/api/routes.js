@@ -988,5 +988,53 @@ router.post('/getPostLikes', async (req, res) =>
     }
 })
 
+// Get a user's follower count
+router.post('/getFollowingCount', async (req, res) =>
+{
+    const profileID = req.body.ProfileID;
+
+    try
+    {
+        const result = await following.findOne({ProfileID: profileID}).exec();
+
+        if (result != null)
+        {
+            followingCount = Object.keys(result.Following).length;
+            res.status(200).json({Following: followingCount});
+        }
+        else
+        {
+            res.status(200).json({Following: 0});
+        }
+    }
+    catch (err)
+    {
+        res.status(400).json({error: err.message});
+    }
+})
+
+router.post('/getFollowerCount', async (req, res) =>
+{
+    const profileID = req.body.ProfileID;
+
+    try
+    {
+        const result = await followers.findOne({ProfileID: profileID}).exec();
+
+        if (result != null)
+        {
+            followerCount = Object.keys(result.Followers).length;
+            res.status(200).json({Followers: followerCount});
+        }
+        else
+        {
+            res.status(200).json({Followers: 0});
+        }
+    }
+    catch (err)
+    {
+        res.status(400).json({error: err.message});
+    }
+})
 
 module.exports = router;
