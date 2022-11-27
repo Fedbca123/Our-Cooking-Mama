@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react'
 import { Text, View, StyleSheet, Image, ImageBackground, TextInput, TouchableOpacity } from 'react-native'
-import { useState } from 'react';
 import Toast from 'react-native-toast-message';
 import { Entypo } from '@expo/vector-icons';
 
@@ -19,6 +18,7 @@ const SignUpScreen = ({ navigation }) => {
 	const comparePass = PW.localeCompare(PW2);
 	const greencheck = '../Images/greencheck.png';
 	const redx = '../Images/redx.png';
+	const defaultProfilePic = '../Images/chegImg.png';
 
 	const handleCreate = async (e) => {
 		if(passAllCheck(PW)){
@@ -58,11 +58,14 @@ const SignUpScreen = ({ navigation }) => {
 						})
 					});
 					const data = await response.json();
+					// setAccountStats(data)
+					// console.log("ok i literally just set accountStats its " + accountStats)
 					if (data._id != null) {
 						Toast.show({
 							type: 'success',
 							text1: 'Check your e-mail to verify your account!'
 						})
+						initializeProfile(data);
 						navigation.navigate('LoginScreen');
 					} else {
 						Toast.show({
@@ -81,6 +84,83 @@ const SignUpScreen = ({ navigation }) => {
 			}
 		}
 
+	}
+
+	// async function initializeProfile(data) {
+	// 	let formdata = new FormData();
+	// 	formdata.append("NickName", "New Chef")
+	// 	formdata.append("DietRest", "")
+	// 	formdata.append("FavCuisine", "")
+	// 	formdata.append("FavDrink", "")
+	// 	formdata.append("FavFood", "")
+	// 	formdata.append("FavoriteFlavor", "")
+	// 	formdata.append("FoodAllerg", "")
+	// 	formdata.append("pronouns", "")
+	// 	formdata.append("userId", data._id)
+	// 	formdata.append("file", { uri: defaultProfilePic, name: 'image.jpg', type: 'image/jpg' })
+	
+	// 	const response = await fetch('http://' + global.ipv4 + ':3000/api/editProfile', {
+	// 	  method: 'POST',
+	// 	  headers: {
+	// 		'Content-Type': 'multipart/form-data',
+	// 	  },
+	// 	  body: formdata
+	// 	}).then(response => {
+	// 	  console.log("IMAGE UPLOADED!!!")
+	// 	  followDummy(response, data)
+	// 	}).catch(err => {
+	// 	  console.log(err);
+	// 	})
+	//   }
+
+	async function initializeProfile(data) {
+		console.log("Grabbed  new initializedProfile ID as " + data._id)
+        const response = await fetch('http://' + global.ipv4 + ':3000/api/editProfile', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+			},
+			body: JSON.stringify({
+                NickName: "New Chef",
+                DietRest: "",
+                FavCuisine: "",
+                FavDrink: "",
+                FavFood: "",
+                FavoriteFlavor: "",
+                FoodAllerg: "",
+                userId: data._id,
+                AccountType: "",
+                // PersonalFeedID: global._id,
+                pronouns: "",
+                ProfilePhoto: defaultProfilePic
+			}),
+		}).catch(err => {
+			console.log(err);
+		})
+
+        const dataret = await response.json()
+		console.log("Okay here is the initialized profile's feed ID " + dataret.PersonalFeedID)
+		followDummy(dataret, data)
+    }
+
+	async function followDummy(dataret, dataID) {
+		console.log("Grabbed  new feed ID as " + dataret.PersonalFeedID)
+		const response = await fetch('http://' + global.ipv4 + ':3000/api/follow', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+			},
+			body: JSON.stringify({
+				FollowerProfileID: '6382e54422ecafcaed0cadaf', // this is the dummy account
+				FollowingProfileID: dataID._id //this is whoever is registering
+			}),
+		}).catch(err => {
+			console.log(err);
+		})
+		const data = await response.json()
+		console.log(data)
 	}
 
 	const switchL = () => {

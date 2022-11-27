@@ -87,7 +87,6 @@ export default function EditProfile( {navigation} ) {
 
     const saveEdit = async (event) => {
         handleStupidList();
-        //console.log(foodAllergyArr + '\n' + dietRestArr + '\n' + favFlavorArr + '\n' + favFoodArr + '\n' + favDrinkArr + '\n'+ favCuisineArr + '\n' + accountType);
         event.preventDefault();
         const response = await fetch('http://' + global.ipv4 + ':3000/api/editProfile', {
 			method: 'POST',
