@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-navigation'
 import { useState } from 'react'
 import { Entypo } from '@expo/vector-icons';
 
-const ProfileSummary = ({ profile, navigation }) => {
+const ProfileSummary = ({ profile, navigation, profileId }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [nickName, setNickName] = useState('');
     const [pronouns, setPronouns] = useState('');
@@ -17,20 +17,17 @@ const ProfileSummary = ({ profile, navigation }) => {
     const [profilePic, setProfilePic] = useState('');
     const Divider = () => <View style={styles.divider}/>
 
-    let favCuisineArr = [];
-    let favFoodArr = [];
-    let favDrinkArr = [];
-    let favFlavorArr = [];
-    let dietRestArr = [];
-    let foodAllergyArr = [];
+    const [follower, setFollower] = useState();
+    const [following, setFollowing] = useState();
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
           getData();
+          getCounts();
         });
     
         return unsubscribe;
-      }, [navigation]);
+    }, [navigation]);
 
     const getData = async () => {
         const response = await fetch('http://' + global.ipv4 + ':3000/api/getOneProfile', {
@@ -60,6 +57,42 @@ const ProfileSummary = ({ profile, navigation }) => {
         }
     }
 
+    const getCounts = async () => {
+		const responseFollowing = await fetch('http://' + global.ipv4 + ':3000/api/getFollowingCount', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+			},
+			body: JSON.stringify({
+				ProfileID: global._id,
+			}),
+		}).catch(err => {
+			console.log(err);
+		})
+		const dataFollowing = await responseFollowing.json()
+        if(dataFollowing.status != 400){
+            setFollowing(dataFollowing.Following);
+        }
+
+        const responseFollowers = await fetch('http://' + global.ipv4 + ':3000/api/getFollowerCount', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+			},
+			body: JSON.stringify({
+				ProfileID: global._id,
+			}),
+		}).catch(err => {
+			console.log(err);
+		})
+		const dataFollowers = await responseFollowers.json()
+        if(dataFollowers.status != 400){
+            setFollower(dataFollowers.Followers);
+        }
+    }
+
     const handleModal = () => {
         getData();
         setModalVisible(true);
@@ -74,18 +107,18 @@ const ProfileSummary = ({ profile, navigation }) => {
                 <Image style={styles.logo} source={{ uri: profile.ProfilePhoto }} />
                 }
                 <View style={{ flexDirection: 'column' }}>
-                    <Text style={{ fontSize: 30, fontWeight: '700', paddingLeft: 50 }}>
+                    <Text style={{ fontSize: 30, fontWeight: '700', paddingLeft: 10 }}>
                         <Text>{profile.NickName} </Text>
-                        <Text style={{fontSize: 18, fontWeight: '400',paddingLeft: 50 }}>{profile.Pronouns}</Text>
+                        <Text style={{fontSize: 18, fontWeight: '400',paddingLeft: 10 }}>{profile.Pronouns}</Text>
                     </Text>
                     
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 47 }}>
-                        <Text style={{ color: '#75b9be' }}>Foodies</Text>
-                        <Text style={{ color: '#75b9be' }}>Fooders</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 20 }}>
+                        <Text style={{ color: '#75b9be' }}>Following</Text>
+                        <Text style={{ color: '#75b9be' }}>Followers</Text>
                     </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 47 }}>
-                        <Text style={{ fontSize: 20, fontWeight: '500' }}>hardcoded</Text>
-                        <Text style={{ fontSize: 20, fontWeight: '500' }}>hardcoded</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 15 }}>
+                        <Text style={{ fontSize: 20, fontWeight: '500' }}>{following}</Text>
+                        <Text style={{ fontSize: 20, fontWeight: '500', marginRight: 50 }}>{follower}</Text>
                     </View>
 
                     <TouchableOpacity onPress={handleModal}>
@@ -192,7 +225,7 @@ const styles = StyleSheet.create({
     },
     aboutMe: {
         alignSelf: 'center',
-        marginLeft: 45,
+        marginLeft: 0,
         borderWidth: 2,
         paddingHorizontal: 10,
         marginTop: 5,
