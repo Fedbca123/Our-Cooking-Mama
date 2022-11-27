@@ -92,7 +92,7 @@ router.post('/register', async (req, res) =>
                         text: 
                             "Welcome to Your Cooking Mama. You must verify your email to access our site/app.\n" +
                             "Please click the following link to verify your email:\n\n" +  
-                            "http://localhost:3000/api/verifyEmail?UserID=" + result._id,
+                            "http://localhost:3000/api/verifyEmail?UserID=" + newUser._id,
                     }
                     sgMail
                     .send(msg)
@@ -988,7 +988,7 @@ router.post('/getPostLikes', async (req, res) =>
     }
 })
 
-// Get a user's follower count
+// Get a user's following count
 router.post('/getFollowingCount', async (req, res) =>
 {
     const profileID = req.body.ProfileID;
@@ -1013,6 +1013,7 @@ router.post('/getFollowingCount', async (req, res) =>
     }
 })
 
+// Get a user's follower count
 router.post('/getFollowerCount', async (req, res) =>
 {
     const profileID = req.body.ProfileID;
