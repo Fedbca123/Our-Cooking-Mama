@@ -1,0 +1,71 @@
+.App {
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-image: linear-gradient(to bottom right, #75B9BE, #A8CCC9, #B3D6C6, #DCEAB2, #C7D66D);
+    font-family: 'VT323';
+    font-size: 21px;
+}
+
+.registerForm, .loginForm {
+    display:flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: .0025rem;
+}
+
+p{
+    text-align: left;
+}
+
+.aboutTitles{
+    text-align: center;
+}
+
+.MeetTheTeam, .Motivation{
+    text-align: left;
+    padding: 2.25rem;
+}
+
+.landingLogo {
+    max-width: 25%;
+    justify-content: center;
+    display: flex;
+    text-align: center;
+}
+
+.chefHat {
+    max-width:10%;
+    justify-content: center;
+    text-align: center;
+}
+
+label {
+    text-align: left;
+    padding: 0.25rem 0;
+}
+
+input {
+    margin: 0.5rem 0;
+    
+}
+
+button {
+    border: none;
+    background-color: #E3C26D;
+    padding: 10px;
+    border-radius: 15px;
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+}
+
+.link-btn {
+    border: none;
+    padding: 10px;
+    border-radius: 15px;
+    background-color: #E39E6D;
+}
+
