@@ -119,23 +119,47 @@ router.get('/verifyEmail', async (req, res) =>
     const userID = req.query.UserID;
 
     if (!mongoose.Types.ObjectId.isValid(userID))
-        res.status(400).json({Message: "User ID is not valid."});
+        res.status(400).json({error: "User ID is not valid."});
 
     try
     {
         const user = await userRegister.findOneAndUpdate({_id: userID}, {$set: {Verified: true}}, {new: true}).exec();
         if (user != null)
         {
-            res.status(200).json({Message: "User has been verified."});
+            res.status(200).json({message: "User has been verified.", error: ""});
         }
         else
         {
-            res.status(400).json({Message: "User not found."});
+            res.status(400).json({error: "User not found."});
         }
     }
     catch (err)
     {
-        res.status(500).json({Message: err.message});
+        res.status(500).json({error: err.message});
+    }
+})
+
+// Change Password
+router.post('/changePassword', async (req, res) =>
+{
+    const userID = req.body.UserID;
+    const password = req.body.Password;
+    const confirmedPassword = req.body.ConfirmedPassword;
+
+    if (!mongoose.Types.ObjectId.isValid(userID))
+        res.status(400).json({error: "User ID is not valid."});
+    else if (password != confirmedPassword)
+        res.status(400).json({error: "Passwords do not match."});
+    else
+    {
+        bcrypt.hash(req.body.Password, 10, async (err, hash) =>
+        {
+            const user = await userRegister.findOneAndUpdate({_id: userID}, {$set: {Password: hash}}, {new: true}).exec();
+            if (user != null)
+                res.status(200).json({message: "Password updated.", error: ""});
+            else
+                res.status(400).json({error: "User not found."});
+        });
     }
 })
 
@@ -218,7 +242,7 @@ router.post('/login', async (req, res) =>
         }
         else
         {
-            error = "Passwords do not match.";
+            error = "Password does not match.";
             res.status(400).json({ _id:id, FirstName:fn, LastName:ln, error:error});
         }
     }
@@ -542,7 +566,7 @@ router.post('/deletePost', async (req, res) => {
             // Delete post if findingPost's profileId matches the taken in profileId
             if (findingPost.ProfileID == profileId) {
                 userPost.findById(postId).deleteOne().exec();
-                pf.updateOne({ProfileID: userId}, {$pull: {Photos: postId}});
+                pf.updateOne({ProfileID: profileId}, {$pull: {Photos: postId}});
                 var ret = {id: 1, error: 'Post deleted!'}
                 return res.json(ret);
             } else {
