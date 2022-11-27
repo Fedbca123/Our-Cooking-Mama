@@ -6,7 +6,8 @@ const userAccountSchema = new mongoose.Schema
     LastName: String,
     UserName: String,
     Email: String,
-    Password: String 
+    Password: String,
+    Verified: Boolean
  },
  {
     collection: 'UserReg'
