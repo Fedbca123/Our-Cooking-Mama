@@ -29,7 +29,7 @@ export const bottomTabIcons = [
 const BottomTabs = ({ navigation }) => {
     async function loadProfile() {
 
-        const response = await fetch('http://' + global.ipv4 + ':3000/api/getPersonalFeed', {
+        const response = await fetch(global.link + '/api/getPersonalFeed', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ const BottomTabs = ({ navigation }) => {
 
     async function loadFeed() {
         console.log("Loading feed... global id is: " + global._id)
-        const response = await fetch('http://' + global.ipv4 + ':3000/api/getMainFeed', {
+        const response = await fetch(global.link + '/api/getMainFeed', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

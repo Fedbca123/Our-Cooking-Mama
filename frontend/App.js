@@ -18,8 +18,8 @@ import { LogBox } from 'react-native';
 const Stack = createStackNavigator();
 
 // Change me
-global.ipv4 = '10.0.0.116'; // <-- this is mine just add yours below
-// global.ipv4 = '10.0.0.116';
+global.link = 'http://our-cooking-mom-test.herokuapp.com' //PRODUCTION
+// global.link = 'http://10.0.0.116:3000'; // OR TESTING ;)
 
 const theme = {
 	...DefaultTheme,

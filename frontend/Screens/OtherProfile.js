@@ -14,7 +14,7 @@ const OtherProfile = ({ navigation, route }) => {
     React.useEffect(() => {
         async function loadProfile() {
         
-            const response = await fetch('http://' + global.ipv4 + ':3000/api/getOneProfile', {
+            const response = await fetch(global.link + '/api/getOneProfile', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ const OtherProfile = ({ navigation, route }) => {
         loadProfile();
 
         async function getFeed(){
-            const response = await fetch('http://' + global.ipv4 + ':3000/api/getPersonalFeed', {
+            const response = await fetch(global.link + '/api/getPersonalFeed', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

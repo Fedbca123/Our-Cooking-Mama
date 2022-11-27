@@ -29,7 +29,7 @@ export default function CreatePost({ navigation }) {
   }
 
   async function createRecipe() {
-		const response = await fetch('http://' + global.ipv4 + ':3000/api/addRecipe', {
+		const response = await fetch(global.link + '/api/addRecipe', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ export default function CreatePost({ navigation }) {
     formdata.append("file", { uri: image, name: 'image.jpg', type: 'image/jpg' })
 
     event.preventDefault()
-    const response = await fetch('http://' + global.ipv4 + ':3000/api/addPost', {
+    const response = await fetch(global.link + '/api/addPost', {
       method: 'POST',
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -80,7 +80,7 @@ export default function CreatePost({ navigation }) {
   }
 
   async function loadFeed() {
-    const response = await fetch('http://' + global.ipv4 + ':3000/api/getMainFeed', {
+    const response = await fetch(global.link + '/api/getMainFeed', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

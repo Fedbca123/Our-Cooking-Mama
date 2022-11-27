@@ -22,7 +22,7 @@ export default function SearchResults({ route, navigation }) {
     const handleSearch = async (event) => {
         event.preventDefault()
         console.log("Searching...");
-        const response = await fetch('http://' + global.ipv4 + ':3000/api/universalSearch', {
+        const response = await fetch(global.link + '/api/universalSearch', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',

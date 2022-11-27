@@ -13,7 +13,7 @@ const LoginScreen = ({ navigation }) => {
 
 	async function handleLogin(event) {
 		event.preventDefault()
-		const response = await fetch('http://' + global.ipv4 + ':3000/api/login', {
+		const response = await fetch(global.link + '/api/login', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ const LoginScreen = ({ navigation }) => {
 	}
 
 	async function loadFeed() {
-		const response = await fetch('http://' + global.ipv4 + ':3000/api/getMainFeed', {
+		const response = await fetch(global.link + '/api/getMainFeed', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',

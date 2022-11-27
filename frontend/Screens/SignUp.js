@@ -99,7 +99,7 @@ const SignUpScreen = ({ navigation }) => {
 	// 	formdata.append("userId", data._id)
 	// 	formdata.append("file", { uri: defaultProfilePic, name: 'image.jpg', type: 'image/jpg' })
 	
-	// 	const response = await fetch('http://' + global.ipv4 + ':3000/api/editProfile', {
+	// 	const response = await fetch(global.link + '/api/editProfile', {
 	// 	  method: 'POST',
 	// 	  headers: {
 	// 		'Content-Type': 'multipart/form-data',
@@ -115,7 +115,7 @@ const SignUpScreen = ({ navigation }) => {
 
 	async function initializeProfile(data) {
 		console.log("Grabbed  new initializedProfile ID as " + data._id)
-        const response = await fetch('http://' + global.ipv4 + ':3000/api/editProfile', {
+        const response = await fetch(global.link + '/api/editProfile', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -146,7 +146,7 @@ const SignUpScreen = ({ navigation }) => {
 
 	async function followDummy(dataret, dataID) {
 		console.log("Grabbed  new feed ID as " + dataret.PersonalFeedID)
-		const response = await fetch('http://' + global.ipv4 + ':3000/api/follow', {
+		const response = await fetch(global.link + '/api/follow', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',

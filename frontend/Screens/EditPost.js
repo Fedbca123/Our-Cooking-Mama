@@ -56,7 +56,7 @@ export default function EditPost({ route, navigation }) {
         formdata.append("file", { uri: postImage, name: 'image.jpg', type: 'image/jpg' })
 
         event.preventDefault()
-        const response = await fetch('http://' + global.ipv4 + ':3000/api/editPost', {
+        const response = await fetch(global.link + '/api/editPost', {
             method: 'POST',
             headers: {
                 'Content-Type': 'multipart/form-data',

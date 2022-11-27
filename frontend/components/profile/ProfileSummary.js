@@ -30,7 +30,7 @@ const ProfileSummary = ({ profile, navigation, profileId }) => {
     }, [navigation]);
 
     const getData = async () => {
-        const response = await fetch('http://' + global.ipv4 + ':3000/api/getOneProfile', {
+        const response = await fetch(global.link + '/api/getOneProfile', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ const ProfileSummary = ({ profile, navigation, profileId }) => {
     }
 
     const getCounts = async () => {
-		const responseFollowing = await fetch('http://' + global.ipv4 + ':3000/api/getFollowingCount', {
+		const responseFollowing = await fetch(global.link + '/api/getFollowingCount', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ const ProfileSummary = ({ profile, navigation, profileId }) => {
             setFollowing(dataFollowing.Following);
         }
 
-        const responseFollowers = await fetch('http://' + global.ipv4 + ':3000/api/getFollowerCount', {
+        const responseFollowers = await fetch(global.link + '/api/getFollowerCount', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',

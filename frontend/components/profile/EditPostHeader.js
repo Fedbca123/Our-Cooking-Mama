@@ -8,7 +8,7 @@ const EditPostHeader = ({ navigation, ID }) => {
     const [modalVisible, setModalVisible] = useState(false);
     let postID = ID.postID
     async function loadProfile() {
-        const response = await fetch('http://' + global.ipv4 + ':3000/api/getPersonalFeed', {
+        const response = await fetch(global.link + '/api/getPersonalFeed', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -25,7 +25,7 @@ const EditPostHeader = ({ navigation, ID }) => {
     }
 
     async function deletePost() {
-        const response = await fetch('http://' + global.ipv4 + ':3000/api/deletePost', {
+        const response = await fetch(global.link + '/api/deletePost', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

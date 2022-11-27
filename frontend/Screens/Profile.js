@@ -15,7 +15,7 @@ export default function Profile({ navigation, route }) {
   useEffect(() => {
     async function loadProfile() {
     
-        const response = await fetch('http://' + global.ipv4 + ':3000/api/getOneProfile', {
+        const response = await fetch(global.link + '/api/getOneProfile', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
