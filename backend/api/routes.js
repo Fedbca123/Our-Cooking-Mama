@@ -1038,4 +1038,25 @@ router.post('/getFollowerCount', async (req, res) =>
     }
 })
 
+router.post('/getRecipe', async (req, res) => 
+{
+    const recipeId = req.body.RecipeID;
+    try {
+        const result = await recipe.findOne({ _id: recipeId }).exec();
+    
+        // check if id is valid
+        if (result == null) {
+            var ret = {RecipeID: -1, error: "Recipe Not Found."};
+            res.status(400).json(ret);
+        } else {
+            console.log(result)
+            res.status(200).json(result)
+        }
+    }
+    catch(error) 
+    {
+        res.status(400).json({error: error.message});
+    }
+})
+
 module.exports = router;

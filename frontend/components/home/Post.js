@@ -143,7 +143,7 @@ const Popup = ({ post }) => (
                 <Text style={{ fontWeight: '900', color: 'blue', }}>Tags: </Text>
                 <Text style={{ fontWeight: '900', color: 'blue', }}>{post.Tags} </Text>
             </Text>
-            <Image source={{ uri: post.Photo }} style={{ height: '50%', resizeMode: 'cover', width: 300, height: 250 }}></Image>
+            <Image source={{ uri: post.Photo }} style={{ height: '50%', resizeMode: 'stretch', width: 300, height: 250 }}></Image>
         </View>
 
         <View style={{ marginTop: 20, marginHorizontal: 10, alignItems: 'center' }}>
