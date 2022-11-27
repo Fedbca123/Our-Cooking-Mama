@@ -43,7 +43,7 @@ const SignUpScreen = ({ navigation }) => {
 				try {
 					// IP address is unique, expo/express can't resolve 'localhost' so you need to ipconfig in cmd and replace with the ipv4
 					// This should be no issue once deployed on heroku
-					const response = await fetch('http://' + global.ipv4 +':3000/api/register', {
+					const response = await fetch(global.link + '/api/register', {
 						method: 'post',
 						headers: {
 							'Accept': 'application/json',
@@ -85,33 +85,6 @@ const SignUpScreen = ({ navigation }) => {
 		}
 
 	}
-
-	// async function initializeProfile(data) {
-	// 	let formdata = new FormData();
-	// 	formdata.append("NickName", "New Chef")
-	// 	formdata.append("DietRest", "")
-	// 	formdata.append("FavCuisine", "")
-	// 	formdata.append("FavDrink", "")
-	// 	formdata.append("FavFood", "")
-	// 	formdata.append("FavoriteFlavor", "")
-	// 	formdata.append("FoodAllerg", "")
-	// 	formdata.append("pronouns", "")
-	// 	formdata.append("userId", data._id)
-	// 	formdata.append("file", { uri: defaultProfilePic, name: 'image.jpg', type: 'image/jpg' })
-	
-	// 	const response = await fetch(global.link + '/api/editProfile', {
-	// 	  method: 'POST',
-	// 	  headers: {
-	// 		'Content-Type': 'multipart/form-data',
-	// 	  },
-	// 	  body: formdata
-	// 	}).then(response => {
-	// 	  console.log("IMAGE UPLOADED!!!")
-	// 	  followDummy(response, data)
-	// 	}).catch(err => {
-	// 	  console.log(err);
-	// 	})
-	//   }
 
 	async function initializeProfile(data) {
 		console.log("Grabbed  new initializedProfile ID as " + data._id)

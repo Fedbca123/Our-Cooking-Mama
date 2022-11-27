@@ -12,7 +12,7 @@ import { POSTS } from '../dummydata/posts'
 export default function Home({ navigation, route }) {
   const background = '../Images/OCMgradient.png'
   const { data } = route.params
-  let dataPosts = data.posts[0];
+  let dataPosts = data.posts[1];
   return (
     <ImageBackground style={styles.background} source={require(background)}>
       <SafeAreaView style={styles.container}>
