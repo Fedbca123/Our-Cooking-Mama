@@ -1,17 +1,16 @@
 import * as React from 'react';
 import {useState, useEffect} from "react";
-import { Text, View, StyleSheet, Image, FlatList, SafeAreaView, ImageBackground, Modal } from 'react-native';
+import { StyleSheet, SafeAreaView, ImageBackground } from 'react-native';
 import BottomTabs from '../components/BottomTabs';
 import Header from '../components/profile/Header';
 import ProfileSummary from '../components/profile/ProfileSummary';
 import UserPosts from '../components/profile/UserPosts';
 
-import { PROFILE } from '../dummydata/profile'
-
 export default function Profile({ navigation, route }) {
   const background = '../Images/OCMgradient.png'
   const { data } = route.params
   const [profileStats, setProfile] = useState([]);
+  const [profileId, setProfileId] = useState('');
 
   useEffect(() => {
     async function loadProfile() {
@@ -32,6 +31,9 @@ export default function Profile({ navigation, route }) {
         setProfile(data);
     }
     loadProfile();
+    if(data[0] != null){
+      setProfileId(data[0].ProfileID);
+    }
 }, [] );
 
 
@@ -39,7 +41,7 @@ export default function Profile({ navigation, route }) {
     <ImageBackground style={styles.background} source={require(background)}>
       <SafeAreaView style={styles.container}>
         <Header navigation={navigation} data={data}></Header>
-        <ProfileSummary profile={profileStats} navigation={navigation}></ProfileSummary>
+        <ProfileSummary profile={profileStats} navigation={navigation} profileId={profileId}></ProfileSummary>
         <UserPosts profile={data} navigation={navigation}></UserPosts>
         <BottomTabs navigation={navigation} />
       </SafeAreaView>
