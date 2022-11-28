@@ -23,17 +23,16 @@ app.use(
     helmet.contentSecurityPolicy({
       directives: {
         defaultSrc: ["'self'", "'unsafe-inline'"],
-        connectSrc: ["'self'", 'https://checkout.stripe.com'],
-        frameSrc: ["'self'", 'https://checkout.stripe.com'],
-        childSrc: ["'self'", 'https://checkout.stripe.com'],
-        scriptSrc: ["'self'", 'https://checkout.stripe.com', "'unsafe-inline'"],
+        connectSrc: ['https://checkout.stripe.com'],
+        frameSrc: ['https://checkout.stripe.com'],
+        childSrc: ['https://checkout.stripe.com'],
+        scriptSrc: ['https://checkout.stripe.com', "'unsafe-inline'"],
         styleSrc: [
-          "'self'",
           'https://fonts.googleapis.com',
           'https://checkout.stripe.com',
         ],
-        fontSrc: ["'self'", 'https://fonts.gstatic.com', 'https://fonts.googleapis.com'],
-        imgSrc: ["'self'", 'https://*.stripe.com', 'https://res.cloudinary.com'],
+        fontSrc: ['https://fonts.gstatic.com', 'https://fonts.googleapis.com'],
+        imgSrc: ['https://*.stripe.com', 'https://res.cloudinary.com'],
         baseUri: ["'self'"],
       },
     })
