@@ -6,15 +6,15 @@ const multer = require('multer');
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-const userRegister = require ('../model/userAccount.js');
-const userProfile = require ('../model/userProfile.js');
-const userPost = require ('../model/userPost.js');
-const pf = require ('../model/personalFeed.js');
-const userComment = require ('../model/userComment.js');
-const postLikes = require ('../model/postLikes.js');
-const recipe = require ('../model/recipes.js');
-const following = require('../model/following.js');
-const followers = require('../model/followers.js');
+const userRegister = require ('./model/userAccount.js');
+const userProfile = require ('./model/userProfile.js');
+const userPost = require ('./model/userPost.js');
+const pf = require ('./model/personalFeed.js');
+const userComment = require ('./model/userComment.js');
+const postLikes = require ('./model/postLikes.js');
+const recipe = require ('./model/recipes.js');
+const following = require('./model/following.js');
+const followers = require('./model/followers.js');
 
 const mongoose = require('mongoose');
 const { json } = require('body-parser');
