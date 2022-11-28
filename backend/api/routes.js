@@ -92,7 +92,7 @@ router.post('/register', async (req, res) =>
                         text: 
                             "Welcome to Your Cooking Mama. You must verify your email to access our site/app.\n" +
                             "Please click the following link to verify your email:\n\n" +  
-                            "http://localhost:3000/api/verifyEmail?UserID=" + newUser._id,
+                            "http://http://our-cooking-mom-test.herokuapp.com/api/verifyEmail?UserID=" + newUser._id,
                     }
                     sgMail
                     .send(msg)
@@ -217,7 +217,7 @@ router.post('/login', async (req, res) =>
                     text: 
                         "Welcome to Your Cooking Mama. You must verify your email to access our site/app.\n" +
                         "Please click the following link to verify your email:\n\n" +  
-                        "http://localhost:3000/api/verifyEmail?UserID=" + result._id,
+                        "http://http://our-cooking-mom-test.herokuapp.com/api/verifyEmail?UserID=" + result._id,
                 }
                 sgMail
                 .send(msg)
