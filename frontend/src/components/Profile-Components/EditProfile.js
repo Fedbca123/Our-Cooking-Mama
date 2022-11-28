@@ -82,10 +82,41 @@ export const EditProfile = (props) => {
 	// 	//}
 	// };
 
+	//Function should help bypass any data that is a circular set
+	const getCircularReplacer = async () => {
+		const seen = new WeakSet();
+		return (key, value) => {
+		  if (typeof value === 'object' && value !== null) {
+			if (seen.has(value)) {
+			  return;
+			}
+			seen.add(value);
+		  }
+		  return value;
+		};
+	};
+
 	const saveEdit = async (event) => {
 		// handleStupidList();
 		//console.log(foodAllergyArr + '\n' + dietRestArr + '\n' + favFlavorArr + '\n' + favFoodArr + '\n' + favDrinkArr + '\n'+ favCuisineArr + '\n' + accountType);
 		event.preventDefault();
+
+		const obj = { 
+			NickName: nickName, 
+			DietRest: dietRest, 
+			FavCuisine: favCuisine, 
+			FavDrink: favDrink, 
+			FavFood: favFood, 
+			FavoriteFlavor: favFlavor, 
+			FoodAllerg: foodAllergy, 
+			userID: cookies.id, 
+			AccountType: accountType, 
+			PersonalFeedID: cookies.id, 
+			Pronouns: pronouns, 
+			ProfilePhoto: profilePic 
+		};
+		obj.name = obj
+		const js = JSON.stringify(obj, getCircularReplacer());
 
 		const response = await fetch(buildPath("api/editProfile"), {
 			method: "POST",
@@ -93,37 +124,30 @@ export const EditProfile = (props) => {
 				"Content-Type": "application/json",
 				"Accept": "application/json",
 			},
-			body: JSON.stringify({
-				// NickName: nickName,
-				// DietRest: dietRest,
-				// FavCuisine: favCuisine,
-				// FavDrink: favDrink,
-				// FavFood: favFood,
-				// FavoriteFlavor: favFlavor,
-				// FoodAllerg: foodAllergy,
-				// userId: cookies.id,
-				// AccountType: accountType,
-				// PersonalFeedID: cookies.id,
-				// pronouns: pronouns,
-				// ProfilePhoto: profilePic,
-				NickName: "cristian",
-				DietRest: "dietRest",
-				FavCuisine: "favCuisine",
-				FavDrink: "favDrink",
-				FavFood: "favFood",
-				FavoriteFlavor: "favFlavor",
-				FoodAllerg: "foodAllergy",
-				userId: cookies.id,
-				AccountType: "accountType",
-				PersonalFeedID: cookies.id,
-				pronouns: "pronouns",
-				ProfilePhoto: profilePic,
-			}),
+			body: js
+				//JSON.stringify({
+				//NickName: "cristian",
+				//DietRest: "dietRest",
+				//FavCuisine: "favCuisine",
+				//FavDrink: "favDrink",
+				//FavFood: "favFood",
+				//FavoriteFlavor: "favFlavor",
+				//FoodAllerg: "foodAllergy",
+				//userId: cookies.id,
+				//AccountType: "accountType",
+				//PersonalFeedID: cookies.id,
+				//pronouns: "pronouns",
+				//ProfilePhoto: profilePic,
+				//}),
 		}).catch((err) => {
 			console.log(err);
 		});
 
-		const data = await response.json();
+		var res = JSON.parse(await response.text());
+
+		console.log("Maybe?")
+		const data = res
+		console.log(res.nickName)
 
 		if (data.error == "") {
 			console.log("Success");
