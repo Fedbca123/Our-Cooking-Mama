@@ -63,8 +63,9 @@ function Post({ post }) {
 			<div className="postHeader">
 				<h3>
 					<img
-						height="50"
-						width="50"
+						height="85"
+						width="85"
+						className="postPP"
 						src={profileStats.ProfilePhoto}
 						alt="UserAvatar"
 					></img>
