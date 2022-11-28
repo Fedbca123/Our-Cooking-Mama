@@ -5,6 +5,7 @@ import { buildPath } from "./bPath";
 import NavBarLanding from "./NavBar-Components/NavBarLanding";
 import ChefHat from "./Images/chefHat.png";
 import { useCookies } from "react-cookie";
+import { Link } from "react-router-dom";
 
 function Login() {
 	var loginName;
@@ -40,11 +41,36 @@ function Login() {
 				if (res._id <= 0) {
 					setMessage("User/Password combination incorrect");
 				} else {
-					setCookie("id", res._id, { path: "/" });
-					setCookie("FirstName", res.FirstName, { path: "/" });
-					setCookie("LastName", res.LastName, { path: "/" });
-					setCookie("UserName", res.UserName, { path: "/" });
-					setCookie("Email", res.Email, { path: "/" });
+					setCookie(
+						"id",
+						res._id,
+						{ path: "/" },
+						{ maxAge: 60 * 20 },
+					);
+					setCookie(
+						"FirstName",
+						res.FirstName,
+						{ path: "/" },
+						{ maxAge: 60 * 20 },
+					);
+					setCookie(
+						"LastName",
+						res.LastName,
+						{ path: "/" },
+						{ maxAge: 60 * 20 },
+					);
+					setCookie(
+						"UserName",
+						res.UserName,
+						{ path: "/" },
+						{ maxAge: 60 * 20 },
+					);
+					setCookie(
+						"Email",
+						res.Email,
+						{ path: "/" },
+						{ maxAge: 60 * 20 },
+					);
 					loadFeed();
 
 					setMessage(" ");
@@ -112,6 +138,8 @@ function Login() {
 				>
 					New Chef?
 				</button>
+
+				<Link to="/SendEmail">Forgot Password?</Link>
 
 				<br />
 
