@@ -5,6 +5,7 @@ import NavBar from '../../components/NavBar-Components/NavBar';
 import './Popup.css';
 import { buildPath } from "../../components/bPath";
 import Post from "./Post";
+// eslint-disable-next-line no-unused-vars
 import Card from "../../components/SearchResults-Components/RecipeCard";
 // import { post } from "../../../../backend/api/routes";
 
@@ -21,6 +22,7 @@ export const HomePage = (props) => {
     // var q;
 
     //Cookies Variables
+    // eslint-disable-next-line no-unused-vars
     const [cookies, setCookie] = useCookies(["user"]);
     //variables for add Post
     const [title, setTitle] = useState("");
@@ -110,7 +112,6 @@ export const HomePage = (props) => {
 
             }
         }
-
 
         return "63772881990a71a5cf2ff956";
 

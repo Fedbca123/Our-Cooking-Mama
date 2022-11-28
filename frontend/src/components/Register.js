@@ -65,15 +65,6 @@ function Register() {
 					setMessage("Username taken. Try again.");
 					return;
 				} else {
-					// var user = {
-					// 	FirstName: res.FirstName,
-					// 	LastName: res.LastName,
-					// 	_id: res._id,
-					// };
-					// localStorage.setItem("user_data", JSON.stringify(user));
-
-					// console.log(user);
-
 					setMessage(" ");
 
 					window.location.href = "/login";

@@ -269,25 +269,30 @@ router.post("/login", async (req, res) => {
 });
 
 // Get main feed (posts from all of a user's followers)
-router.post('/altGetMainFeed', async (req, res) => {
-    const profileId = req.body.ProfileID;
-    var mainFeedUpdate;
-    try {
-        // check for existence of following document for specific user
-        const result = await following.findOne({ProfileID: profileId}).exec();
-        console.log(result);
-        if (result == null) {
-            res.status(400).json({error: "No following document for: " + profileId + " found."});
-        } else {
-            // get all posts for every user in following array
-            console.log("Following: " + result.Following);
-            const followingPosts = await userPost.find({ProfileID: {$in: result.Following}}).sort({_id: -1}).exec();
-            res.status(200).json({posts: followingPosts});
-        }
-    } catch (err) {
-        res.status(400).json({error: err.message});
-    }
-})
+router.post("/altGetMainFeed", async (req, res) => {
+	const profileId = req.body.ProfileID;
+	var mainFeedUpdate;
+	try {
+		// check for existence of following document for specific user
+		const result = await following.findOne({ ProfileID: profileId }).exec();
+		console.log(result);
+		if (result == null) {
+			res.status(400).json({
+				error: "No following document for: " + profileId + " found.",
+			});
+		} else {
+			// get all posts for every user in following array
+			console.log("Following: " + result.Following);
+			const followingPosts = await userPost
+				.find({ ProfileID: { $in: result.Following } })
+				.sort({ _id: -1 })
+				.exec();
+			res.status(200).json({ posts: followingPosts });
+		}
+	} catch (err) {
+		res.status(400).json({ error: err.message });
+	}
+});
 
 // create/edit Profile
 router.post("/editProfile", upload.single("file"), async (req, res) => {
@@ -1121,32 +1126,33 @@ router.post("/getRecipe", async (req, res) => {
 	}
 });
 
-router.post('/sendResetEmail', async (req, res) => 
-{
-    const email = req.body.Email;
-    const user = await userRegister.findOne({Email: email}).exec();
-    if (user == null)
-        res.status(400).json({error: "A user with that email could not be found."});
-    else
-    {
-        const msg = {
-            to: email,
-            from: 'yourcookingmamaapp@gmail.com',
-            subject: 'Click the link provided to reset your password.',
-            text: 
-                "Forgetting your password happens a lot. Trust us, we know.\n\n" +
-                "Please click the following link to reset your password:\n" +  
-                "http://localhost:3000/ResetPass?UserID=" + user._id,
-        }
-        sgMail
-        .send(msg)
-        .then(() => {
-            res.status(200).json({error: ""});
-        })
-        .catch((error) => {
-            res.status(400).json({error:error.message});
-        })
-    }
-})
+router.post("/sendResetEmail", async (req, res) => {
+	const email = req.body.Email;
+	const user = await userRegister.findOne({ Email: email }).exec();
+	if (user == null)
+		res.status(400).json({
+			error: "A user with that email could not be found.",
+		});
+	else {
+		const msg = {
+			to: email,
+			from: "yourcookingmamaapp@gmail.com",
+			subject: "Click the link provided to reset your password.",
+			text:
+				"Forgetting your password happens a lot. Trust us, we know.\n\n" +
+				"Please click the following link to reset your password:\n" +
+				"http://localhost:3001/ResetPass?UserID=" +
+				user._id,
+		};
+		sgMail
+			.send(msg)
+			.then(() => {
+				res.status(200).json({ error: "" });
+			})
+			.catch((error) => {
+				res.status(400).json({ error: error.message });
+			});
+	}
+});
 
 module.exports = router;
