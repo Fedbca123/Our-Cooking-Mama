@@ -191,3 +191,209 @@ describe("POST /editPost", () => {
         expect(response.status).toBe(400);
     })
 })
+
+describe("POST /addPost", () => {
+    test("Returns status code 200 if user exists", async () => {
+        const response = await request(appPort).post('/api/addPost')
+            .send({ 'RecipeID': '', 
+                    'UserID': '635729f8a909eb70eca16509',
+                    'Category': 'Unit testing is fun',
+                    'file':'thisImage.png',
+                    'Caption': 'New post new caption',
+                    'Tags': ['Add', 'Some', 'Tags']
+            })
+            .set('Accept', 'application/json')
+        expect(response.status).toBe(200);
+    })
+
+    test("Returns status code 400 if user does not exist", async () => {
+        const response = await request(appPort).post('/api/addPost')
+            .send({ 'RecipeID': '6350bacfab0ac0d60ee31e99', 
+                    'UserID': '6350bacfad0ac0d60ce31999',
+                    'Category': 'Unit testing is fun part 2',
+                    'file':'thisImage.png',
+                    'Caption': 'Bad post no pass',
+                    'Tags': ['Add', 'Some', 'Tags']
+            })
+            .set('Accept', 'application/json')
+        expect(response.status).toBe(400);
+    })
+})
+
+describe("POST /deletePost", () => {
+    test("Returns status code 200 if user and post exist", async () => {
+        const response = await request(appPort).post('/api/deletePost')
+            .send({ 'PostID': '635729f8a909eb70eca16509', 
+                    'ProfileID': '6350bacfad0ac0d60ce31e99',
+            })
+            .set('Accept', 'application/json')
+        expect(response.status).toBe(200);
+    })
+
+    test("Returns status code 400 if user and post do not exist", async () => {
+        const response = await request(appPort).post('/api/deletePost')
+            .send({ 'PostID': 'badPostID', 
+                    'ProfileID': '6350bacfad0ac0d60ce31e99',
+            })
+            .set('Accept', 'application/json')
+        expect(response.status).toBe(400);
+    })
+})
+
+describe("POST /universalSearch", () => {
+    test("Returns status code 200 if users exist", async () => {
+        const response = await request(appPort).post('/api/universalSearch')
+            .send({ 'Query': 'rleinecker' })
+            .set('Accept', 'application/json')
+        expect(response.status).toBe(200);
+    })
+
+    test("Returns status code 200 if posts exist", async () => {
+        const response = await request(appPort).post('/api/universalSearch')
+            .send({ 'Query': '637720864d72e9cdcdbb1788' })
+            .set('Accept', 'application/json')
+        expect(response.status).toBe(200);
+    })
+
+    test("Returns status code 200 if recipes exist", async () => {
+        const response = await request(appPort).post('/api/universalSearch')
+            .send({ 'Query': '637720864d72e9cdcdbb1787' })
+            .set('Accept', 'application/json')
+        expect(response.status).toBe(200);
+    })
+
+    test("Returns status code 400 if nothing exists", async () => {
+        const response = await request(appPort).post('/api/deletePost')
+            .send({ 'Query': 'badSearchQuery' })
+            .set('Accept', 'application/json')
+        expect(response.status).toBe(400);
+    })
+})
+
+describe("POST /addRecipe", () => {
+    test("Returns status code 200 if recipe does not exist yet", async () => {
+        const response = await request(appPort).post('/api/addRecipe')
+            .send({ 'Ingredients': 'tomato sauce, pasta', 
+                    'Name': 'College Pasta',
+                    'ChefID': '636abacec3b021d0494084d6'
+            })
+            .set('Accept', 'application/json')
+        expect(response.status).toBe(200);
+    })
+
+    test("Returns status code 400 if recipe already exists", async () => {
+        const response = await request(appPort).post('/api/addRecipe')
+            .send({ 'Ingredients': 'tomato sauce, pasta', 
+                    'Name': 'College Pasta',
+                    'ChefID': '636abacec3b021d0494084d6'
+            })
+            .set('Accept', 'application/json')
+        expect(response.status).toBe(400);
+    }) 
+})
+
+describe("POST /editRecipe", () => {
+    test("Returns status code 200 if recipe exists and is modified", async () => {
+        const response = await request(appPort).post('/api/editRecipe')
+            .send({ 'Ingredients': 'tomato sauce, pasta, onion', 
+                    'Name': 'College Pasta',
+                    'ChefID': '636abacec3b021d0494084d6'
+            })
+            .set('Accept', 'application/json')
+        expect(response.status).toBe(200);
+    })
+
+    test("Returns status code 400 if recipe does not exist", async () => {
+        const response = await request(appPort).post('/api/editRecipe')
+            .send({ 'Ingredients': 'pumpkin puree, pie crust', 
+                    'Name': 'College Pastry',
+                    'ChefID': '636abacec3b021d0494084d6'
+            })
+            .set('Accept', 'application/json')
+        expect(response.status).toBe(400);
+    }) 
+})
+
+describe("POST /deleteRecipe", () => {
+    test("Returns status code 200 if recipe exists and is deleted", async () => {
+        const response = await request(appPort).post('/api/deleteRecipe')
+            .send({ 'RecipeID': '637f186a160a84d6d5f8ae9a' })
+            .set('Accept', 'application/json')
+        expect(response.status).toBe(200);
+    })
+
+    test("Returns status code 400 if recipe does not exist", async () => {
+        const response = await request(appPort).post('/api/deleteRecipe')
+            .send({ 'RecipeID': 'badRecipeID' })
+            .set('Accept', 'application/json')
+        expect(response.status).toBe(400);
+    }) 
+})
+
+describe("POST /getPersonalFeed", () => {
+    test("Returns status code 200 if user exists and has posts", async () => {
+        const response = await request(appPort).post('/api/getPersonalFeed')
+            .send({ 'UserID': '6350bb36ad0ac0d60ce31e9a' })
+            .set('Accept', 'application/json')
+        expect(response.status).toBe(200);
+    })
+
+    test("Returns status code 400 if user does not have posts", async () => {
+        const response = await request(appPort).post('/api/getPersonalFeed')
+            .send({ 'UserID': '636323c8c7af5bc4733c1111' })
+            .set('Accept', 'application/json')
+        expect(response.status).toBe(400);
+    }) 
+
+    test("Returns status code 400 if user does not exist", async () => {
+        const response = await request(appPort).post('/api/getPersonalFeed')
+            .send({ 'UserID': 'badUserID' })
+            .set('Accept', 'application/json')
+        expect(response.status).toBe(400);
+    }) 
+})
+
+describe("POST /altGetMainFeed", () => {
+    test("Returns status code 200 if user exists and is following people", async () => {
+        const response = await request(appPort).post('/api/altGetMainFeed')
+            .send({ 'ProfileID': '6350bb36ad0ac0d60ce31e9a' })
+            .set('Accept', 'application/json')
+        expect(response.status).toBe(200);
+    })
+
+    test("Returns status code 400 if user is not following anyone", async () => {
+        const response = await request(appPort).post('/api/altGetMainFeed')
+            .send({ 'ProfileID': '636323c8c7af5bc4733c1111' })
+            .set('Accept', 'application/json')
+        expect(response.status).toBe(400);
+    }) 
+
+    test("Returns status code 400 if user does not exist", async () => {
+        const response = await request(appPort).post('/api/altGetMainFeed')
+            .send({ 'ProfileID': 'badUserID' })
+            .set('Accept', 'application/json')
+        expect(response.status).toBe(400);
+    }) 
+})
+
+describe("POST /addComment", () => {
+    test("Returns status code 200 if recipe exists and is modified", async () => {
+        const response = await request(appPort).post('/api/editRecipe')
+            .send({ 'Ingredients': 'tomato sauce, pasta, onion', 
+                    'Name': 'College Pasta',
+                    'ChefID': '636abacec3b021d0494084d6'
+            })
+            .set('Accept', 'application/json')
+        expect(response.status).toBe(200);
+    })
+
+    test("Returns status code 400 if recipe does not exist", async () => {
+        const response = await request(appPort).post('/api/editRecipe')
+            .send({ 'Ingredients': 'pumpkin puree, pie crust', 
+                    'Name': 'College Pastry',
+                    'ChefID': '636abacec3b021d0494084d6'
+            })
+            .set('Accept', 'application/json')
+        expect(response.status).toBe(400);
+    }) 
+})
