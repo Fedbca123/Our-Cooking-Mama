@@ -22,19 +22,19 @@ app.use(
     // [
     helmet.contentSecurityPolicy({
       directives: {
-        defaultSrc: ["*", "https://our-cooking-mom-test.herokuapp.com/favicon.ico"],
-        connectSrc: ["*", 'https://checkout.stripe.com'],
-        frameSrc: ["*", 'https://checkout.stripe.com'],
-        childSrc: ["*", 'https://checkout.stripe.com'],
-        scriptSrc: ["*", 'https://checkout.stripe.com'],
+        defaultSrc: ["'self'", "'unsafe-inline'"],
+        connectSrc: ["'self'", 'https://checkout.stripe.com'],
+        frameSrc: ["'self'", 'https://checkout.stripe.com'],
+        childSrc: ["'self'", 'https://checkout.stripe.com'],
+        scriptSrc: ["'self'", 'https://checkout.stripe.com', "'unsafe-inline'"],
         styleSrc: [
-          "*",
-          'https://fonts.googleapis.com/css2?family=VT323&display=swap',
+          "'self'",
+          'https://fonts.googleapis.com',
           'https://checkout.stripe.com',
         ],
-        fontSrc: ["*", 'https://fonts.googleapis.com/css2?family=VT323&display=swap'],
-        imgSrc: ["*", 'https://*.stripe.com', 'https://res.cloudinary.com'],
-        baseUri: ["*"],
+        fontSrc: ["'self'", 'https://fonts.gstatic.com', 'https://fonts.googleapis.com'],
+        imgSrc: ["'self'", 'https://*.stripe.com', 'https://res.cloudinary.com'],
+        baseUri: ["'self'"],
       },
     })
     // ]
@@ -76,7 +76,7 @@ if (process.env.NODE_ENV === 'production')
   app.use(express.static('frontend/build'));
   app.get('*', (req, res) => 
  {
-    res.sendFile(path.resolve(__dirname, 'frontend', 'build', './frontend/public/index.html'));
+    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
   }); 
 }
 // -------- Heroku deployment -------- 
