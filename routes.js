@@ -114,7 +114,7 @@ router.post('/register', async (req, res) =>
                         console.error(error)
                     })
 
-                    res.status(400).json(newUser);
+                    res.status(200).json(newUser);
                 } catch(error) 
                 {
                     res.status(400).json({error: error.message});
