@@ -29,10 +29,10 @@ app.use(
         scriptSrc: ["*", 'https://checkout.stripe.com'],
         styleSrc: [
           "*",
-          'https://fonts.googleapis.com',
+          'https://fonts.googleapis.com/css2?family=VT323&display=swap',
           'https://checkout.stripe.com',
         ],
-        fontSrc: ["*", 'https://fonts.gstatic.com'],
+        fontSrc: ["*", 'https://fonts.googleapis.com/css2?family=VT323&display=swap'],
         imgSrc: ["*", 'https://*.stripe.com', 'https://res.cloudinary.com'],
         baseUri: ["*"],
       },
