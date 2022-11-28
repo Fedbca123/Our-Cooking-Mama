@@ -53,14 +53,9 @@ const imageFilter = function (req, file, cb) {
 var upload = multer({ storage: storage, fileFilter: imageFilter });
 
 router.get('/', async (req, res) => {
-    try 
-    {
-        const data = await userRegister.find();
-        res.json(data) 
-    } catch (error) 
-    {
-        res.status(500).json({message: error.message})
-    }
+    router.get("*", (req, res) => {
+        res.sendFile(path.resolve(__dirname, "build", "index.html"));
+    });
 })
 
 //Post Method

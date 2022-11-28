@@ -22,7 +22,7 @@ app.use(
     // [
     helmet.contentSecurityPolicy({
       directives: {
-        defaultSrc: ["'self'"],
+        defaultSrc: ["'self'", "https://our-cooking-mom-test.herokuapp.com/favicon.ico"],
         connectSrc: ["'self'", 'https://checkout.stripe.com'],
         frameSrc: ["'self'", 'https://checkout.stripe.com'],
         childSrc: ["'self'", 'https://checkout.stripe.com'],
