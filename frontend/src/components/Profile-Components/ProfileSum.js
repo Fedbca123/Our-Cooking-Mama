@@ -21,15 +21,12 @@ export const ProfileSum = (props) => {
 
 	const navigate = useNavigate();
 	const [cookies, setCookie] = useCookies(["user"]);
-	//const myCookie = cookies.get('cookie-name');
 
 	React.useEffect(() => {
 		const callAPI = () => {
 			getData();
 			getFollowerCount();
 			getFollowingCount();
-			// document.getElementById("following").innerHTML =
-			// 	"followers: " + followers + ", following: " + following;
 		};
 		callAPI();
 	}, []);
