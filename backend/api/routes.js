@@ -1136,7 +1136,7 @@ router.post('/sendResetEmail', async (req, res) =>
             text: 
                 "Forgetting your password happens a lot. Trust us, we know.\n\n" +
                 "Please click the following link to reset your password:\n" +  
-                "https://our-cooking-mom-test.herokuapp.com/ResetPass?UserID=" + user._id,
+                "http://localhost:3000/ResetPass?UserID=" + user._id,
         }
         sgMail
         .send(msg)
