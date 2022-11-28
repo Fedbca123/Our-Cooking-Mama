@@ -1,6 +1,7 @@
-const server = require('./index.js');
+const app = require('./index.js');
 const request = require('supertest');
 const mongoose = require('mongoose');
+const appPort = 'localhost:3000'
 
 // Making dummy unit test to see if Jest even works
 it ('Testing to see if Jest works', () => {
@@ -9,12 +10,10 @@ it ('Testing to see if Jest works', () => {
 
 describe("GET api/getAll", () => {
     test("Returns status code 200 with all users", async () => {
-        const response = await request(server).get('api/getAll')
+        const response = await request(appPort).get('/api/getAll')
         .set('Accept', 'application/json')
         //expect(response.headers["Content-Type"]).toMatch(/json/);
         expect(response.statusCode).toEqual(200)
-        expect(response.body.error).toBe("")
-        done()
     })
     afterAll(() => mongoose.disconnect())
 })
