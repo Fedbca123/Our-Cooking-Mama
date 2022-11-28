@@ -101,9 +101,9 @@ router.post('/register', async (req, res) =>
                         from: 'yourcookingmamaapp@gmail.com',
                         subject: 'Please verify your email.',
                         text: 
-                            "Welcome to Your Cooking Mama. You must verify your email to access our site/app.\n" +
-                            "Please click the following link to verify your email:\n\n" +  
-                            "http://localhost:3000/api/verifyEmail?UserID=" + newUser._id,
+                            "Welcome to Our Cooking Mama. You must verify your email to access our site/app.\n\n" +
+                            "Please click the following link to verify your email:\n" +  
+                            "https://our-cooking-mom-test.herokuapp.com/api/verifyEmail?UserID=" + newUser._id,
                     }
                     sgMail
                     .send(msg)
@@ -180,7 +180,7 @@ router.get('/getAll', async (req, res) =>
     try 
     {
         const data = await userRegister.find();
-        res.json(data) 
+        res.status(200).json(data) 
     } catch (error) 
     {
         res.status(500).json({message: error.message})
@@ -226,9 +226,9 @@ router.post('/login', async (req, res) =>
                     from: 'yourcookingmamaapp@gmail.com',
                     subject: 'Please verify your email.',
                     text: 
-                        "Welcome to Your Cooking Mama. You must verify your email to access our site/app.\n" +
-                        "Please click the following link to verify your email:\n\n" +  
-                        "http://localhost:3000/api/verifyEmail?UserID=" + result._id,
+                        "Welcome to Our Cooking Mama. You must verify your email to access our site/app.\n\n" +
+                        "Please click the following link to verify your email:\n" +  
+                        "https://our-cooking-mom-test.herokuapp.com/api/verifyEmail?UserID=" + result._id,
                 }
                 sgMail
                 .send(msg)
@@ -1067,6 +1067,34 @@ router.post('/getRecipe', async (req, res) =>
     catch(error) 
     {
         res.status(400).json({error: error.message});
+    }
+})
+
+router.post('/sendResetEmail', async (req, res) => 
+{
+    const email = req.body.Email;
+    const user = await userRegister.findOne({Email: email}).exec();
+    if (user == null)
+        res.status(400).json({error: "A user with that email could not be found."});
+    else
+    {
+        const msg = {
+            to: email,
+            from: 'yourcookingmamaapp@gmail.com',
+            subject: 'Click the link provided to reset your password.',
+            text: 
+                "Forgetting your password happens a lot. Trust us, we know.\n\n" +
+                "Please click the following link to reset your password:\n" +  
+                "https://our-cooking-mom-test.herokuapp.com/ResetPass?UserID=" + user._id,
+        }
+        sgMail
+        .send(msg)
+        .then(() => {
+            res.status(200).json({error: ""});
+        })
+        .catch((error) => {
+            res.status(400).json({error:error.message});
+        })
     }
 })
 
