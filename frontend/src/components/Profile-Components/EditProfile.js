@@ -86,7 +86,7 @@ export const EditProfile = (props) => {
 	const getCircularReplacer = async () => {
 		const seen = new WeakSet();
 		return (key, value) => {
-			if (typeof value === 'object' && value !== null) {
+			if (typeof value === "object" && value !== null) {
 				if (seen.has(value)) {
 					return;
 				}
@@ -97,68 +97,54 @@ export const EditProfile = (props) => {
 	};
 
 	const saveEdit = async (event) => {
-		console.log("USer is: " + cookies.id)
-		handleStupidList();
-		const formData = new FormData();
-		formData.append('NickName', nickelName);
-		formData.append('DietRest', dietRest);
-		formData.append('FavCuisine', favCuisine);
-		formData.append('FavDrink', favDrink);
-		formData.append('FavFood', favFood);
-		formData.append('FavoriteFlavor', favFlavor);
-		formData.append('FoodAllerg', foodAllergy);
-		formData.append('userID', cookies.id);
-		formData.append('pronouns', pronounz);
-		formData.append('AccountType', accountType);
 		event.preventDefault();
-		// const obj = JSON.stringify({
-		// 	NickName: nickelName,
-		// 	DietRest: dietRestArr,
-		// 	FavCuisine: favCuisineArr,
-		// 	FavDrink: favDrinkArr,
-		// 	FavFood: favFoodArr,
-		// 	FavoriteFlavor: favFlavorArr,
-		// 	FoodAllerg: foodAllergyArr,
-		// 	userId: cookies.id,
-		// 	AccountType: accountType,
-		// 	PersonalFeedID: cookies.id,
-		// 	pronouns: pronounz,
-		// 	ProfilePhoto: profilePic
-		// });
-		// obj.name = obj
-		// const js = JSON.stringify(obj, getCircularReplacer());
-		let username = cookies.id
+		// console.log("USer is: " + cookies.id);
+		// handleStupidList();
+		console.log(dietRest.target.value);
+		const formData = new FormData();
+		formData.append("NickName", nickelName);
+		formData.append("DietRest", dietRest.values());
+		formData.append("FavCuisine", favCuisine.split(","));
+		formData.append("FavDrink", favDrink.split(","));
+		formData.append("FavFood", favFood.split(","));
+		formData.append("FavoriteFlavor", favFlavor.split(","));
+		formData.append("FoodAllerg", foodAllergy.target.value.split(","));
+		formData.append("userID", cookies.id);
+		formData.append("pronouns", pronounz.target.value);
+		formData.append("AccountType", accountType.target.value);
+
 		const response = await fetch(buildPath("api/editProfile"), {
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				"Accept": "application/json",
-			},
+			// headers: {
+			// 	"Content-Type": "application/json",
+			// 	"Accept": "application/json",
+			// },
 			// headers: {
 			// 	'Content-Type': 'multipart/form-data',
 			// },
-			body: JSON.stringify({
-					NickName: nickelName,
-					DietRest: "dietRest",
-					FavCuisine: "favCuisine",
-					FavDrink: "favDrink",
-					FavFood: "favFood",
-					FavoriteFlavor: "favFlavor",
-					FoodAllerg: "foodAllergy",
-					userId: cookies.id,
-					AccountType: "accountType",
-					PersonalFeedID: "username",
-					pronouns: "pronounz",
-				})
-		}).then(response => {
-			console.log(response)
-			// console.log("IMAGE UPLOADED!!!")
-		}).catch((err) => {
-			console.log(err);
+			// body: JSON.stringify({
+			// 		NickName: nickelName,
+			// 		DietRest: "dietRest",
+			// 		FavCuisine: "favCuisine",
+			// 		FavDrink: "favDrink",
+			// 		FavFood: "favFood",
+			// 		FavoriteFlavor: "favFlavor",
+			// 		FoodAllerg: "foodAllergy",
+			// 		userId: cookies.id,
+			// 		AccountType: "accountType",
+			// 		PersonalFeedID: "username",
+			// 		pronouns: "pronounz",
+			body: formData,
+			// })
 		})
+			.then((response) => {
+				console.log(response);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 
-
-		console.log("Maybe?")
+		console.log("Maybe?");
 		// console.log(res.nickName)
 
 		// if (data.error == "") {
@@ -196,55 +182,65 @@ export const EditProfile = (props) => {
 			<div className="drop">
 				What's your nick name?
 				<input type="text" onChange={(val) => setnickName(val)} />
-				Which is your favorite food?
-				<Select
-					multi
-					options={FavFoodOptions}
-					values={[]}
-					onChange={(val) => setfavFood(val)}
-				/>
-				Which is your favorite flavor?
-				<Select
-					multi
-					options={favoriteFlavorOptions}
-					values={[]}
-					onChange={(val) => setfavFlavor(val)}
-				/>
-				What is your favorite drink?
-				<Select
-					multi
-					options={favoriteDrinkOptions}
-					values={[]}
-					onChange={(val) => setfavDrink(val)}
-				/>
-				Do you have specific allergies?
-				<Select
-					multi
-					options={FoodAllergies}
-					values={[]}
-					onChange={(val) => setfoodAllergy(val)}
-				/>
-				Do you have any dietary restrictions?
-				<Select
-					multi
-					options={DietRest}
-					values={[]}
-					onChange={(val) => setdietRest(val)}
-				/>
-				What is your favorite cuisine?
-				<Select
-					multi
-					options={FavCuisineOptions}
-					values={[]}
-					onChange={(val) => setfavCuisine(val)}
-				/>
 				What is the purpose of your account?
-				<Select
+				{/* <Select
 					multi
 					options={AccountType}
 					values={[]}
 					onChange={(val) => setaccountType(val)}
-				/>
+				/> */}
+				<input type="text" onChange={(val) => setfavFood(val)} />
+				What are your pronouns?
+				<input type="text" onChange={(val) => setPronouns(val)} />
+				<h2>Please Separate Multiple entries below with a comma</h2>
+				Which is your favorite food?
+				{/* <Select
+					multi
+					options={FavFoodOptions}
+					values={[]}
+					onChange={(val) => setfavFood(val)}
+				/> */}
+				<input type="text" onChange={(val) => setaccountType(val)} />
+				Which is your favorite flavor?
+				{/* <Select
+					multi
+					options={favoriteFlavorOptions}
+					values={[]}
+					onChange={(val) => setfavFlavor(val)}
+				/> */}
+				<input type="text" onChange={(val) => setfavFlavor(val)} />
+				What is your favorite drink?
+				{/* <Select
+					multi
+					options={favoriteDrinkOptions}
+					values={[]}
+					onChange={(val) => setfavDrink(val)}
+				/> */}
+				<input type="text" onChange={(val) => setfavDrink(val)} />
+				Do you have specific allergies?
+				{/* <Select
+					multi
+					options={FoodAllergies}
+					values={[]}
+					onChange={(val) => setfoodAllergy(val)}
+				/> */}
+				<input type="text" onChange={(val) => setfoodAllergy(val)} />
+				Do you have any dietary restrictions?
+				{/* <Select
+					multi
+					options={DietRest}
+					values={[]}
+					onChange={(val) => setdietRest(val)}
+				/> */}
+				<input type="text" onChange={(val) => setdietRest(val)} />
+				What is your favorite cuisine?
+				{/* <Select
+					multi
+					options={FavCuisineOptions}
+					values={[]}
+					onChange={(val) => setfavCuisine(val)}
+				/> */}
+				<input type="text" onChange={(val) => setfavCuisine(val)} />
 				<button type="submit" onClick={saveEdit}>
 					Update Profile
 				</button>
