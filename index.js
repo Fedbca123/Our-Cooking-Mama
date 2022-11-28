@@ -22,19 +22,19 @@ app.use(
     // [
     helmet.contentSecurityPolicy({
       directives: {
-        defaultSrc: ["'self'", "https://our-cooking-mom-test.herokuapp.com/favicon.ico"],
-        connectSrc: ["'self'", 'https://checkout.stripe.com'],
-        frameSrc: ["'self'", 'https://checkout.stripe.com'],
-        childSrc: ["'self'", 'https://checkout.stripe.com'],
-        scriptSrc: ["'self'", 'https://checkout.stripe.com'],
+        defaultSrc: ["*", "https://our-cooking-mom-test.herokuapp.com/favicon.ico"],
+        connectSrc: ["*", 'https://checkout.stripe.com'],
+        frameSrc: ["*", 'https://checkout.stripe.com'],
+        childSrc: ["*", 'https://checkout.stripe.com'],
+        scriptSrc: ["*", 'https://checkout.stripe.com'],
         styleSrc: [
-          "'self'",
+          "*",
           'https://fonts.googleapis.com',
           'https://checkout.stripe.com',
         ],
-        fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-        imgSrc: ["'self'", 'https://*.stripe.com', 'https://res.cloudinary.com'],
-        baseUri: ["'self'"],
+        fontSrc: ["*", 'https://fonts.gstatic.com'],
+        imgSrc: ["*", 'https://*.stripe.com', 'https://res.cloudinary.com'],
+        baseUri: ["*"],
       },
     })
     // ]
