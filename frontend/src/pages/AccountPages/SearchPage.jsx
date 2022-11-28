@@ -1,55 +1,136 @@
-import React, { useState } from "react";
-import { useHistory, useNavigate } from 'react-router-dom';
-
+import React, { useState, useEffect } from "react";
+import Popup from 'reactjs-popup';
+import { useCookies } from "react-cookie";
 import NavBar from '../../components/NavBar-Components/NavBar';
-import Card from '../../components/Recipes-Display/Card';
+import './Popup.css';
+import { buildPath } from "../../components/bPath";
+import Post from "./PostSearchResult";
+import Recipe from "./RecipeSearchResult";
+import Profile from "./ProfileSearchResult";
+import Card from "../../components/SearchResults-Components/RecipeCard";
+import ProfileSearchResult from "./ProfileSearchResult";
 
 export const SearchPage = (props) => {
-    const navigate = useNavigate();
 
-    const[error, setError] = useState(null);
-    const[isLoaded, setIsLoaded] = useState(false);
-    const[items, setItems] = useState([]);
+    //Cookies Variables
+    const [cookies, setCookie] = useCookies(["user"]);
+    const [searchResult, setSearchResult] = useState([]);
 
-    //Set Search Query to Empty String
-    const[q, setQ] = useState("");
+    useEffect(() => {
+        console.log("QUERY IS: " + cookies.searchQuery)
+        doSearch(cookies.searchQuery)
+    }, []);
 
-    //Function to Call Universal Search API (Search for Profiles or Recipes)
-    async function search(event){
-        event.preventDefault();
-        
-        //Include more code...
+
+    if (cookies.id <= 0) {
+        window.location.href = "/login";
+    } //once cookie expires, logout user
+
+    const doSearch = async (query) => {
+        console.log(query)
+        var obj = { Query: query };
+        var js = JSON.stringify(obj);
+        try {
+            const response = await fetch(buildPath("api/universalSearch"), {
+                method: "POST",
+                body: js,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                },
+            });
+
+            var res = JSON.parse(await response.text());
+            setSearchResult(res)
+        } catch (e) {
+            alert(e.toString());
+            return;
+        }
+    }
+
+    function UserFeed(prop) {
+        if (typeof searchResult.Users != "undefined") {
+            // console.log("good")
+            return (
+                <div>
+                    {
+                        searchResult.Users.map((item) =>
+                            <div key={item._id}>
+                                <ProfileSearchResult user={item}></ProfileSearchResult>
+                            </div>)
+                    }
+                </div>
+            )
+        } else {
+            return (
+                <div>
+                    No users found!
+                </div>
+            )
+        }
+    }
+
+    function PostFeed(prop) {
+        if (typeof searchResult.Posts != "undefined") {
+            // console.log("good")
+            return (
+                <div>
+                    {
+                        searchResult.Posts.map((item) =>
+                            <div key={item._id}>
+                                <Post post={item}></Post>
+                            </div>)
+                    }
+                </div>
+            )
+        } else {
+            return (
+                <div>
+                    No posts found!
+                </div>
+            )
+        }
+    }
+
+    function RecipeFeed(prop) {
+        if (typeof searchResult.Recipes != "undefined") {
+            // console.log("good")
+            return (
+                <div>
+                    {
+                        searchResult.Recipes.map((item) =>
+                            <div key={item._id}>
+                                <Recipe recipe={item}></Recipe>
+                            </div>)
+                    }
+                </div>
+            )
+        } else {
+            return (
+                <div>
+                    No recipes found!
+                </div>
+            )
+        }
     }
 
     return (
-        
-        <div>
-            <NavBar />
-            <div className="SearchPage">
-                <h1>Search for Your Adventure!</h1>
-
-                {/*Search Bar Component*/}
-                <div className="search-wrapper">
-                    <label htmlFor="search-form">
-                        <input 
-                            type="search"
-                            name="search-form"
-                            id="search-form"
-                            className="search-input"
-                            placeholder="Searching for..."
-                            value={q} /*setting the value of useState q any time the user types in the search box */
-                            onChange={ (e) => setQ(e.target.value)}
-                        />
-                    </label>
-                </div>
-
-                {/*Results Display for Recipe Cards Component */}
-                <div className="results-wrapper">
-                    <Card />
-                </div>
+        <><NavBar />
+            <h1>Search Results</h1>
+            <h2 style={{ color: 'red' }}>Post Results</h2>
+            <div>
+                <PostFeed prop={searchResult}></PostFeed>
             </div>
-        </div>
-    )
+            <h2 style={{ color: 'red' }}>Recipe Results</h2>
+            <div>
+                <RecipeFeed prop={searchResult}></RecipeFeed>
+            </div>
+            <h2 style={{ color: 'red' }}>User Results</h2>
+            <div>
+                <UserFeed prop={searchResult}></UserFeed>
+            </div>
+        </>
+    );
 }
 
 export default SearchPage;

@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { buildPath } from "./bPath";
+import { useCookies } from "react-cookie";
+
 
 import NavBarLanding from "./NavBar-Components/NavBarLanding";
 import ChefHat from "./Images/chefHat.png";
@@ -17,6 +19,9 @@ function Register() {
 	const navigate = useNavigate();
 
 	const [message, setMessage] = useState("");
+	const [cookies, setCookie] = useCookies(["user"]);
+	const defaultProfilePic = ChefHat;
+
 
 	const doRegister = async (event) => {
 		event.preventDefault();
@@ -65,17 +70,8 @@ function Register() {
 					setMessage("Username taken. Try again.");
 					return;
 				} else {
-					// var user = {
-					// 	FirstName: res.FirstName,
-					// 	LastName: res.LastName,
-					// 	_id: res._id,
-					// };
-					// localStorage.setItem("user_data", JSON.stringify(user));
-
-					// console.log(user);
-
 					setMessage(" ");
-
+					initializeProfile(res._id)
 					window.location.href = "/login";
 				}
 			} catch (e) {
@@ -84,6 +80,34 @@ function Register() {
 			}
 		}
 	};
+
+	async function initializeProfile(freshID) {
+        const response = await fetch(buildPath("api/editProfile"), {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+			},
+			body: JSON.stringify({
+                NickName: "New Chef",
+                DietRest: "",
+                FavCuisine: "",
+                FavDrink: "",
+                FavFood: "",
+                FavoriteFlavor: "",
+                FoodAllerg: "",
+                userId: freshID,
+                AccountType: "",
+                // PersonalFeedID: global._id,
+                pronouns: "",
+                ProfilePhoto: defaultProfilePic
+			}),
+		}).catch(err => {
+			console.log(err);
+		})
+
+        const dataret = await response.json()
+    }
 
 	return (
 		<div>
