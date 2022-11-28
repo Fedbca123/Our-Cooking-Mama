@@ -81,8 +81,7 @@ export default function EditProfile( {navigation} ) {
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: false,
         });
-        const newProfilePic = result.assets[0].uri;
-        console.log(newProfilePic);
+        const newProfilePic = result.uri;
         if (!result.canceled) { 
             setProfilePic(newProfilePic);
         }
