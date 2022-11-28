@@ -9,8 +9,8 @@ import { useCookies } from "react-cookie";
 
 export const EditProfile = (props) => {
 	const navigate = useNavigate();
-	const [nickName, setnickName] = useState("");
-	const [pronouns, setPronouns] = useState("");
+	const [nickelName, setnickName] = useState("");
+	const [pronounz, setPronouns] = useState("");
 	const [accountType, setaccountType] = useState("");
 	const [profilePic, setProfilePic] = useState("");
 	const [favCuisine, setfavCuisine] = useState("");
@@ -86,96 +86,108 @@ export const EditProfile = (props) => {
 	const getCircularReplacer = async () => {
 		const seen = new WeakSet();
 		return (key, value) => {
-		  if (typeof value === 'object' && value !== null) {
-			if (seen.has(value)) {
-			  return;
+			if (typeof value === 'object' && value !== null) {
+				if (seen.has(value)) {
+					return;
+				}
+				seen.add(value);
 			}
-			seen.add(value);
-		  }
-		  return value;
+			return value;
 		};
 	};
 
 	const saveEdit = async (event) => {
-		// handleStupidList();
-		//console.log(foodAllergyArr + '\n' + dietRestArr + '\n' + favFlavorArr + '\n' + favFoodArr + '\n' + favDrinkArr + '\n'+ favCuisineArr + '\n' + accountType);
+		console.log("USer is: " + cookies.id)
+		handleStupidList();
+		const formData = new FormData();
+		formData.append('NickName', nickelName);
+		formData.append('DietRest', dietRest);
+		formData.append('FavCuisine', favCuisine);
+		formData.append('FavDrink', favDrink);
+		formData.append('FavFood', favFood);
+		formData.append('FavoriteFlavor', favFlavor);
+		formData.append('FoodAllerg', foodAllergy);
+		formData.append('userID', cookies.id);
+		formData.append('pronouns', pronounz);
+		formData.append('AccountType', accountType);
 		event.preventDefault();
-
-		const obj = { 
-			NickName: nickName, 
-			DietRest: dietRest, 
-			FavCuisine: favCuisine, 
-			FavDrink: favDrink, 
-			FavFood: favFood, 
-			FavoriteFlavor: favFlavor, 
-			FoodAllerg: foodAllergy, 
-			userID: cookies.id, 
-			AccountType: accountType, 
-			PersonalFeedID: cookies.id, 
-			Pronouns: pronouns, 
-			ProfilePhoto: profilePic 
-		};
-		obj.name = obj
-		const js = JSON.stringify(obj, getCircularReplacer());
-
+		// const obj = JSON.stringify({
+		// 	NickName: nickelName,
+		// 	DietRest: dietRestArr,
+		// 	FavCuisine: favCuisineArr,
+		// 	FavDrink: favDrinkArr,
+		// 	FavFood: favFoodArr,
+		// 	FavoriteFlavor: favFlavorArr,
+		// 	FoodAllerg: foodAllergyArr,
+		// 	userId: cookies.id,
+		// 	AccountType: accountType,
+		// 	PersonalFeedID: cookies.id,
+		// 	pronouns: pronounz,
+		// 	ProfilePhoto: profilePic
+		// });
+		// obj.name = obj
+		// const js = JSON.stringify(obj, getCircularReplacer());
+		let username = cookies.id
 		const response = await fetch(buildPath("api/editProfile"), {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 				"Accept": "application/json",
 			},
-			body: js
-				//JSON.stringify({
-				//NickName: "cristian",
-				//DietRest: "dietRest",
-				//FavCuisine: "favCuisine",
-				//FavDrink: "favDrink",
-				//FavFood: "favFood",
-				//FavoriteFlavor: "favFlavor",
-				//FoodAllerg: "foodAllergy",
-				//userId: cookies.id,
-				//AccountType: "accountType",
-				//PersonalFeedID: cookies.id,
-				//pronouns: "pronouns",
-				//ProfilePhoto: profilePic,
-				//}),
+			// headers: {
+			// 	'Content-Type': 'multipart/form-data',
+			// },
+			body: JSON.stringify({
+					NickName: nickelName,
+					DietRest: "dietRest",
+					FavCuisine: "favCuisine",
+					FavDrink: "favDrink",
+					FavFood: "favFood",
+					FavoriteFlavor: "favFlavor",
+					FoodAllerg: "foodAllergy",
+					userId: cookies.id,
+					AccountType: "accountType",
+					PersonalFeedID: "username",
+					pronouns: "pronounz",
+				})
+		}).then(response => {
+			console.log(response)
+			// console.log("IMAGE UPLOADED!!!")
 		}).catch((err) => {
 			console.log(err);
-		});
+		})
 
-		var res = JSON.parse(await response.text());
 
 		console.log("Maybe?")
-		const data = res
-		console.log(res.nickName)
+		// console.log(res.nickName)
 
-		if (data.error == "") {
-			console.log("Success");
-			navigate("/profile");
-		} else if (data.error == "Cannot find user account.") {
-			console.log("User not found");
-		}
+		// if (data.error == "") {
+		// 	console.log("Success");
+		// 	navigate("/profile");
+		// } else if (data.error == "Cannot find user account.") {
+		// 	console.log("User not found");
+		// }
 	};
 
-	// const handleStupidList = () => {
-	// 	for (let i in selected) {
-	// 		if (FoodAllergies.includes(selected[i])) {
-	// 			foodAllergyArr.push(selected[i]);
-	// 		} else if (DietRest.includes(selected[i])) {
-	// 			dietRestArr.push(selected[i]);
-	// 		} else if (FavFlavor.includes(selected[i])) {
-	// 			favFlavorArr.push(selected[i]);
-	// 		} else if (FavFood.includes(selected[i])) {
-	// 			favFoodArr.push(selected[i]);
-	// 		} else if (FavDrink.includes(selected[i])) {
-	// 			favDrinkArr.push(selected[i]);
-	// 		} else if (FavCuisine.includes(selected[i])) {
-	// 			favCuisineArr.push(selected[i]);
-	// 		} else if (AccountType.includes(selected[i])) {
-	// 			test(selected[i]);
-	// 		}
-	// 	}
-	// };
+	const handleStupidList = () => {
+		for (let i in selected) {
+			if (foodAllergy.includes(selected[i])) {
+				foodAllergyArr.push(selected[i]);
+			} else if (dietRest.includes(selected[i])) {
+				dietRestArr.push(selected[i]);
+			} else if (favFlavor.includes(selected[i])) {
+				favFlavorArr.push(selected[i]);
+			} else if (favFood.includes(selected[i])) {
+				favFoodArr.push(selected[i]);
+			} else if (favDrink.includes(selected[i])) {
+				favDrinkArr.push(selected[i]);
+			} else if (favCuisine.includes(selected[i])) {
+				favCuisineArr.push(selected[i]);
+			} else if (accountType.includes(selected[i])) {
+				test(selected[i]);
+			}
+		}
+	};
 
 	return (
 		<div className="editProf">
