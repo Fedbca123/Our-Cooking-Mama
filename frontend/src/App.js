@@ -22,8 +22,10 @@ import AboutUs from "./pages/LandingPages/AboutUs";
 // Account Page imports
 import HomePage from "./pages/AccountPages/HomePage";
 import ProfilePage from "./pages/AccountPages/ProfilePage";
-//import SearchPage from "./pages/AccountPages/SearchPage";
+import SearchProfilePage from "./pages/AccountPages/SearchProfilePage"
+import SearchPage from "./pages/AccountPages/SearchPage";
 import EditProfile from "./pages/AccountPages/EditProfile";
+import OtherProfile from "./pages/AccountPages/SearchProfilePage"
 
 // // Cookies imports
 // // import { useCookies } from "react-cookie";
@@ -58,6 +60,8 @@ function App() {
 				<Route path="/homepage" element={<HomePage />} />
 				<Route path="/profile" element={<ProfilePage />} />
 				<Route path="/editProfile" element={<EditProfile />} />
+				<Route path="/search" element={<SearchPage />} />
+				<Route path="/searchProfile" element={<SearchProfilePage/>}/>
 			</Routes>
 		</div>
 	);

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { buildPath } from "./../bPath";
+import { buildPath } from "../bPath";
 import { useCookies } from "react-cookie";
 
 import Chef from "./../Images/chef.png";
 
-export const ProfileSum = ({props}) => {
+export const SearchProfileSum = ({props}) => {
 
     //const [modalVisible, setModalVisible] = useState(false);
     const [NickName, setNickName] = useState('');
@@ -20,6 +20,7 @@ export const ProfileSum = ({props}) => {
 
     const navigate = useNavigate();
     const [cookies, setCookie] = useCookies(["user"]);
+    const [id, setID] = useState([])
     //const myCookie = cookies.get('cookie-name');
 
     React.useEffect(() => {
@@ -37,7 +38,7 @@ export const ProfileSum = ({props}) => {
                 'Accept': 'application/json',
             },
             body: JSON.stringify({
-                Query: cookies.id,
+                Query: props,
             }),
         }).catch(err => {
             console.log(err);
@@ -47,6 +48,7 @@ export const ProfileSum = ({props}) => {
             console.log("not slay!")
         } 
         else {
+            setID(data._id)
             setNickName(data.NickName)
             setPronouns(data.Pronouns)
             setAccountType(data.AccountType)
@@ -62,17 +64,28 @@ export const ProfileSum = ({props}) => {
         }
     }
 
-
-    //const handleModal = () => {
-    //    getData();
-    //   setModalVisible(true);
-    //}
+    const handleFollow = async () => {
+        const response = await fetch(buildPath("api/follow"), {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+			},
+			body: JSON.stringify({
+				FollowerProfileID: id,
+				FollowingProfileID: cookies.id
+			}),
+		}).catch(err => {
+			console.log(err);
+		})
+		const data = await response.json()
+    }
 
         
     return (
         <div>
             <div className="editProfile">
-                <button onClick={() => navigate("/editProfile")}> Edit Profile </button>
+                <button onClick={handleFollow}> Follow </button>
             </div>
 
             {(profilePic == '')? 
@@ -134,5 +147,5 @@ export const ProfileSum = ({props}) => {
     );
 }
 
-export default ProfileSum;
+export default SearchProfileSum;
 

@@ -35,7 +35,7 @@ export const HomePage = (props) => {
     const [chefName, setChefName] = useState("")
     const [recipe, setRecipe] = useState("");
     const [posts, setPosts] = useState([]);
-    const [searchResult, setSearchResult] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
     var ingredientString;
     var ingredients;
 
@@ -156,137 +156,39 @@ export const HomePage = (props) => {
 
     }
 
-    //Function to Check Results from Universal Search API
-    // async function displaySearchFeed(event){
-    //     setQuery(event.target.value);   //set what's typed to be the query value
-    //     console.log("Searching...")
-
-    //     const response = await fetch(buildPath("api/universalSearch"), {
-    //         method: "POST",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //             "Accept": "application/json",
-    //         },
-    //         body: JSON.stringify({
-    //             Query: query,
-    //         }),
-    //     }).catch(err => {
-    //         console.log(error);
-    //     });
-
-    //     const data = await response.json()
-
-    //     if(!data.error){
-    //         console.log("Results found.")
-
-    //         if(data.Users.length > 0) {
-    //             setProfilesExist(true);
-    //             setProfilesArray(data.Users);
-    //         } else { setProfilesExist(false); }
-
-    //         if(data.Posts.length > 0) {
-    //             setPostsExist(true);
-    //             setPostsArray(data.Posts);
-    //         } else { setPostsExist(false); }
-
-    //         if(data.Recipes.length > 0) {
-    //             setRecipesExist(true);
-    //             setRecipesArray(data.Recipes);
-    //         } else { setRecipesExist(false); }
-    //     }
-    //     console.log(data)
-    // }
-
-    // //Results if Users Are Searched
-    // const SearchProfileFeed = () => {
-    //     let content
-    //     if(profilesExist) {
-    //         //Need to feed profiles within profilesArray into card grid...is this the solution?
-    //         {profilesArray.map((item, index) => {
-    //             return(
-    //                 <div className="col-11 col-md-6 col-lg-3 mx-0 mb-4">
-    //                     <div className="card p-0 overflow-hidden h-100 shadow">
-    //                         <img src={item.ProfilePhoto} className="card-img-top" alt="Post"/>
-    //                         <div className="card-body"> 
-    //                             <h5 className="card-title">{item.UserName}</h5>
-    //                         </div>
-    //                     </div>
-    //                 </div>
-    //             )
-    //         })}
-    //     } else {content = <span>No users match your quest search!</span>}
-
-    //     return content
-    // }
-
-    // //Results if Posts are Searched
-    // const SearchPostFeed = () => {
-    //     let content
-    //     if(postsExist) {
-    //         //Need to feed posts within postsArray into card grid
-    //         content = <span>{postsArray[0].Photo}</span> //this only prints the first result found for posts
-    //     } else {content = <span>No posts match your quest search!</span>} 
-
-    //     return content
-    // }
-
-    // //Results if Recipes are Searched
-    // const SearchRecipeFeed = () => {
-    //     let content
-    //     if(recipesExist) {
-    //         //Need to feed recipes within recipesArray into card grid
-    //         content = <span>{recipesArray.Recipe}</span> //this only prints the first result found for recipes
-    //     } else {content = <span>No recipes match your quest search! Is this something new for you to create?</span>}
-
-    //     return content
-    // }
+    function handleSearch(event) {
+        setCookie("searchQuery", searchQuery, { path: "/" });
+        window.location.href = "/search";
+    }
 
     function handleChange(event) {
-        // console.log(event.target.value)
-        doSearch(event.target.value)
+        setSearchQuery(event.target.value)
     }
 
-    useEffect(() => {
-        doSearch("a");
-    }, []);
-
-    const doSearch = async (query) => {
-        console.log(query)
-        var obj = { Query: query };
-        var js = JSON.stringify(obj);
-        try {
-            const response = await fetch(buildPath("api/universalSearch"), {
-                method: "POST",
-                body: js,
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                },
-            });
-
-            var res = JSON.parse(await response.text());
-            setSearchResult(res)
-        } catch (e) {
-            alert(e.toString());
-            return;
-        }
-    }
-
-    function userResult(searchResult) {
-        console.log("HERE")
-        if (searchResult) {
-            return (<div>
-                                {
-                    searchResult.Users.map((item) =>
-                        <div>
-                            {item.UserName}
-
-                        </div>
+    function MainFeed() {
+        console.log("hello " + posts)
+        if (typeof posts !== 'undefined') {
+            console.log("good")
+            return (
+                <div>
+                {
+                    posts.map((item) =>
+                        item.map((item) =>
+                            <div key={item._id}>
+                                <Post post={item} />
+                            </div>)
                     )
                 }
-            </div>)
+            </div>
+            )
+        } else {
+            console.log("bad")
+            return (
+                <div>
+                    No posts found!
+                </div>
+            )
         }
-        return <div></div>
     }
 
     return (
@@ -308,19 +210,9 @@ export const HomePage = (props) => {
                     //   onChange={ displaySearchFeed(q) } // Unsure if this is where to make call to displaySearchFeed 
                     />
                 </label>
+                <button onClick={handleSearch}>Search</button>
             </div>
 
-            <h3>Discover Profiles</h3>
-            <div>
-            <userResult props={searchResult}></userResult>
-            </div>
-            {/* <SearchProfileFeed /> */}
-
-            <h3>Discover Posts</h3>
-            {/* <SearchPostFeed /> */}
-
-            <h3>Discover Recipes</h3>
-            {/* <SearchRecipeFeed /> */}
 
             <Popup
                 trigger={<button className="button"> Create Post </button>}
@@ -377,7 +269,7 @@ export const HomePage = (props) => {
             </Popup>
 
             {/* this is where posts are rendered! */}
-            <div>
+            {/* <div>
                 {
                     posts.map((item) =>
                         item.map((item) =>
@@ -386,8 +278,9 @@ export const HomePage = (props) => {
                             </div>)
                     )
                 }
+            </div> */}
 
-            </div>
+            <MainFeed></MainFeed>
 
 
             {/* <Card/> */}
