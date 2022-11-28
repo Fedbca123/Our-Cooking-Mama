@@ -12,23 +12,34 @@ describe("GET api/getAll", () => {
     test("Returns status code 200 with all users", async () => {
         const response = await request(appPort).get('/api/getAll')
         .set('Accept', 'application/json')
-        //expect(response.headers["Content-Type"]).toMatch(/json/);
-        expect(response.statusCode).toEqual(200)
+        expect(response.status).toBe(200)
     })
     afterAll(() => mongoose.disconnect())
 })
 
 describe("POST api/register", () => {
     test("Returns status code 200 with new user's information", async () => {
-        const response = await request(port).post('/api/register')
-        .send({'FirstName': 'John', 'LastName': 'Doe', 'UserName': 'johndoe', 'Email': 'johndoe@urmom.com', 'Password':'HashThisPassword'})
+        const response = await request(appPort).post('/api/register')
+        .send({'FirstName': 'Johnny', 
+               'LastName': 'Depp',
+               'UserName': 'jdepp',
+               'Email': 'jdepp@urmom.com',
+               'Password':'HashThisPassword123',
+               'Verified': 'False'
+        })
         .set('Accept', 'application/json')
         expect(response.status).toBe(200);
     })
 
     test("Returns status code 400 if username exists already", async () => {
-        const response = await request(port).post('/api/register')
-        .send({'FirstName': 'John', 'LastName': 'Doe', 'UserName': 'johndoe', 'Email': 'johndoe@urmom.com', 'Password':'HashThisPassword'})
+        const response = await request(appPort).post('/api/register')
+        .send({'FirstName': 'Johnny', 
+               'LastName': 'Depp',
+               'UserName': 'jdepp',
+               'Email': 'jdepp@urmom.com',
+               'Password':'HashThisPassword123',
+               'Verified': 'False'
+        })
         .set('Accept', 'application/json')
         expect(response.status).toBe(400);
         expect(response.body.error).toBe("Username taken. Try again.");
@@ -37,26 +48,39 @@ describe("POST api/register", () => {
 
 describe("POST api/login", () => {
     test("Returns status code 200 with user's ID and first and last name", async () => {
-    const response = await request(port).post('/api/login')
-      .send({UserName:'cheonsa143', Password:'test1234'})
-      .set('Accept', 'application/json')
-    expect(response.headers["Content-Type"]).toMatch(/json/);
-    expect(response.status).toEqual(200);
+    const response = await request(appPort).post('/api/login')
+        .send({UserName:'cheonsa143', Password:'test1234'})
+        .set('Accept', 'application/json')
+    expect(response.status).toBe(200);
     })
 
     test("Returns status code 400 if user doesn't exist", async () => {
-    const response = await request(port).post('/api/login')
-      .send({UserName:'ThisUserIsNotReal', Password:'password12345'})
-      .set('Accept', 'application/json')
-    expect(response.headers["Content-Type"]).toMatch(/json/);
-    expect(response.status).toEqual(400);
+    const response = await request(appPort).post('/api/login')
+        .send({UserName:'ThisUserIsNotReal', Password:'password12345'})
+        .set('Accept', 'application/json')
+    expect(response.status).toBe(400);
     })
     
-    test("Returns status code 400 if user doesn't exist", async () => {
-    const response = await request(port).post('/api/login')
-      .send({UserName:'cheonsa143', Password:'wrongPassword'})
-      .set('Accept', 'application/json')
-    expect(response.headers["Content-Type"]).toMatch(/json/);
-    expect(response.status).toEqual(400);
+    test("Returns status code 400 if user inputs wrong password", async () => {
+    const response = await request(appPort).post('/api/login')
+        .send({UserName:'cheonsa143', Password:'wrongPassword'})
+        .set('Accept', 'application/json')
+    expect(response.status).toBe(400);
+    })
+})
+
+describe("POST /getOneProfile", () => {
+    test("Returns status code 200 if user exists in db", async () => {
+        const response = await request(appPort).post('/api/login')
+            .send({UserName:'cheonsa143', Password:'wrongPassword'})
+            .set('Accept', 'application/json')
+        expect(response.status).toBe(400);
+    })
+
+    test("Returns status code 400 if user does not exist in db", async () => {
+        const response = await request(appPort).post('/api/login')
+            .send({UserName:'cheonsa143', Password:'wrongPassword'})
+            .set('Accept', 'application/json')
+        expect(response.status).toBe(400);
     })
 })
