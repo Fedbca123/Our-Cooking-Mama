@@ -21,7 +21,7 @@ export default function Home({ navigation, route }) {
         <ScrollView>
           {dataPosts.map((post, index) => (
             
-            <View key={post._id}>
+            <View key={index}>
               {post.map((data, index) => (
                 <Post post={data} key={index}></Post>
               ))}

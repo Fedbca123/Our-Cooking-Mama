@@ -7,6 +7,7 @@ import { ScreenWidth } from 'react-native-elements/dist/helpers';
 import { Ionicons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { MultipleSelectList } from 'react-native-dropdown-select-list'
+import Toast from 'react-native-toast-message';
 // import { testID } from 'deprecated-react-native-prop-types/DeprecatedTextPropTypes';
 
 export default function EditProfile( {navigation} ) {
@@ -33,6 +34,8 @@ export default function EditProfile( {navigation} ) {
     let favFlavorArr = [];
     let dietRestArr = [];
     let foodAllergyArr = [];
+    let accountTypeArr = [];
+
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -87,27 +90,40 @@ export default function EditProfile( {navigation} ) {
 
     const saveEdit = async (event) => {
         handleStupidList();
+        let formdata = new FormData();
+        formdata.append("NickName", nickName)
+        formdata.append("DietRest", dietRestArr)
+        formdata.append("FavCuisine", favCuisineArr)
+        formdata.append("FavDrink", favDrinkArr)
+        formdata.append("FavFood", favFoodArr)
+        formdata.append("FavoriteFlavor", favFlavorArr)
+        formdata.append("FoodAllerg", foodAllergyArr)
+        formdata.append("userId", global._id)
+        formdata.append("AccountType", accountTypeArr)
+        formdata.append("pronouns", pronouns)
+        formdata.append("file", { uri: profilePic, name: 'image.jpg', type: 'image/jpg' })
         event.preventDefault();
         const response = await fetch(global.link + '/api/editProfile', {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'Accept': 'application/json',
-			},
-			body: JSON.stringify({
-                NickName: nickName,
-                DietRest: dietRestArr,
-                FavCuisine: favCuisineArr,
-                FavDrink: favDrinkArr,
-                FavFood: favFoodArr,
-                FavoriteFlavor: favFlavorArr,
-                FoodAllerg: foodAllergyArr,
-                userId: global._id,
-                AccountType: accountType,
-                PersonalFeedID: global._id,
-                pronouns: pronouns,
-                ProfilePhoto: profilePic
-			}),
+			// headers: {
+			// 	'Content-Type': 'application/json',
+			// 	'Accept': 'application/json',
+			// },
+            body: formdata
+			// body: JSON.stringify({
+            //     NickName: nickName,
+            //     DietRest: dietRestArr,
+            //     FavCuisine: favCuisineArr,
+            //     FavDrink: favDrinkArr,
+            //     FavFood: favFoodArr,
+            //     FavoriteFlavor: favFlavorArr,
+            //     FoodAllerg: foodAllergyArr,
+            //     userId: global._id,
+            //     AccountType: accountType,
+            //     PersonalFeedID: global._id,
+            //     pronouns: pronouns,
+            //     ProfilePhoto: profilePic
+			// }),
 		}).catch(err => {
 			console.log(err);
 		})
@@ -116,6 +132,10 @@ export default function EditProfile( {navigation} ) {
 
         if (data.error == ''){
             console.log("Succes")
+            Toast.show({
+                type: 'success',
+                text1: 'Changes saved'
+            })
         } else if(data.error == "Cannot find user account."){
             console.log("User not found")
         }
@@ -143,7 +163,7 @@ export default function EditProfile( {navigation} ) {
                 favCuisineArr.push(selected[i]);
             }
             else if(AccountType.includes(selected[i])){
-                test(selected[i]);
+                accountTypeArr.push(selected[i]);
             }
         }
     }
