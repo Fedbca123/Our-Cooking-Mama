@@ -16,14 +16,17 @@ const OtherProfileSummary = ({ profile, navigation }) => {
     const [favFood, setFood] = useState('');
     const [favFlavor, setFlavor] = useState('');
     const [profilePic, setProfilePic] = useState('');
+    const [otherId, setOtherId] = useState('');
     const Divider = () => <View style={styles.divider}/>
 
     const [follower, setFollower] = useState();
     const [following, setFollowing] = useState();
+    const [followed, setFollowed] = useState(true);
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
           getData();
+          checkFollow();
         });
     
         return unsubscribe;
@@ -69,6 +72,10 @@ const OtherProfileSummary = ({ profile, navigation }) => {
         getCounts();
     }
 
+    if(otherId == ''){
+        setOtherId(profile._id);
+    }
+
     const getData = async () => {
         setProfilePic(profile.ProfilePhoto);
         setAccountType(profile.AccountType);
@@ -78,7 +85,9 @@ const OtherProfileSummary = ({ profile, navigation }) => {
         setDrink(profile.FavDrink);
         setFood(profile.FavFood);
         setFlavor(profile.FavoriteFlavor);
+        setOtherId(profile._id);
         getCounts();
+        //console.log("test");
     }
 
     const handleModal = () => {
@@ -86,7 +95,34 @@ const OtherProfileSummary = ({ profile, navigation }) => {
         setModalVisible(true);
     }
 
+    const checkFollow = async () => {
+        const response = await fetch(global.link + '/api/checkFollow', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+			},
+			body: JSON.stringify({
+				FollowerProfileID: otherId,
+				FollowingProfileID: global._id
+			}),
+		}).catch(err => {
+			console.log(err);
+		})
+		const data = await response.json()
+        console.log("DATA: "+ data);
+        if(data.error == ('User: ' + profile._id + ' Already Followed.')){
+            setFollowed(false);
+        }
+        else if(data.error == 0){
+            setFollowed(true);
+        }
+    }
+
     const handleFollow = async () => {
+        if(otherId == ''|| otherId == undefined){
+            getData();
+        }
         const response = await fetch(global.link + '/api/follow', {
 			method: 'POST',
 			headers: {
@@ -94,14 +130,21 @@ const OtherProfileSummary = ({ profile, navigation }) => {
 				'Accept': 'application/json',
 			},
 			body: JSON.stringify({
-				FollowerProfileID: profile._id,
+				FollowerProfileID: otherId,
 				FollowingProfileID: global._id
 			}),
 		}).catch(err => {
 			console.log(err);
 		})
 		const data = await response.json()
+        console.log(data);
+        if(data.error == ('User: ' + profile._id + ' Already Followed.')){
+            setFollowed(false);
+            setFollower(follower+1);
+        }
     }
+
+
 
     return (
         <SafeAreaView style={{}}>
@@ -142,9 +185,15 @@ const OtherProfileSummary = ({ profile, navigation }) => {
                             <Text style={styles.aboutMe}>About Me</Text>
                         </TouchableOpacity>
 
+                        {followed ? 
                         <TouchableOpacity onPress={handleFollow}>
                             <Text style={styles.aboutMe}>Follow</Text>
                         </TouchableOpacity>
+                        :
+                        <TouchableOpacity onPress={() => setFollowed(!followed)}>
+                            <Text style={styles.aboutMe}>Unfollow</Text>
+                        </TouchableOpacity>
+                        } 
                     </View>
 
                 </View>
