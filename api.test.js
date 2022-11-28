@@ -71,16 +71,18 @@ describe("POST api/login", () => {
 
 describe("POST /getOneProfile", () => {
     test("Returns status code 200 if user exists in db", async () => {
-        const response = await request(appPort).post('/api/login')
-            .send({UserName:'cheonsa143', Password:'wrongPassword'})
+        const response = await request(appPort).post('/api/getOneProfile')
+            .send({Query: '63632373c7af5bc4733c110e'})
             .set('Accept', 'application/json')
-        expect(response.status).toBe(400);
+        expect(response.status).toBe(200);
     })
 
     test("Returns status code 400 if user does not exist in db", async () => {
-        const response = await request(appPort).post('/api/login')
-            .send({UserName:'cheonsa143', Password:'wrongPassword'})
+        const response = await request(appPort).post('/api/getOneProfile')
+            .send({Query: '63632373c7af5bc4733ceeee'})
             .set('Accept', 'application/json')
         expect(response.status).toBe(400);
     })
 })
+
+describe("POST ")
