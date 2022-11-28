@@ -72,7 +72,7 @@ function Register() {
 				} else {
 					setMessage(" ");
 					initializeProfile(res._id)
-					// window.location.href = "/login";
+					window.location.href = "/login";
 				}
 			} catch (e) {
 				alert(e.toString());
@@ -107,7 +107,6 @@ function Register() {
 		})
 
         const dataret = await response.json()
-		console.log("Okay here is the initialized profile's feed ID " + dataret.PersonalFeedID)
     }
 
 	return (

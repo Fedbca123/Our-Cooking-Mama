@@ -63,8 +63,9 @@ function Post({ post }) {
 			<div className="postHeader">
 				<h3>
 					<img
-						height="50"
-						width="50"
+						height="85"
+						width="85"
+						className="postPP"
 						src={profileStats.ProfilePhoto}
 						alt="UserAvatar"
 					></img>
@@ -75,8 +76,8 @@ function Post({ post }) {
 			<div className="postImage">
 				<img
 					src={post.Photo}
-					width="1000"
-					height="200"
+					width="500"
+					height="500"
 					alt="UserPhoto"
 				/>
 			</div>
