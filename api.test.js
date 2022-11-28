@@ -1,14 +1,22 @@
-const app = require('./index');
+const server = require('./index.js');
 const request = require('supertest');
-const port = 'http://localhost:3000'
+const mongoose = require('mongoose');
+
+// Making dummy unit test to see if Jest even works
+it ('Testing to see if Jest works', () => {
+    expect(1).toBe(1);
+})
 
 describe("GET api/getAll", () => {
     test("Returns status code 200 with all users", async () => {
-    const response = await request(port).get('/api/getAll')
-    .set('Accept', 'application/json')
-    //expect(response.headers["Content-Type"]).toMatch(/json/);
-    expect(response.status).toEqual(200);
+        const response = await request(server).get('api/getAll')
+        .set('Accept', 'application/json')
+        //expect(response.headers["Content-Type"]).toMatch(/json/);
+        expect(response.statusCode).toEqual(200)
+        expect(response.body.error).toBe("")
+        done()
     })
+    afterAll(() => mongoose.disconnect())
 })
 
 describe("POST api/register", () => {
