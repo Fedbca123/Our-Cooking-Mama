@@ -33,6 +33,7 @@ export const HomePage = (props) => {
     const [chefName, setChefName] = useState("")
     const [recipe, setRecipe] = useState("");
     const [posts, setPosts] = useState([]);
+    const [searchResult, setSearchResult] = useState([]);
     var ingredientString;
     var ingredients;
 
@@ -239,35 +240,86 @@ export const HomePage = (props) => {
     //     return content
     // }
 
+    function handleChange(event) {
+        // console.log(event.target.value)
+        doSearch(event.target.value)
+    }
+
+    useEffect(() => {
+        doSearch("a");
+    }, []);
+
+    const doSearch = async (query) => {
+        console.log(query)
+        var obj = { Query: query };
+        var js = JSON.stringify(obj);
+        try {
+            const response = await fetch(buildPath("api/universalSearch"), {
+                method: "POST",
+                body: js,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                },
+            });
+
+            var res = JSON.parse(await response.text());
+            setSearchResult(res)
+        } catch (e) {
+            alert(e.toString());
+            return;
+        }
+    }
+
+    function userResult(searchResult) {
+        console.log("HERE")
+        if (searchResult) {
+            return (<div>
+                                {
+                    searchResult.Users.map((item) =>
+                        <div>
+                            {item.UserName}
+
+                        </div>
+                    )
+                }
+            </div>)
+        }
+        return <div></div>
+    }
+
     return (
         <><NavBar />
             <h1>Home Page</h1>
 
             {/* Search Bar Component */}
-            {/* <h2>Search for Your Food Adventure!</h2> */}
-            {/* <div className="search-wrapper"> */}
-            {/* <label htmlFor="search-form"> */}
-            {/* <input  */}
-            {/* type="search" */}
-            {/* name="search-form" */}
-            {/* id="search-form" */}
-            {/* className="search-input" */}
-            {/* placeholder="Searching for..." */}
-            {/* value={q} setting the value of useState q any time the user types in the search box */}
-            {/* onChange={ (e) => setQuery(e.target.value) } */}
-            {/* onChange={ displaySearchFeed(q) } /*Unsure if this is where to make call to displaySearchFeed*/}
-            {/* /> */}
-            {/* </label> */}
-            {/* </div> */}
+            <h2>Search for Your Food Adventure!</h2>
+            <div className="search-wrapper">
+                <label htmlFor="search-form">
+                    <input
+                        type="search"
+                        name="search-form"
+                        id="search-form"
+                        className="search-input"
+                        placeholder="Searching for..."
+                        //   value={q} //setting the value of useState q any time the user types in the search box  
+                        onChange={handleChange}
+                    //   onChange={ displaySearchFeed(q) } // Unsure if this is where to make call to displaySearchFeed 
+                    />
+                </label>
+            </div>
 
-            {/* <h3>Discover Profiles</h3>
-            <SearchProfileFeed />
+            <h3>Discover Profiles</h3>
+            <div>
+            <userResult props={searchResult}></userResult>
+            </div>
+            {/* <SearchProfileFeed /> */}
 
             <h3>Discover Posts</h3>
-            <SearchPostFeed />
+            {/* <SearchPostFeed /> */}
 
             <h3>Discover Recipes</h3>
-            <SearchRecipeFeed /> */}
+            {/* <SearchRecipeFeed /> */}
 
             <Popup
                 trigger={<button className="button"> Create Post </button>}
@@ -327,10 +379,10 @@ export const HomePage = (props) => {
             <div>
                 {
                     posts.map((item) =>
-                        item.map((item) => 
-                        <div key={item._id}>
-                            <Post post={item} />
-                        </div> )
+                        item.map((item) =>
+                            <div key={item._id}>
+                                <Post post={item} />
+                            </div>)
                     )
                 }
 
