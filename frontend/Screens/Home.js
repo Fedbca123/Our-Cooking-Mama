@@ -20,7 +20,8 @@ export default function Home({ navigation, route }) {
         <FoodReal navigation={navigation}></FoodReal>
         <ScrollView>
           {dataPosts.map((post, index) => (
-            <View>
+            
+            <View key={post._id}>
               {post.map((data, index) => (
                 <Post post={data} key={index}></Post>
               ))}
