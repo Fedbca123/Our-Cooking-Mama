@@ -13,19 +13,28 @@ import "./App.css";
 
 import BuildPath from "./components/bPath";
 
-//import LoginPage from './components/Login';
+
+// Landing Page imports
+import LandingPage from "./pages/LandingPages/LandingPage";
 import LoginPage from "./pages/LandingPages/LoginPage";
 import RegisterPage from "./pages/LandingPages/RegisterPage";
+import AboutUs from "./pages/LandingPages/AboutUs";
+
+
+// Account Page imports
 import HomePage from "./pages/AccountPages/HomePage";
 import ProfilePage from "./pages/AccountPages/ProfilePage";
-import SearchPage from "./pages/AccountPages/SearchPage";
-import LandingPage from "./pages/LandingPages/LandingPage";
+//import SearchPage from "./pages/AccountPages/SearchPage";
+import EditProfile from "./pages/AccountPages/EditProfile";
+
+// Cookies imports
 // import { useCookies } from "react-cookie";
 import Cookie from "universal-cookie";
 
+// Components imports
 import NavBar from "./components/NavBar-Components/NavBar";
 import NavBarLanding from "./components/NavBar-Components/NavBarLanding";
-import AboutUs from "./pages/LandingPages/AboutUs";
+import Card from "./components/SearchResults-Components/RecipeCard"
 
 function App() {
 	//const [currentForm, setCurrentForm] = useState("login");
@@ -34,7 +43,6 @@ function App() {
 	//const toggleForm = (formName) => {
 	//	setCurrentForm(formName);
 	//};
-	var cookie = new Cookie();
 
 	return (
 		<div className="App">
@@ -46,10 +54,14 @@ function App() {
 
 				<Route path="/homepage" element={<HomePage />} />
 				<Route path="/profile" element={<ProfilePage />} />
-				<Route path="/search" element={<SearchPage />} />
+				<Route path="/editProfile" element={<EditProfile />} />
 			</Routes>
 		</div>
 	);
 }
 
 export default App;
+
+
+// this can be added back later if need be
+//<Route path="/search" element={<SearchPage />} />

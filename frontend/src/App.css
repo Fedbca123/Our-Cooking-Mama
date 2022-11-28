@@ -25,15 +25,25 @@ p{
     text-align: center;
 }
 
-.MeetTheTeam, .Motivation{
+.MeetTheTeam {
+    text-align: left;
+    margin-left: 25px;
+}
+
+.Motivation{
     text-align: left;
     padding: 2.25rem;
 }
 
-.landingLogo {
+.landing {
+    margin: 25px;
+    font-size: 25px;
+}
+
+.landingLogo, .landingLogo2, .landingLogo3  {
     max-width: 25%;
     justify-content: center;
-    display: flex;
+    
     text-align: center;
 }
 
@@ -69,3 +79,74 @@ button {
     background-color: #E39E6D;
 }
 
+.chef {
+    max-width: 25%;
+
+    background-color: #e39e6da6;
+    background-image: linear-gradient(to bottom right, #e3c26d84, #f5b71a88, #f5631a88, #f5751a88);
+
+    border-style: ridge;
+    border-radius: 0px;
+    border-width: 5px;
+    border-image: linear-gradient(to bottom right, #e3c26d84, #f5b71a88, #f5631a88, #f5751a88);
+    
+    display: flex;
+    margin-left: 25px;
+    margin-top: 25px;
+}
+
+.chef1 {
+    max-width: 25%;
+    float: right;
+}
+
+.following {
+    display: flex;
+    font-size: 30px;
+    margin-left: 25px;
+    margin-right:73%;
+    text-align: left;
+}
+
+.bio, .profileFavs {
+    display: flex;
+    font-size: 25px;
+    margin-top: 10px;
+    margin-left: 25px;
+    margin-right:73%;
+    text-align: left;
+    background-image: linear-gradient(to bottom right, #e3c26d84, #f5b71a88, #f5751a88);
+}
+
+.profileFavs {
+    font-size: 18px;
+}
+
+.profList {
+    display: flex;
+    text-align: left;
+    align-items: center;
+    justify-content: left;
+    flex-direction: column;
+    padding:5px;
+}
+
+.editProfile {
+    display: flex;
+    justify-content: right;
+    margin-top: 15px;
+    margin-right: 15px;
+}
+
+.editProf {
+    margin: 25px;
+}
+
+.drop {
+    display:flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: .0025rem;
+}

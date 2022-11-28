@@ -4,7 +4,7 @@ import { buildPath } from "./bPath";
 
 import NavBarLanding from "./NavBar-Components/NavBarLanding";
 import ChefHat from "./Images/chefHat.png";
-import { Cookie } from "universal-cookie";
+import { useCookies } from "react-cookie";
 
 function Login() {
 	var loginName;
@@ -13,6 +13,7 @@ function Login() {
 	const navigate = useNavigate();
 
 	const [message, setMessage] = useState("");
+	const [cookies, setCookie] = useCookies(["user"]);
 
 	const doLogin = async (event) => {
 		event.preventDefault();
@@ -39,14 +40,12 @@ function Login() {
 				if (res._id <= 0) {
 					setMessage("User/Password combination incorrect");
 				} else {
-					var user = {
-						FirstName: res.FirstName,
-						LastName: res.LastName,
-						_id: res._id,
-					};
-					localStorage.setItem("user_data", JSON.stringify(user));
-
-					console.log(user);
+					setCookie("id", res._id, { path: "/" });
+					setCookie("FirstName", res.FirstName, { path: "/" });
+					setCookie("LastName", res.LastName, { path: "/" });
+					setCookie("UserName", res.UserName, { path: "/" });
+					setCookie("Email", res.Email, { path: "/" });
+					loadFeed();
 
 					setMessage(" ");
 					window.location.href = "/homepage";
@@ -56,6 +55,24 @@ function Login() {
 				return;
 			}
 		}
+	};
+
+	const loadFeed = async () => {
+		const response = await fetch(buildPath("api/getMainFeed"), {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				"Accept": "application/json",
+			},
+			body: JSON.stringify({
+				ProfileID: cookies.id,
+			}),
+		}).catch((err) => {
+			console.log(err);
+		});
+
+		const data = await response.json();
+		setCookie("data", data, { path: "/" });
 	};
 
 	return (
