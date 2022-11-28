@@ -8,6 +8,18 @@ const Post = ({ post }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [profileStats, setProfile] = useState([]);
     const [recipeStats, setRecipe] = useState([]);
+    var likesR = Math.floor(Math.random() * 100) + 1;
+    const [likes, setLikes] = useState(likesR);
+    const [isClicked, setIsClicked] = useState(false);
+
+    const handleClick = () => {
+        if (isClicked) {
+            setLikes(likes - 1);
+        } else {
+            setLikes(likes + 1);
+        }
+        setIsClicked(!isClicked);
+    };
 
     useEffect(() => {
         async function loadProfile() {
@@ -75,8 +87,19 @@ const Post = ({ post }) => {
                 </Modal>
             </View>
             <View style={{ marginHorizontal: 15, marginVertical: 10 }}>
-                <PostFooter></PostFooter>
-                <Likes post={post}></Likes>
+                {/* <PostFooter handleClick={handleClick}></PostFooter> */}
+                <View style={{ flexDirection: 'row' }}>
+                    <View style={styles.leftFooterIconsContianer}>
+                        <TouchableOpacity onPress={() => handleClick()}>
+                            <FontAwesome name={isClicked ? 'thumbs-up' : 'thumbs-o-up'} size={33} color="black" />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={share}>
+                            <FontAwesome5 name="share" size={33} color="black" />
+                        </TouchableOpacity>
+
+                    </View>
+                </View>
+                <Likes likes={likes}></Likes>
                 <Caption post={post}></Caption>
             </View>
         </View>
@@ -123,10 +146,12 @@ const PostImage = ({ post }) => (
     </View>
 )
 
-const PostFooter = () => (
+const PostFooter = (handleClick) => (
     <View style={{ flexDirection: 'row' }}>
         <View style={styles.leftFooterIconsContianer}>
-            <FontAwesome name="thumbs-o-up" size={33} color="black" />
+            <TouchableOpacity onPress={() => handleClick()}>
+                <FontAwesome name={thumbIcon} size={33} color="black" />
+            </TouchableOpacity>
             <TouchableOpacity onPress={share}>
                 <FontAwesome5 name="share" size={33} color="black" />
             </TouchableOpacity>
@@ -141,9 +166,9 @@ const Icon = ({ imgStyle, imgUrl }) => (
     </TouchableOpacity>
 )
 
-const Likes = ({ post }) => (
+const Likes = ({ likes }) => (
     <View style={{ flexDirection: 'row', marginTop: 4 }}>
-        <Text style={{ fontWeight: '600' }}>hardcoded # likes</Text>
+        <Text style={{ fontWeight: '600', fontSize: 16 }}>{likes} likes</Text>
     </View>
 )
 
@@ -185,7 +210,7 @@ const Popup = ({ post, recipeStats }) => (
         </View>
         <View style={{ marginTop: 10, alignItems: 'center' }}>
             <Text style={{ fontSize: 20, fontWeight: '600', marginBottom: 10 }}>Recipe / Review</Text>
-            <Text style={{ fontSize: 20, fontWeight: '600', color:'blue' }}>{recipeStats.Ingredients}</Text>
+            <Text style={{ fontSize: 20, fontWeight: '600', color: 'blue' }}>{recipeStats.Ingredients}</Text>
         </View>
     </View>
 )
