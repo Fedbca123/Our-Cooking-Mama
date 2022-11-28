@@ -118,6 +118,36 @@ const SignUpScreen = ({ navigation }) => {
 		followDummy(dataret, data)
 	}
 
+	
+    // async function initializeProfile(data) {
+    //     let formdata = new FormData();
+    //     formdata.append("NickName", "Change user name")
+    //     formdata.append("DietRest", "")
+    //     formdata.append("FavCuisine", "")
+    //     formdata.append("FavDrink", "")
+    //     formdata.append("FavFood", "")
+    //     formdata.append("FavoriteFlavor", "")
+    //     formdata.append("FoodAllerg", "")
+    //     formdata.append("userId", data._id)
+    //     formdata.append("AccountType", "")
+    //     formdata.append("pronouns", "")
+    //     formdata.append("file", { uri: profilePic, name: 'image.jpg', type: 'image/jpg' })
+    //     const response = await fetch(global.link + '/api/editProfile', {
+	// 		method: 'POST',
+    //         body: formdata
+	// 	}).catch(err => {
+	// 		console.log(err);
+	// 	}).then(response => {
+	// 		console.log("IMAGE UPLOADED!!!")
+	// 		followDummy(response,data)
+	// 	})
+
+    //     // const ret = await response.json()
+	// 	// followDummy(ret,data)
+
+    // }
+
+
 	async function followDummy(dataret, dataID) {
 		console.log("Grabbed  new feed ID as " + dataret.PersonalFeedID)
 		const response = await fetch(global.link + '/api/follow', {

@@ -104,25 +104,7 @@ export default function EditProfile( {navigation} ) {
         event.preventDefault();
         const response = await fetch(global.link + '/api/editProfile', {
 			method: 'POST',
-			// headers: {
-			// 	'Content-Type': 'application/json',
-			// 	'Accept': 'application/json',
-			// },
             body: formdata
-			// body: JSON.stringify({
-            //     NickName: nickName,
-            //     DietRest: dietRestArr,
-            //     FavCuisine: favCuisineArr,
-            //     FavDrink: favDrinkArr,
-            //     FavFood: favFoodArr,
-            //     FavoriteFlavor: favFlavorArr,
-            //     FoodAllerg: foodAllergyArr,
-            //     userId: global._id,
-            //     AccountType: accountType,
-            //     PersonalFeedID: global._id,
-            //     pronouns: pronouns,
-            //     ProfilePhoto: profilePic
-			// }),
 		}).catch(err => {
 			console.log(err);
 		})
@@ -171,13 +153,31 @@ export default function EditProfile( {navigation} ) {
         setaccountType(str);
     }
 
+    async function loadProfile() {
+
+        const response = await fetch(global.link + '/api/getPersonalFeed', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+                UserID: global._id,
+            }),
+        }).catch(err => {
+            console.log(err);
+        })
+        const data = await response.json()
+        navigation.navigate('Profile', { data: data });
+    }
+
   return (
     <ScrollView>
         <ImageBackground source={require(background)} style={styles.background}>
             <SafeAreaView style={{flex: 1}}>
                 
                 <View style={styles.contianerHeader}>
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <TouchableOpacity onPress={loadProfile}>
                         <Ionicons name="arrow-back" size={40} color="black" />
                     </TouchableOpacity>
 
