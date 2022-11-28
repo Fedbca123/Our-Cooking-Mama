@@ -159,7 +159,7 @@ button {
     max-height: auto;
 }
 .post {
-    background-image:linear-gradient(to bottom right, #e3c26d3d, #f5b71a47, #f5751a40);
+    background-image:linear-gradient(to bottom right, #e3c26d84, #f5b71a88, #f5751a88);
     margin:25px;
 }
 .postHeader {
