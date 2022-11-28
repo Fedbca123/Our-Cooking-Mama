@@ -18,8 +18,8 @@ import { LogBox } from 'react-native';
 const Stack = createStackNavigator();
 
 // Change me
-// global.link = 'http://our-cooking-mom-test.herokuapp.com' //PRODUCTION
-global.link = 'http://192.168.0.225:3000'; // OR TESTING ;)
+global.link = 'http://our-cooking-mom-test.herokuapp.com' //PRODUCTION
+// global.link = 'http://192.168.0.225:3000'; // OR TESTING ;)
 
 const theme = {
 	...DefaultTheme,
@@ -31,7 +31,7 @@ const theme = {
 
 const App = () => {
 	// below is for the demo! good luck!
-	// LogBox.ignoreAllLogs();
+	LogBox.ignoreAllLogs();
 	global._id = 0;
 	global.signedUser = '';
 	return(

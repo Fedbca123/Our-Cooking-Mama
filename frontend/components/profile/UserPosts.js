@@ -66,7 +66,7 @@ const UserPosts = ({ profile, navigation }) => {
 const styles = StyleSheet.create({
     container: {
         // alignSelf: 'stretch',
-        height: 390,
+        height: 490,
         //borderWidth: 3,
         justifyContent: 'center',
         alignItems: 'center',

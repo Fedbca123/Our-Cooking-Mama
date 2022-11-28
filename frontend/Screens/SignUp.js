@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, StyleSheet, Image, ImageBackground, TextInput, TouchableOpacity } from 'react-native'
+import { Text, View, StyleSheet, Image, ImageBackground, TextInput, TouchableOpacity, ScrollView } from 'react-native'
 import Toast from 'react-native-toast-message';
 import { Entypo } from '@expo/vector-icons';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const background = '../Images/OCMgradient.png'
 // const logo = '../Images/OCMlogo2.png';
@@ -21,7 +22,7 @@ const SignUpScreen = ({ navigation }) => {
 	const defaultProfilePic = '../Images/chegImg.png';
 
 	const handleCreate = async (e) => {
-		if(passAllCheck(PW)){
+		if (passAllCheck(PW)) {
 			console.log("Nice ._.")
 		} else {
 			//console.log("Password must meet all criteria")
@@ -88,34 +89,34 @@ const SignUpScreen = ({ navigation }) => {
 
 	async function initializeProfile(data) {
 		console.log("Grabbed  new initializedProfile ID as " + data._id)
-        const response = await fetch(global.link + '/api/editProfile', {
+		const response = await fetch(global.link + '/api/editProfile', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 				'Accept': 'application/json',
 			},
 			body: JSON.stringify({
-                NickName: "New Chef",
-                DietRest: "",
-                FavCuisine: "",
-                FavDrink: "",
-                FavFood: "",
-                FavoriteFlavor: "",
-                FoodAllerg: "",
-                userId: data._id,
-                AccountType: "",
-                // PersonalFeedID: global._id,
-                pronouns: "",
-                ProfilePhoto: defaultProfilePic
+				NickName: "New Chef",
+				DietRest: "",
+				FavCuisine: "",
+				FavDrink: "",
+				FavFood: "",
+				FavoriteFlavor: "",
+				FoodAllerg: "",
+				userId: data._id,
+				AccountType: "",
+				// PersonalFeedID: global._id,
+				pronouns: "",
+				ProfilePhoto: defaultProfilePic
 			}),
 		}).catch(err => {
 			console.log(err);
 		})
 
-        const dataret = await response.json()
+		const dataret = await response.json()
 		console.log("Okay here is the initialized profile's feed ID " + dataret.PersonalFeedID)
 		followDummy(dataret, data)
-    }
+	}
 
 	async function followDummy(dataret, dataID) {
 		console.log("Grabbed  new feed ID as " + dataret.PersonalFeedID)
@@ -144,7 +145,7 @@ const SignUpScreen = ({ navigation }) => {
 		return !/\d/.test(myString);
 	}
 
-	function hasSpecialChar(str){
+	function hasSpecialChar(str) {
 		return !/[~`!#$@%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(str);
 	}
 
@@ -152,8 +153,8 @@ const SignUpScreen = ({ navigation }) => {
 		return !/[A-Z]/.test(str);
 	}
 
-	function passAllCheck(){
-		if ( !hasUpper(PW) && PW.length >= 8 && !hasNumber(PW) && !hasSpecialChar(PW) && !comparePass){
+	function passAllCheck() {
+		if (!hasUpper(PW) && PW.length >= 8 && !hasNumber(PW) && !hasSpecialChar(PW) && !comparePass) {
 			//console.log("Nice " + hasUpper(PW) + " " + (PW.length >= 8) + " " + hasNumber(PW) + " " + hasSpecialChar(PW) + " " + comparePass);
 			return true;
 		}
@@ -165,15 +166,15 @@ const SignUpScreen = ({ navigation }) => {
 	}
 
 	function isValidEmail(email) {
-		if(EM == ''){
+		if (EM == '') {
 			return true;
 		}
 		return /\S+@\S+\.\S+/.test(email);
 	}
-	
-	let otp =''
-	const generateOTP = () =>{
-		for(let i = 0; i <= 3; i++){
+
+	let otp = ''
+	const generateOTP = () => {
+		for (let i = 0; i <= 3; i++) {
 			const randVal = Math.round(Math.random() * 9);
 			otp = otp + randVal;
 		}
@@ -182,146 +183,150 @@ const SignUpScreen = ({ navigation }) => {
 	}
 
 	return (
+
 		<ImageBackground style={styles.background} source={require(background)}>
-			<View style={{ alignItems: 'center' }}>
-				<Text style={styles.title}>Sign Up</Text>
-				<Text>Become a chef today!</Text>
-			</View>
+			<KeyboardAwareScrollView>
+				<View style={{ alignItems: 'center' }}>
+					<Text style={styles.title}>Sign Up</Text>
+					<Text>Become a chef today!</Text>
+				</View>
 
-			<View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10}}>
-				<Text style={styles.switchButton} onPress={switchL}>Login</Text>
-				<Text> </Text>
-				<Text style={styles.switchButtonColored}>Sign Up</Text>
-			</View>
+				<View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
+					<Text style={styles.switchButton} onPress={switchL}>Login</Text>
+					<Text> </Text>
+					<Text style={styles.switchButtonColored}>Sign Up</Text>
+				</View>
 
-			<View>
-				<TextInput
-					placeholder="Username"
-					style={styles.input}
-					autoCorrect={false}
-					onChangeText={(val) => setUN(val)}
-					backgroundColor='#fff'
-				/>
-				<TextInput
-					placeholder="First name"
-					style={styles.input}
-					autoCorrect={false}
-					onChangeText={(val) => setFN(val)}
-					backgroundColor='#fff'
-				/>
-				<TextInput
-					placeholder="Last name"
-					style={styles.input}
-					autoCorrect={false}
-					onChangeText={(val) => setLN(val)}
-					backgroundColor='#fff'
-				/>
-				<TextInput
-					placeholder="Email"
-					style={styles.input}
-					autoCorrect={false}
-					onChangeText={(val) => setEM(val)}
-					backgroundColor='#fff'
-				/>
+				<View>
+					<TextInput
+						placeholder="Username"
+						style={styles.input}
+						autoCorrect={false}
+						onChangeText={(val) => setUN(val)}
+						backgroundColor='#fff'
+					/>
+					<TextInput
+						placeholder="First name"
+						style={styles.input}
+						autoCorrect={false}
+						onChangeText={(val) => setFN(val)}
+						backgroundColor='#fff'
+					/>
+					<TextInput
+						placeholder="Last name"
+						style={styles.input}
+						autoCorrect={false}
+						onChangeText={(val) => setLN(val)}
+						backgroundColor='#fff'
+					/>
+					<TextInput
+						placeholder="Email"
+						style={styles.input}
+						autoCorrect={false}
+						onChangeText={(val) => setEM(val)}
+						backgroundColor='#fff'
+					/>
 
-				{isValidEmail(EM) ? 
-					<View></View>
-				:
-					<Text style={styles.validEmText}>Please enter a valid email</Text>
+					{isValidEmail(EM) ?
+						<View></View>
+						:
+						<Text style={styles.validEmText}>Please enter a valid email</Text>
+					}
+
+					<View style={styles.passWrapper}>
+						<TextInput
+							placeholder="Password"
+							style={{ width: 150 }}
+							autoCorrect={false}
+							secureTextEntry={seePass}
+							onChangeText={(val) => setPW(val)}
+							backgroundColor='#fff'
+						/>
+						{!seePass ?
+							<TouchableOpacity onPress={() => setSeePass(!seePass)}>
+								<Entypo name="eye" color="black" size={20} />
+							</TouchableOpacity>
+							:
+							<TouchableOpacity onPress={() => setSeePass(!seePass)}>
+								<Entypo name="eye-with-line" color="black" size={20} />
+							</TouchableOpacity>
+						}
+					</View>
+					<View style={styles.passWrapper}>
+						<TextInput
+							placeholder=" Confirm Password"
+							style={{ width: 150 }}
+							autoCorrect={false}
+							secureTextEntry={seePass}
+							onChangeText={(val) => setPW2(val)}
+							backgroundColor='#fff'
+						/>
+						{!seePass ?
+							<TouchableOpacity onPress={() => setSeePass(!seePass)}>
+								<Entypo name="eye" color="black" size={20} />
+							</TouchableOpacity>
+							:
+							<TouchableOpacity onPress={() => setSeePass(!seePass)}>
+								<Entypo name="eye-with-line" color="black" size={20} />
+							</TouchableOpacity>
+						}
+					</View>
+				</View>
+
+				<View>
+					<Text style={styles.button} onPress={handleCreate}>Create Account</Text>
+				</View>
+
+				{(PW == '') ?
+					<Text></Text> //Place Holder
+					:
+					<View style={styles.passCheck}>
+						<View style={{ flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 15 }}>
+							{(PW.length < 8) ?
+								<Image source={require(redx)} style={styles.passIcon}></Image>
+								:
+								<Image source={require(greencheck)} style={styles.passIcon}></Image>
+							}
+							<Text style={{ padding: 2, fontSize: 11.5, paddingLeft: 15 }}>Password has atleast 8 characters</Text>
+						</View>
+						<View style={{ flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 15 }}>
+							{(hasNumber(PW)) ?
+								<Image source={require(redx)} style={styles.passIcon}></Image>
+								:
+								<Image source={require(greencheck)} style={styles.passIcon}></Image>
+							}
+							<Text style={{ padding: 2, fontSize: 11.5, paddingLeft: 15 }}>Atleast one numeric character (0-9)</Text>
+						</View>
+						<View style={{ flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 15 }}>
+							{(hasSpecialChar(PW)) ?
+								<Image source={require(redx)} style={styles.passIcon}></Image>
+								:
+								<Image source={require(greencheck)} style={styles.passIcon}></Image>
+							}
+							<Text style={{ padding: 2, fontSize: 11.5, paddingLeft: 15 }}>Atleast one special character</Text>
+						</View>
+						<View style={{ flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 15 }}>
+							{(hasUpper(PW)) ?
+								<Image source={require(redx)} style={styles.passIcon}></Image>
+								:
+								<Image source={require(greencheck)} style={styles.passIcon}></Image>
+							}
+							<Text style={{ padding: 2, fontSize: 11.5, paddingLeft: 15 }}>Atleast one upper case letter</Text>
+						</View>
+						<View style={{ flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 15 }}>
+							{(comparePass) ?
+								<Image source={require(redx)} style={styles.passIcon}></Image>
+								:
+								<Image source={require(greencheck)} style={styles.passIcon}></Image>
+							}
+							<Text style={{ padding: 2, fontSize: 11.5, paddingLeft: 15 }}>Passwords match</Text>
+						</View>
+					</View>
+
 				}
-
-				<View style={styles.passWrapper}>
-					<TextInput
-						placeholder="Password"
-						style={{width: 150}}
-						autoCorrect={false}
-						secureTextEntry={seePass}
-						onChangeText={(val) => setPW(val)}
-						backgroundColor='#fff'
-					/>
-					{!seePass ?
-					<TouchableOpacity onPress={() => setSeePass(!seePass)}>
-						<Entypo name="eye" color="black" size={20}/>
-					</TouchableOpacity>
-					:
-					<TouchableOpacity onPress={() => setSeePass(!seePass)}>
-						<Entypo name="eye-with-line" color="black" size={20}/>
-					</TouchableOpacity>
-					}
-				</View>
-				<View style={styles.passWrapper}>
-					<TextInput
-						placeholder=" Confirm Password"
-						style={{width: 150}}
-						autoCorrect={false}
-						secureTextEntry={seePass}
-						onChangeText={(val) => setPW2(val)}
-						backgroundColor='#fff'
-					/>
-					{!seePass ?
-					<TouchableOpacity onPress={() => setSeePass(!seePass)}>
-						<Entypo name="eye" color="black" size={20}/>
-					</TouchableOpacity>
-					:
-					<TouchableOpacity onPress={() => setSeePass(!seePass)}>
-						<Entypo name="eye-with-line" color="black" size={20}/>
-					</TouchableOpacity>
-					}
-				</View>
-			</View>
-
-			<View>
-				<Text style={styles.button} onPress={handleCreate}>Create Account</Text>
-			</View>
-
-			{(PW == '') ?
-			<Text></Text> //Place Holder
-			:
-			<View style={styles.passCheck}>
-				<View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingLeft:15}}>
-					{(PW.length < 8) ?
-						<Image source={require(redx)} style={styles.passIcon}></Image>
-					:
-						<Image source={require(greencheck)} style={styles.passIcon}></Image>
-					}
-					<Text style={{padding: 2, fontSize: 11.5, paddingLeft:15}}>Password has atleast 8 characters</Text>
-				</View>
-				<View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingLeft:15}}>
-					{(hasNumber(PW)) ?
-						<Image source={require(redx)} style={styles.passIcon}></Image>
-					:
-						<Image source={require(greencheck)} style={styles.passIcon}></Image>
-					}
-					<Text style={{padding: 2, fontSize: 11.5, paddingLeft:15}}>Atleast one numeric character (0-9)</Text>
-				</View>
-				<View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingLeft:15}}>
-					{(hasSpecialChar(PW)) ?
-						<Image source={require(redx)} style={styles.passIcon}></Image>
-					:
-						<Image source={require(greencheck)} style={styles.passIcon}></Image>
-					}
-					<Text style={{padding: 2, fontSize: 11.5, paddingLeft:15}}>Atleast one special character</Text>
-				</View>
-				<View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingLeft:15}}>
-					{(hasUpper(PW)) ?
-						<Image source={require(redx)} style={styles.passIcon}></Image>
-					:
-						<Image source={require(greencheck)} style={styles.passIcon}></Image>
-					}
-					<Text style={{padding: 2, fontSize: 11.5, paddingLeft:15}}>Atleast one upper case letter</Text>
-				</View>
-				<View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingLeft:15}}>
-					{(comparePass) ?
-						<Image source={require(redx)} style={styles.passIcon}></Image>
-					:
-						<Image source={require(greencheck)} style={styles.passIcon}></Image>
-					}
-					<Text style={{padding: 2, fontSize: 11.5, paddingLeft:15}}>Passwords match</Text>
-				</View>
-			</View>
-			}
-
+			</KeyboardAwareScrollView>
 		</ImageBackground>
+
 	);
 }
 
@@ -360,6 +365,7 @@ const styles = StyleSheet.create({
 		padding: 5,
 		width: 145,
 		textAlign: 'center',
+		alignSelf: 'center',
 		backgroundColor: '#E39E6D',
 		borderRadius: 15,
 		overflow: 'hidden',
@@ -395,7 +401,7 @@ const styles = StyleSheet.create({
 		height: 15,
 	},
 	passWrapper: {
-		flexDirection: 'row', 
+		flexDirection: 'row',
 		alignItems: 'center',
 		height: 40,
 		margin: 12,

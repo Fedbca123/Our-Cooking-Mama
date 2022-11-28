@@ -6,6 +6,7 @@ import { ScreenHeight, ScreenWidth } from 'react-native-elements/dist/helpers';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-navigation';
 import { KeyboardAvoidingView } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 export default function CreatePost({ navigation }) {

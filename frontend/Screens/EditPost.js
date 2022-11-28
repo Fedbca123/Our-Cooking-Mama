@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { TextInput } from 'react-native';
 import { Text, View, StyleSheet, Image, SafeAreaView, ImageBackground, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import EditPostHeader from '../components/profile/EditPostHeader'
 import Toast from 'react-native-toast-message';
 import * as ImagePicker from 'expo-image-picker';
@@ -80,11 +81,8 @@ export default function EditPost({ route, navigation }) {
     }
 
     return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : null}
-            style={{ flex: 1 }}
-        >
-            <ImageBackground style={{ flex: 1 }} source={require(background)}>
+        <ImageBackground style={{ flex: 1 }} source={require(background)}>
+            <KeyboardAwareScrollView>
                 <SafeAreaView style={styles.container}>
                     <EditPostHeader navigation={navigation} ID={{ postID }} ></EditPostHeader>
 
@@ -118,8 +116,8 @@ export default function EditPost({ route, navigation }) {
                     </TouchableOpacity>
 
                 </SafeAreaView>
-            </ImageBackground>
-        </KeyboardAvoidingView>
+            </KeyboardAwareScrollView>
+        </ImageBackground>
     );
 }
 
@@ -131,7 +129,8 @@ const styles = StyleSheet.create({
     input: {
         borderWidth: 2,
         width: '70%',
-        height: '70%',
+        height: '120%',
+        paddingVertical: 10,
         paddingLeft: 2,
         borderRadius: 8
     },

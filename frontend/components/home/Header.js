@@ -29,7 +29,7 @@ const Header = ({ navigation }) => {
             console.log(err);
         })
         const data = await response.json()
-        navigation.navigate('SearchResults', { data : data})
+        navigation.navigate('SearchResults', { data: data })
     }
 
     return (
@@ -49,7 +49,12 @@ const Header = ({ navigation }) => {
                 <Text style={{
                     fontSize: 25,
                     fontWeight: 'bold',
-                }}>Hello, {global.signedUser}!</Text>
+                }}>
+                    <Text>
+                        Hello Chef 
+                    </Text>
+                    <Text style={{color: 'red'}}> {global.signedUser}!</Text>
+                </Text>
             </View>
 
         </View>
