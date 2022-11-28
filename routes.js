@@ -92,7 +92,7 @@ router.post('/register', async (req, res) =>
                         text: 
                             "Welcome to Your Cooking Mama. You must verify your email to access our site/app.\n" +
                             "Please click the following link to verify your email:\n\n" +  
-                            "https://our-cooking-mom-test.herokuapp.com/api/verifyEmail?UserID=" + newUser._id,
+                            "http://localhost:3000/api/verifyEmail?UserID=" + newUser._id,
                     }
                     sgMail
                     .send(msg)
@@ -103,7 +103,7 @@ router.post('/register', async (req, res) =>
                         console.error(error)
                     })
 
-                    res.status(200).json(newUser);
+                    res.status(400).json(newUser);
                 } catch(error) 
                 {
                     res.status(400).json({error: error.message});
@@ -217,7 +217,7 @@ router.post('/login', async (req, res) =>
                     text: 
                         "Welcome to Your Cooking Mama. You must verify your email to access our site/app.\n" +
                         "Please click the following link to verify your email:\n\n" +  
-                        "https://our-cooking-mom-test.herokuapp.com/api/verifyEmail?UserID=" + result._id,
+                        "http://localhost:3000/api/verifyEmail?UserID=" + result._id,
                 }
                 sgMail
                 .send(msg)
@@ -717,7 +717,7 @@ router.post('/getMainFeed', async (req, res) => {
             console.log("Following: " + result.Following);
             const followingPosts = result.Following.map(async (influencerID) => {
                 try {
-                    const userPosts = await userPost.find({ProfileID: influencerID}).sort({_id: -1}).exec();
+                    userPosts = await userPost.find({ProfileID: influencerID}).sort({_id: -1}).exec();
                     return userPosts;
                 } catch (error) {
                     console.error(error);
@@ -725,27 +725,6 @@ router.post('/getMainFeed', async (req, res) => {
                 }
             });
             res.status(200).json({ posts: await Promise.all(followingPosts) });
-        }
-    } catch (err) {
-        res.status(400).json({error: err.message});
-    }
-})
-
-// Get main feed (posts from all of a user's followers)
-router.post('/altGetMainFeed', async (req, res) => {
-    const profileId = req.body.ProfileID;
-    var mainFeedUpdate;
-    try {
-        // check for existence of following document for specific user
-        const result = await following.findOne({ProfileID: profileId}).exec();
-        console.log(result);
-        if (result == null) {
-            res.status(400).json({error: "No following document for: " + profileId + " found."});
-        } else {
-            // get all posts for every user in following array
-            console.log("Following: " + result.Following);
-            const followingPosts = await userPost.find({ProfileID: {$in: result.Following}}).sort({_id: -1}).exec();
-            res.status(200).json({posts: followingPosts});
         }
     } catch (err) {
         res.status(400).json({error: err.message});

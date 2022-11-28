@@ -1,7 +1,5 @@
-// import { useImperativeHandle } from "react";
 import { Link, useMatch, useResolvedPath } from "react-router-dom";
 import { useCookies } from "react-cookie";
-// import { NavBar, Nav, NavDropdown } from 'react-boostrap';
 
 export default function NavBar() {
 	const path = window.location.pathname;
