@@ -388,8 +388,8 @@ const styles = StyleSheet.create({
 		overflow: 'hidden',
 	},
 	passCheck: {
-		width: '70%',
-		height: '15%',
+		width: '100%',
+		height: '17%',
 		borderWidth: 1,
 		marginTop: 10,
 		borderRadius: 10,
