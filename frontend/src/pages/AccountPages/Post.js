@@ -75,8 +75,8 @@ function Post({ post }) {
 			<div className="postImage">
 				<img
 					src={post.Photo}
-					width="1000"
-					height="200"
+					width="500"
+					height="500"
 					alt="UserPhoto"
 				/>
 			</div>

@@ -150,3 +150,11 @@ button {
     flex-direction: column;
     margin: .0025rem;
 }
+.postImage {
+    display: flex;
+    justify-content: center;
+
+
+    max-width: 100%;
+    max-height: auto;
+}
