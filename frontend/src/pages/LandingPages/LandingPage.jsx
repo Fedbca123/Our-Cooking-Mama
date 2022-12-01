@@ -4,7 +4,7 @@ import NavBarLanding from '../../components/NavBar-Components/NavBarLanding';
 
 import Logo from '../../components/Images/logoOrange.png';
 
-export const LandingPage = (props) => {
+function LandingPage() {
 
     return (
         

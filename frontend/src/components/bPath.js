@@ -1,4 +1,4 @@
-const app_name = "our-cooking-mom";
+const app_name = "our-cooking-mom-test";
 
 exports.buildPath = function buildPath(route) {
 	if (process.env.NODE_ENV === "production") {
