@@ -52,18 +52,6 @@ const imageFilter = function (req, file, cb) {
 
 var upload = multer({ storage: storage, fileFilter: imageFilter });
 
-router.get('/', async (req, res) => {
-    if (process.env.NODE_ENV === 'production') 
-    {
-      // Set static folder
-      app.use(express.static('frontend/public'));
-      app.get('*', (req, res) => 
-     {
-        res.sendFile(path.resolve(__dirname, 'frontend', 'src', 'index.html'));
-      }); 
-    }
-})
-
 //Post Method
 router.post('/register', async (req, res) => 
 {
