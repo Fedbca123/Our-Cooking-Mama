@@ -8,6 +8,8 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const cors = require("cors");
 const helmet = require("helmet");
+// Accessing the path module
+const path = require("path");
 
 const app = express();
 const routes = require("./routes");
@@ -71,12 +73,17 @@ __dirname = path.resolve();
 
 if (process.env.NODE_ENV === 'production') 
 {
-  // Set static folder
-  app.use(express.static('frontend/build'));
-  app.get('*', (req, res) => 
- {
-    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
-  }); 
+  app.use(express.static("client/build"));
+  app.get("/*", (req, res) => {
+    res.sendFile(
+      path.join(__dirname, "../client/build", "index.html"),
+      function (err) {
+        if (err) {
+          res.status(500).send(err);
+        }
+      }
+    );
+  });
 }
 // -------- Heroku deployment -------- 
 
