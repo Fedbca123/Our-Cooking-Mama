@@ -49,11 +49,6 @@ function App() {
 	return (
 		<div className="App">
 			<Routes>
-                <Helmet>
-                <link rel="preconnect" href="https://fonts.googleapis.com" />
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-                {<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />}
-                </Helmet>
 				<Route path="/" element={<LandingPage />} />
 				<Route path="/login" element={<LoginPage />} />
 				<Route path="/register" element={<RegisterPage />} />
