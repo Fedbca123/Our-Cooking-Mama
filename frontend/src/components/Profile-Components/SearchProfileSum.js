@@ -30,8 +30,10 @@ export const SearchProfileSum = ({props}) => {
         callAPI();
       },[]);
 
+    let bp = require("./../bPath.js");
+    
     const getData = async () => {
-        const response = await fetch(buildPath("api/getOneProfile"), {
+        const response = await fetch(bp.buildPath("api/getOneProfile"), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

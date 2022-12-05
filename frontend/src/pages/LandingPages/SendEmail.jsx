@@ -12,6 +12,8 @@ export const SendEmail = (props) => {
 
     const [message, setMessage] = useState("");
 
+    let bp = require("./../../components/bPath.js");
+
     async function sendEmail(){
 
         if(email.target.value === ""){
@@ -21,7 +23,7 @@ export const SendEmail = (props) => {
 
             try{
 
-                const response = await fetch(buildPath("api/sendResetEmail"), {
+                const response = await fetch(bp.buildPath("api/sendResetEmail"), {
                     method: "POST",
                     body: JSON.stringify({Email: email.target.value}),
                     headers: {

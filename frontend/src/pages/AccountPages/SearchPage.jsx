@@ -26,12 +26,14 @@ export const SearchPage = (props) => {
         window.location.href = "/login";
     } //once cookie expires, logout user
 
+    let bp = require("./../../components/bPath.js");
+
     const doSearch = async (query) => {
         console.log(query)
         var obj = { Query: query };
         var js = JSON.stringify(obj);
         try {
-            const response = await fetch(buildPath("api/universalSearch"), {
+            const response = await fetch(bp.buildPath("api/universalSearch"), {
                 method: "POST",
                 body: js,
                 headers: {

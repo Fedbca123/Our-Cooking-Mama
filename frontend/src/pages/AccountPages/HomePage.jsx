@@ -44,12 +44,14 @@ export const HomePage = (props) => {
         loadPost();
     }, []);
 
+    let bp = require("./../../components/bPath.js");
+
     const loadPost = async () => {
 
         var obj = { ProfileID: cookies.id };
         var js = JSON.stringify(obj);
         try {
-            const response = await fetch(buildPath("api/getMainFeed"), {
+            const response = await fetch(bp.buildPath("api/getMainFeed"), {
                 method: "POST",
                 body: js,
                 headers: {

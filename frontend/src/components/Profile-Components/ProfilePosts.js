@@ -18,8 +18,10 @@ export const ProfilePosts = (props) => {
 		callAPI();
 	}, []);
 
+	let bp = require("./../bPath.js");
+
 	const getPosts = async () => {
-		const response = await fetch(buildPath("api/getPersonalFeed"), {
+		const response = await fetch(bp.buildPath("api/getPersonalFeed"), {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

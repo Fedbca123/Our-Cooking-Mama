@@ -14,11 +14,13 @@ function PostSearchResult({ post }) {
 		grabRecipe();
 	}, []);
 
+	let bp = require("./../../components/bPath.js");
+	
 	const grabProfile = async () => {
 		var obj = { Query: post.ProfileID };
 		var js = JSON.stringify(obj);
 		try {
-			const response = await fetch(buildPath("api/getOneProfile"), {
+			const response = await fetch(bp.buildPath("api/getOneProfile"), {
 				method: "POST",
 				body: js,
 				headers: {
