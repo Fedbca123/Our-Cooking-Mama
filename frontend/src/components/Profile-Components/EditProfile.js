@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
-import Select from "react-dropdown-select";
-import { components } from "react-select";
 
 import { buildPath } from "./../bPath";
 import { useCookies } from "react-cookie";
@@ -30,9 +28,6 @@ export const EditProfile = (props) => {
 	var userdietRest
 	var userfoodAllerg
 	var userfavFood
-
-	//for dropdown storage
-	const [selected, setSelected] = React.useState([]);
 
 	// cookies :  )
 	const [cookies, setCookie] = useCookies(["user"]);
@@ -161,26 +156,6 @@ export const EditProfile = (props) => {
 		// } else if (data.error == "Cannot find user account.") {
 		// 	console.log("User not found");
 		// }
-	};
-
-	const handleStupidList = () => {
-		for (let i in selected) {
-			if (foodAllergy.includes(selected[i])) {
-				foodAllergyArr.push(selected[i]);
-			} else if (dietRest.includes(selected[i])) {
-				dietRestArr.push(selected[i]);
-			} else if (favFlavor.includes(selected[i])) {
-				favFlavorArr.push(selected[i]);
-			} else if (favFood.includes(selected[i])) {
-				favFoodArr.push(selected[i]);
-			} else if (favDrink.includes(selected[i])) {
-				favDrinkArr.push(selected[i]);
-			} else if (favCuisine.includes(selected[i])) {
-				favCuisineArr.push(selected[i]);
-			} else if (accountType.includes(selected[i])) {
-				test(selected[i]);
-			}
-		}
 	};
 
 	return (
