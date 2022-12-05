@@ -16,6 +16,8 @@ function Login() {
 	const [message, setMessage] = useState("");
 	const [cookies, setCookie] = useCookies(["user"]);
 
+	let bp = require("./bPath.js");
+
 	const doLogin = async (event) => {
 		event.preventDefault();
 
@@ -27,7 +29,7 @@ function Login() {
 			return;
 		} else {
 			try {
-				const response = await fetch(buildPath("api/login"), {
+				const response = await fetch(bp.buildPath("api/login"), {
 					method: "POST",
 					body: js,
 					headers: {

@@ -22,6 +22,7 @@ function Register() {
 	const [cookies, setCookie] = useCookies(["user"]);
 	const defaultProfilePic = ChefHat;
 
+	let bp = require("./bPath.js");
 
 	const doRegister = async (event) => {
 		event.preventDefault();
@@ -82,7 +83,7 @@ function Register() {
 	};
 
 	async function initializeProfile(freshID) {
-        const response = await fetch(buildPath("api/editProfile"), {
+        const response = await fetch(bp.buildPath("api/editProfile"), {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
