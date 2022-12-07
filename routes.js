@@ -24,15 +24,11 @@ const { ObjectID, ObjectId } = require('bson');
 router.use(function(req, res, next) {
 	res.header("Access-Control-Allow-Origin", "http://localhost:3002"); // update to match the domain you will make the request from
 	res.header("Access-Control-Allow-Origin", "http://localhost:3001"); // change the 3001 port the port where your webapp is running from!!
-<<<<<<< HEAD
 	res.header("Access-Control-Allow-Origin", "https://our-cooking-mom-test.herokuapp.com");
 	res.header(
 		"Access-Control-Allow-Headers",
 		"Origin, X-Requested-With, Content-Type, Accept",
 	);
-=======
-	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
->>>>>>> 4312bf5c5d7347bdef9cf783283f657713102718
 	next();
 });
 
