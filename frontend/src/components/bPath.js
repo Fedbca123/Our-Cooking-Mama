@@ -1,4 +1,4 @@
-const app_name = 'your-cooking-mom-test'
+const app_name = 'our-cooking-mom-test'
 
 exports.buildPath = 
 function buildPath(route)
