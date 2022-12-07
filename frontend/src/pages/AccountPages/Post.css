@@ -1,0 +1,13 @@
+.postImage {
+    width: 100%;
+    object-fit:contain;
+}
+
+.postText {
+    font-weight: normal;
+}
+
+.bottom {
+    border-bottom: 100px;
+    border-width: 20px;
+}

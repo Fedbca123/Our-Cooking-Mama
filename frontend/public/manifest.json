@@ -8,7 +8,12 @@
       "sizes": "814x814"
     },
     {
-      "src": "logoBlue.png",
+      "src": "chefHat.png",
+      "type": "image/png",
+      "sizes": "814x814"
+    },
+    {
+      "src": "chef.png",
       "type": "image/png",
       "sizes": "814x814"
     }

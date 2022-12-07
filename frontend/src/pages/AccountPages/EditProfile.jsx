@@ -1,17 +1,15 @@
 import React, { useState } from "react";
 
 import NavBar from '../../components/NavBar-Components/NavBar';
-import ProfileSum from "../../components/Profile-Components/ProfileSum";
-import ProfilePosts from "../../components/Profile-Components/ProfilePosts"
+import EditProfile from "../../components/Profile-Components/EditProfile";
 
 export const ProfilePage = (props) => {
 
     return (
         <div>
             <NavBar />
-            <div className="profilePG">
-                 <ProfileSum />
-                 <ProfilePosts/>
+            <div className="editProfPG">
+                 <EditProfile />
             </div>
         </div>
     )

@@ -4,7 +4,8 @@ import { buildPath } from "./bPath";
 
 import NavBarLanding from "./NavBar-Components/NavBarLanding";
 import ChefHat from "./Images/chefHat.png";
-import { Cookie } from "universal-cookie";
+import { useCookies } from "react-cookie";
+import { Link } from "react-router-dom";
 
 function Login() {
 	var loginName;
@@ -13,6 +14,9 @@ function Login() {
 	const navigate = useNavigate();
 
 	const [message, setMessage] = useState("");
+	const [cookies, setCookie] = useCookies(["user"]);
+
+	let bp = require("./bPath.js");
 
 	const doLogin = async (event) => {
 		event.preventDefault();
@@ -25,7 +29,7 @@ function Login() {
 			return;
 		} else {
 			try {
-				const response = await fetch(buildPath("api/login"), {
+				const response = await fetch(bp.buildPath("api/login"), {
 					method: "POST",
 					body: js,
 					headers: {
@@ -39,14 +43,37 @@ function Login() {
 				if (res._id <= 0) {
 					setMessage("User/Password combination incorrect");
 				} else {
-					var user = {
-						FirstName: res.FirstName,
-						LastName: res.LastName,
-						_id: res._id,
-					};
-					localStorage.setItem("user_data", JSON.stringify(user));
-
-					console.log(user);
+					setCookie(
+						"id",
+						res._id,
+						{ path: "/" },
+						{ maxAge: 60 * 20 },
+					);
+					setCookie(
+						"FirstName",
+						res.FirstName,
+						{ path: "/" },
+						{ maxAge: 60 * 20 },
+					);
+					setCookie(
+						"LastName",
+						res.LastName,
+						{ path: "/" },
+						{ maxAge: 60 * 20 },
+					);
+					setCookie(
+						"UserName",
+						res.UserName,
+						{ path: "/" },
+						{ maxAge: 60 * 20 },
+					);
+					setCookie(
+						"Email",
+						res.Email,
+						{ path: "/" },
+						{ maxAge: 60 * 20 },
+					);
+					loadFeed();
 
 					setMessage(" ");
 					window.location.href = "/homepage";
@@ -56,6 +83,24 @@ function Login() {
 				return;
 			}
 		}
+	};
+
+	const loadFeed = async () => {
+		const response = await fetch(buildPath("api/getMainFeed"), {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				"Accept": "application/json",
+			},
+			body: JSON.stringify({
+				ProfileID: cookies.id,
+			}),
+		}).catch((err) => {
+			console.log(err);
+		});
+
+		const data = await response.json();
+		setCookie("data", data, { path: "/" });
 	};
 
 	return (
@@ -95,6 +140,8 @@ function Login() {
 				>
 					New Chef?
 				</button>
+
+				<Link to="/SendEmail">Forgot Password?</Link>
 
 				<br />
 
