@@ -1,0 +1,171 @@
+.App {
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-image: linear-gradient(to bottom right, #75B9BE, #A8CCC9, #B3D6C6, #DCEAB2, #C7D66D);
+    font-family: 'VT323';
+    font-size: 21px;
+}
+
+.registerForm, .loginForm {
+    display:flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: .0025rem;
+}
+
+p{
+    text-align: left;
+}
+
+.aboutTitles{
+    text-align: center;
+}
+
+.MeetTheTeam {
+    text-align: left;
+    margin-left: 25px;
+}
+
+.Motivation{
+    text-align: left;
+    padding: 2.25rem;
+}
+
+.landing {
+    margin: 25px;
+    font-size: 25px;
+}
+
+.landingLogo, .landingLogo2, .landingLogo3  {
+    max-width: 25%;
+    justify-content: center;
+    
+    text-align: center;
+}
+
+.chefHat {
+    max-width:10%;
+    justify-content: center;
+    text-align: center;
+}
+
+label {
+    text-align: left;
+    padding: 0.25rem 0;
+}
+
+input {
+    margin: 0.5rem 0;
+    
+}
+
+button {
+    border: none;
+    background-color: #E3C26D;
+    padding: 10px;
+    border-radius: 15px;
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+}
+
+.link-btn {
+    border: none;
+    padding: 10px;
+    border-radius: 15px;
+    background-color: #E39E6D;
+}
+
+.chef {
+    max-width: 25%;
+
+    background-color: #e39e6da6;
+    background-image: linear-gradient(to bottom right, #e3c26d84, #f5b71a88, #f5631a88, #f5751a88);
+
+    border-style: ridge;
+    border-radius: 0px;
+    border-width: 5px;
+    border-image: linear-gradient(to bottom right, #e3c26d84, #f5b71a88, #f5631a88, #f5751a88);
+    
+    display: flex;
+    margin-left: 25px;
+    margin-top: 25px;
+}
+
+.chef1 {
+    max-width: 25%;
+    float: right;
+}
+
+.following {
+    display: flex;
+    font-size: 30px;
+    margin-left: 25px;
+    margin-right:73%;
+    text-align: left;
+}
+
+.bio, .profileFavs {
+    display: flex;
+    font-size: 25px;
+    margin-top: 10px;
+    margin-left: 25px;
+    margin-right:73%;
+    text-align: left;
+    background-image: linear-gradient(to bottom right, #e3c26d84, #f5b71a88, #f5751a88);
+}
+
+.profileFavs {
+    font-size: 18px;
+}
+
+.profList {
+    display: flex;
+    text-align: left;
+    align-items: center;
+    justify-content: left;
+    flex-direction: column;
+    padding:5px;
+}
+
+.editProfile {
+    display: flex;
+    justify-content: right;
+    margin-top: 15px;
+    margin-right: 15px;
+}
+
+.editProf {
+    margin: 25px;
+}
+
+.drop {
+    display:flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: .0025rem;
+}
+.postImage {
+    display: flex;
+    justify-content: center;
+
+
+    max-width: 100%;
+    max-height: auto;
+}
+.post {
+    background-image:linear-gradient(to bottom right, #e3c26d84, #f5b71a88, #f5751a88);
+    margin:25px;
+}
+.postHeader {
+    display: flex;
+    margin-left: 25px;
+}
+.postPP {
+    display:flex;
+}
